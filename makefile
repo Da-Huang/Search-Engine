@@ -2,10 +2,10 @@ CXXFLAGS = -std=c++0x -g
 LDFLAGS = -lrt -pthread -pg -g
 LD = g++
 CXX = g++
-a: a.o
-	$(LD) a.o -o a $(LDFLAGS)
+main: main.o
+	$(LD) main.o -o main $(LDFLAGS)
 
-a.o:
+main.o:
 
 clean:
-	rm a *.o -f
+	rm main *.out *.o -f

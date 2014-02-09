@@ -1,3 +1,3 @@
 Search-Engine
 =============
-This is a course project for Network Architecture @pku.
+This is a course project for Web-based Information Architecture @pku.
