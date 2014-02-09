@@ -1,5 +1,5 @@
 CXXFLAGS = -std=c++0x -g -Wall
-LDFLAGS = -lrt -pthread -pg -g -Wall
+LDFLAGS = -lrt -pthread -lboost_regex -L/path/to/boost/lib -pg -g -Wall
 LD = g++
 CXX = g++
 
@@ -20,6 +20,7 @@ DEPS = $(patsubst %.cpp,%.d,$(SOURCE_FILES))
 $(TARGET): $(OBJS)
 	@echo $(subst TEXT,"Generating Target file: $@",$(TEXT_TEMPLATE))
 	$(LD) $^ -o $@ $(LDFLAGS)
+	@echo $(subst TEXT,"All Done.",$(TEXT_TEMPLATE))
 
 -include $(DEPS)
 

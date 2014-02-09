@@ -1,3 +1,6 @@
+# Executable files
+main
+
 # Dependencies for Object files
 *.d
 
@@ -5,6 +8,7 @@
 *.slo
 *.lo
 *.o
+*.out
 
 # Compiled Dynamic libraries
 *.so
