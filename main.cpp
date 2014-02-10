@@ -2,7 +2,7 @@
 #include <vector>
 #include <boost/regex.hpp>
 #include <string>
-#include "stemmer.h"
+#include "Stemmer.h"
 
 using namespace boost;
 using namespace std;

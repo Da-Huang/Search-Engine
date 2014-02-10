@@ -1,4 +1,4 @@
-#include "stemmer.h"
+#include "Stemmer.h"
 #include <vector>
 #include <string>
 #include <ctype.h>
