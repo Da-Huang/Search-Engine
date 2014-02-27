@@ -1,5 +1,5 @@
 CXXFLAGS = -std=c++0x -g -Wall
-LDFLAGS = -lrt -pthread -lboost_regex -L/path/to/boost/lib -pg -g -Wall
+LDFLAGS = -lrt -pthread -l boost_regex -L /path/to/boost/lib -pg -g -Wall
 LD = g++
 CXX = g++
 
