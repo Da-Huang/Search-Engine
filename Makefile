@@ -4,6 +4,7 @@ LD = g++
 CXX = g++
 
 TEXT_TEMPLATE = "\033[36mTEXT\033[0m"
+COMMA = ","
 
 TARGET = main
 
@@ -20,14 +21,15 @@ DEPS = $(patsubst %.cpp,%.d,$(SOURCE_FILES))
 	$(CXX) -c $(CXXFLAGS) -MMD -o $@ $<
 
 $(TARGET): $(OBJS)
-	@echo $(subst TEXT,"Generating Target file: $@",$(TEXT_TEMPLATE))
+	@echo $(subst TEXT,"Generating Target file: $@ ...",$(TEXT_TEMPLATE))
 	$(LD) $^ -o $@ $(LDFLAGS)
 	@echo $(subst TEXT,"All Done.",$(TEXT_TEMPLATE))
 
 -include $(DEPS)
 
 clean:
-	@echo Remove $(TARGET), Object Files, and Dependency Files.
+	@echo $(subst TEXT,"Removing $(TARGET)$(COMMA) Object Files$(COMMA) and Dependency Files.",$(TEXT_TEMPLATE))
 	$(RM) $(TARGET) $(OBJS) $(DEPS) *.out
+	@echo $(subst TEXT,"Clean.",$(TEXT_TEMPLATE))
 
 .PHONY: clean
