@@ -2,11 +2,13 @@
 #define _TERM_H_
 
 #include <string>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
 class Term {
-protect:
+protected:
 	string term;
 	ifstream postingList;
 	size_t begin;
