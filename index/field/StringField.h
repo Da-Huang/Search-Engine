@@ -9,7 +9,9 @@ class StringField : public Field {
 private:
 	string str;
 public:
-	StringField();
+	StringField(const string &fieldName, const string &str) :
+		Field(fieldName), str(str) {}
+	virtual string toString() const;
 };
 
 #endif

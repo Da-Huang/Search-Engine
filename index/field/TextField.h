@@ -1,13 +1,13 @@
 #ifndef _TEXT_FIELD_H_
 #define _TEXT_FIELD_H_
 
+#include "Field.h"
 #include <istream>
 using namespace std;
 
-class TextField : public TextField {
+class TextField : public Field {
 private:
-	string text;
-	istream in;
+//	istream &in;
 };
 
 #endif
