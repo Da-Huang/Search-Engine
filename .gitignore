@@ -18,3 +18,7 @@ main
 *.lai
 *.la
 *.a
+
+# swp
+*.swp
+

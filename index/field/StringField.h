@@ -14,4 +14,15 @@ public:
 	virtual string toString() const;
 };
 
+
+string StringField::toString() const {
+	string res = "<";
+	res += fieldName;
+	res += ",";
+	res += str;
+	res += ">";
+	return res; 
+}
+
+
 #endif

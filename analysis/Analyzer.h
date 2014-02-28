@@ -5,7 +5,7 @@
 
 class Analyzer {
 public:
-	virtual TokenStream tokenStream() = 0;
+//	virtual TokenStream tokenStream() const = 0;
 };
 
 #endif
