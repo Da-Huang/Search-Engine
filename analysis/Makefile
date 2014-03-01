@@ -15,7 +15,7 @@ DEPS = $(patsubst %.cpp,%.d,$(SOURCE_FILES))
 
 clean:
 	@echo $(subst TEXT,"Removing Object Files and Dependency Files in This Directory.",$(TEXT_TEMPLATE))
-	$(RM) $(OBJS) $(DEPS)
+	$(RM) $(OBJS) $(DEPS) *.out
 	@echo $(subst TEXT,"Clean.",$(TEXT_TEMPLATE))
 
 .PHONY: all clean
