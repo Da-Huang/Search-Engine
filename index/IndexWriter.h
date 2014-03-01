@@ -5,7 +5,7 @@
 
 class IndexWriter {
 private:
-	FILE *dir;
+//	string DIR
 public:
 	void write(Document &doc);
 	void close();

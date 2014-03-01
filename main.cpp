@@ -18,8 +18,17 @@ istream &get(const string &str) {
 	return t;
 }
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+using namespace boost::property_tree;
 
 int main() {
+	ptree pt;
+	pt.put("field.fields", 1);
+	ofstream out("test.ini");
+	write_ini(out, pt);
+	out.close();
+	/*
 	Analyzer analyzer;
 	Document doc;
 	StringField f1("abc", "efg");
@@ -27,6 +36,7 @@ int main() {
 	doc.addField(f1);
 	doc.addField(f2);
 	cout << doc.toString() << endl;
+	*/
 
 	return 0;
 }
