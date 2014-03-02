@@ -5,7 +5,7 @@
 
 class Analyzer {
 public:
-	virtual TokenStream tokenStream(istream &in);
+	virtual TokenStream tokenStream(istream &in) const;
 	virtual ~Analyzer() {}
 };
 

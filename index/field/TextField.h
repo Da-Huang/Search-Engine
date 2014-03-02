@@ -11,14 +11,14 @@ using namespace std;
 class TextField : public Field {
 private:
 	istream &in;
-	Analyzer &analyzer;
+	const Analyzer &analyzer;
 public:
 	TextField(const string &fieldName, 
 			istream &in, Analyzer &analyzer) 
 		: Field(fieldName), in(in), analyzer(analyzer) {}
 
 	TextField(const string &fieldName,
-			const string &str, Analyzer &analyzer) 
+			const string &str, const Analyzer &analyzer) 
 		: Field(fieldName), in(*new istringstream(str)), 
 		analyzer(analyzer) {}
 

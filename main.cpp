@@ -39,8 +39,9 @@ int main() {
 	doc.addField(f2);
 	cout << doc.toString() << endl;
 	*/
-	ifstream in("main.cpp");//, ios::binary);
-	TokenStream t(in);
+	Analyzer analyzer;
+	ifstream in("Makefile.sub");//, ios::binary);
+	TokenStream t = analyzer.tokenStream(in);
 	while ( t.hasNext() ) {
 		Token token = t.next();
 		cout << token.toString() << endl;
