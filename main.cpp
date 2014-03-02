@@ -18,16 +18,19 @@ istream &get(const string &str) {
 	return t;
 }
 
+#include <TokenStream.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 using namespace boost::property_tree;
 
 int main() {
+	/*
 	ptree pt;
 	pt.put("field fields", 1);
 	ofstream out("test.ini");
 	write_ini(out, pt);
 	out.close();
+	*/
 	/*
 	Analyzer analyzer;
 	Document doc;
@@ -37,6 +40,12 @@ int main() {
 	doc.addField(f2);
 	cout << doc.toString() << endl;
 	*/
+	ifstream in("main.cpp");//, ios::binary);
+	TokenStream t(in);
+	while ( t.hasNext() ) {
+		Token token = t.next();
+		cout << token.toString() << endl;
+	}
 
 	return 0;
 }

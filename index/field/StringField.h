@@ -5,6 +5,7 @@
 #include <string>
 using namespace std;
 
+
 class StringField : public Field {
 private:
 	string str;
@@ -13,16 +14,6 @@ public:
 		Field(fieldName), str(str) {}
 	virtual string toString() const;
 };
-
-
-string StringField::toString() const {
-	string res = "<";
-	res += fieldName;
-	res += ",";
-	res += str;
-	res += ">";
-	return res; 
-}
 
 
 #endif

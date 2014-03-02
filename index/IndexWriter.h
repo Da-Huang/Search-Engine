@@ -2,7 +2,7 @@
 #define _INDEX_WRITER_H_
 
 #include <Document.h>
-#include <Dictionary>
+#include <Dictionary.h>
 
 class IndexWriter {
 private:
@@ -12,13 +12,5 @@ public:
 	void write(Document &doc);
 	void close();
 };
-
-void IndexWriter::write(Document &doc) {
-}
-
-
-void IndexWriter::close() {
-}
-
 
 #endif
