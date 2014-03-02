@@ -1,6 +1,7 @@
 #include <TokenStream.h>
 #include <ctype.h>
 #include <string.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -31,11 +32,16 @@ Token TokenStream::next() {
 	string str;
 	size_t begin, end;
 	if ( !in.eof() ) {
-		begin = (size_t) in.tellg() - 1;
+		begin = (size_t) in.tellg();
 		str.push_back(in.get());
 		while ( !in.eof() && isTokenChar(in.peek()) )
 			str.push_back(in.get());
 		end = in.tellg();
+
+		/* To Lower Case */
+		transform(str.begin(), str.end(), 
+				str.begin(), ptr_fun<int, int>(tolower));
+
 		while ( !in.eof() && !isTokenChar(in.peek()) ) in.get();
 	}
 	return Token(str, begin, end);
