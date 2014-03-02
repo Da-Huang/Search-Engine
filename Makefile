@@ -1,6 +1,7 @@
-CXXFLAGS = -std=c++0x -g -Wall
+INCLUDES = -I. $(foreach dir,$(SOURCE_DIR),-I$(dir))
+CXXFLAGS = -std=c++0x -g -Wall $(INCLUDES)
 LDFLAGS  = -pg -g -Wall
-#LDFLAGS = -lrt -pthread -l boost_regex -L /path/to/boost/lib -pg -g -Wall
+#LDFLAGS = -lrt -lpthread -lboost_regex -L/path/to/boost/lib -pg -g -Wall
 LD = g++
 CXX = g++
 
@@ -30,7 +31,8 @@ $(TARGET): $(OBJS)
 
 clean:
 	@echo $(subst TEXT,"Removing $(TARGET)$(COMMA) Object Files$(COMMA) and Dependency Files.",$(TEXT_TEMPLATE))
-	$(RM) $(TARGET) $(OBJS) $(DEPS) *.out
+	$(RM) $(TARGET) $(OBJS) $(DEPS)
+	find . -name "gmon.out" | xargs $(RM)
 	@echo $(subst TEXT,"Clean.",$(TEXT_TEMPLATE))
 
 .PHONY: clean

@@ -1,8 +1,8 @@
 #ifndef _TEXT_FIELD_H_
 #define _TEXT_FIELD_H_
 
-#include "Field.h"
-#include "../../analysis/Analyzer.h"
+#include <Field.h>
+#include <Analyzer.h>
 #include <istream>
 #include <sstream>
 #include <string>

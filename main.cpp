@@ -3,10 +3,10 @@
 #include <vector>
 //#include <boost/regex.hpp>
 #include <string>
-#include "Stemmer.h"
-#include "index/field/StringField.h"
-#include "index/field/TextField.h"
-#include "index/Document.h"
+#include <Stemmer.h>
+#include <StringField.h>
+#include <TextField.h>
+#include <Document.h>
 
 //using namespace boost;
 using namespace std;
@@ -24,7 +24,7 @@ using namespace boost::property_tree;
 
 int main() {
 	ptree pt;
-	pt.put("field.fields", 1);
+	pt.put("field fields", 1);
 	ofstream out("test.ini");
 	write_ini(out, pt);
 	out.close();

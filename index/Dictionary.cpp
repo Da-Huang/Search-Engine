@@ -1,4 +1,4 @@
-#include "Dictionary.h"
+#include <Dictionary.h>
 
 
 void Dictionary::add(const string &term) {
