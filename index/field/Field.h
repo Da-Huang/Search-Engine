@@ -12,6 +12,7 @@ protected:
 public:
 	virtual string toString() const = 0;
 	virtual const string &getFieldName() const { return fieldName; }
+	virtual ~Field() {};
 };
 
 #endif

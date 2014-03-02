@@ -8,6 +8,7 @@ private:
 	size_t docID;
 public:
 	Posting(size_t docID) : docID(docID) {}
+	virtual ~Posting() {}
 };
 
 #endif

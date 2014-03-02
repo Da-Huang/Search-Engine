@@ -11,15 +11,18 @@ using namespace std;
 class TextField : public Field {
 private:
 	istream &in;
-	const Analyzer &analyzer;
+	Analyzer &analyzer;
 public:
 	TextField(const string &fieldName, 
-			istream &in, const Analyzer &analyzer) :
-		Field(fieldName), in(in), analyzer(analyzer) {}
+			istream &in, Analyzer &analyzer) 
+		: Field(fieldName), in(in), analyzer(analyzer) {}
+
 	TextField(const string &fieldName,
-			const string &str, const Analyzer &analyzer) :
-		Field(fieldName), in(*new istringstream(str)), analyzer(analyzer) {}
-	~TextField() { delete &in; }
+			const string &str, Analyzer &analyzer) 
+		: Field(fieldName), in(*new istringstream(str)), 
+		analyzer(analyzer) {}
+
+	virtual ~TextField() {}
 	virtual string toString() const;
 };
 

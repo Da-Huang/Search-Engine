@@ -13,7 +13,7 @@ public:
 	Dictionary(const string &filePath) : filePath(filePath) {}
 	void add(const string &term);
 	size_t getTermID(const string &term);
-	~Dictionary();
+	virtual ~Dictionary();
 };
 
 #endif

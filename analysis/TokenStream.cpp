@@ -19,8 +19,6 @@ bool TokenStream::isTokenChar(char c) const {
 }
 
 TokenStream::TokenStream(istream& in) : in(in) {
-	in.seekg(0, ios::end);
-	size = in.tellg();
 	in.seekg(0);
 	while ( !in.eof() && !isTokenChar(in.peek()) ) in.get();
 }

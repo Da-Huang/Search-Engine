@@ -9,13 +9,14 @@ using namespace std;
 class TokenStream {
 private:
 	istream &in;
-	size_t size;
-public:
-	TokenStream(istream& in);
-	bool hasNext() const;
-	Token next();
+
 	bool isSpecialAccept(char c, const char *accept) const;
 	bool isTokenChar(char c) const;
+public:
+	TokenStream(istream& in);
+	virtual bool hasNext() const;
+	virtual Token next();
+	virtual ~TokenStream() {}
 };
 
 

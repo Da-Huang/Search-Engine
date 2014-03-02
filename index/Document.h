@@ -12,7 +12,8 @@ private:
 	map<string, Field&> fields;
 public:
 	void addField(Field &field);
-	string toString() const;
+	virtual string toString() const;
+	virtual ~Document() {}
 };
 
 #endif

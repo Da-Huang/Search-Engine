@@ -3,7 +3,6 @@
 #include <vector>
 //#include <boost/regex.hpp>
 #include <string>
-#include <Stemmer.h>
 #include <StringField.h>
 #include <TextField.h>
 #include <Document.h>

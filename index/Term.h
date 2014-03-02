@@ -15,6 +15,7 @@ protected:
 	size_t end;
 public:
 	Term(const string &term) : term(term) {}
+	virtual ~Term() {}
 };
 
 #endif

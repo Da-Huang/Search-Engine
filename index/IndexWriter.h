@@ -9,8 +9,9 @@ private:
 //	string DIR
 	Dictionary dict;
 public:
-	void write(Document &doc);
-	void close();
+	virtual void write(Document &doc);
+	virtual void close();
+	virtual ~IndexWriter() {}
 };
 
 #endif

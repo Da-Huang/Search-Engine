@@ -13,7 +13,8 @@ public:
 	Token() {}
 	Token(const string &value, size_t begin, size_t end) :
 		value(value), begin(begin), end(end) {}
-	string toString() const;
+	virtual string toString() const;
+	virtual ~Token() {}
 };
 
 #endif
