@@ -1,5 +1,7 @@
 #include <StringField.h>
 
+void StringField::writeTo(MMIndex &mmIndex) const {
+}
 
 string StringField::toString() const {
 	string res = "<";

@@ -1,15 +1,17 @@
 #ifndef _INDEX_WRITER_H_
 #define _INDEX_WRITER_H_
 
+#include <string>
 #include <Document.h>
 #include <Dictionary.h>
-#include <string>
+#include <MMIndex.h>
 
 using namespace std;
 
 class IndexWriter {
 private:
 	const string &dirPath;
+	MMIndex mmIndex;
 public:
 	IndexWriter(const string &dirPath);
 	virtual void write(Document &doc);

@@ -14,6 +14,7 @@ public:
 	void addField(Field &field);
 	virtual string toString() const;
 	virtual ~Document() {}
+	friend class IndexWriter;
 };
 
 #endif

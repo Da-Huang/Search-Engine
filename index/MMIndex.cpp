@@ -1,34 +1,58 @@
 #include <MMIndex.h>
 
 
-void MMIndex::add(const string &term, const Posting &posting) {
-	vector<Posting> &postingList = index[term];
+void MMIndex::add(const string &term, 
+		const string &field, const Posting &posting) {
+	fields.insert(field);
+	vector<Posting> &postingList = index[term][field];
 	const size_t N = postingList.size();
-	if ( postingList[N - 1].docID == posting.docID )
+
+	if ( N > 0 && postingList[N - 1].docID == posting.docID ) {
 		sizeByte += postingList[N - 1].merge(posting);
-	else {
+	} else {
 		postingList.push_back(posting);
 		sizeByte += posting.size();
 	}
 }
 
-void MMIndex::writeTo(ostream &indexOut, 
+void MMIndex::writeTo(ostream &indexOut, ostream &metaOut,
 		ostream &termOut, ostream &postingOut) const {
-	for (auto it = index.begin(); it != index.end(); it ++) {
+	for (auto termIt = index.begin(); termIt != index.end(); termIt ++) {
 		size_t termBegin = termOut.tellp();
 		indexOut.write((char*)&termBegin, sizeof(termBegin));
-		termOut.write(it->first.c_str(), it->first.length() + 1);
-		const vector<Posting> &postingList = it->second;
-		for (size_t i = 0; i < postingList.size(); i ++) {
-			size_t postingListBegin = postingOut.tellp();
-			indexOut.write(
-					(char*)&postingListBegin, sizeof(postingListBegin));
-			size_t postingListSize = postingList.size();
-			indexOut.write(
-					(char*)&postingListSize, sizeof(postingListSize));
-			postingList[i].writeTo(postingOut);
+		termOut.write(termIt->first.c_str(), termIt->first.length() + 1);
+
+		/* Write each field. */
+		for (auto fieldIt = fields.begin();
+				fieldIt != fields.end(); fieldIt ++) {
+			metaOut.write(fieldIt->c_str(), fieldIt->length() + 1);
+
+			auto postingListIt = termIt->second.find(*fieldIt);
+			size_t fieldBegin = termOut.tellp();
+			indexOut.write((char*)&fieldBegin, sizeof(fieldBegin));
+			if ( postingListIt == termIt->second.end() ) {
+				size_t fieldSize = 0;
+				indexOut.write((char*)&fieldSize, sizeof(fieldSize));
+				continue;
+			}
+
+			const vector<Posting> &postingList = postingListIt->second;
+			size_t fieldSize = postingList.size();
+			indexOut.write((char*)&fieldSize, sizeof(fieldSize));
+
+			/* Write each posting. */
+			for (auto postingIt = postingList.begin(); 
+					postingIt != postingList.end(); postingIt ++) {
+				postingIt->writeTo(postingOut);
+			}
 		}
 	}
+}
+
+void MMIndex::reset() {
+	fields.clear();
+	index.clear();
+	sizeByte = 0;
 }
 
 MMIndex::~MMIndex() {

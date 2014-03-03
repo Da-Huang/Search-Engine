@@ -22,6 +22,7 @@ public:
 		: Field(fieldName), in(*new istringstream(str)), 
 		analyzer(analyzer) {}
 
+	virtual void writeTo(MMIndex &mmIndex) const;
 	virtual ~TextField() {}
 	virtual string toString() const;
 };

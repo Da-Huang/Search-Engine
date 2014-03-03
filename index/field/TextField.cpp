@@ -1,5 +1,7 @@
 #include <TextField.h>
 
+void TextField::writeTo(MMIndex &mmIndex) const {
+}
 
 string TextField::toString() const {
 	string res = "<";

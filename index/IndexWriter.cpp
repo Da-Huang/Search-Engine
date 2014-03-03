@@ -10,6 +10,11 @@ IndexWriter::IndexWriter(const string &dirPath) : dirPath(dirPath) {
 }
 
 void IndexWriter::write(Document &doc) {
+	
+	for (auto it = doc.fields.begin(); 
+			it != doc.fields.end(); it ++) {
+//		mmIndex.add(it->first, );
+	}
 }
 
 void IndexWriter::merge() {
@@ -20,6 +25,6 @@ void IndexWriter::close() {
 	string cmd = "rm -f ";
 	cmd += dirPath;
 	cmd += "/__*";
-	system(cmd);
+	system(cmd.c_str());
 }
 
