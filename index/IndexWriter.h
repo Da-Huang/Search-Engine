@@ -3,12 +3,16 @@
 
 #include <Document.h>
 #include <Dictionary.h>
+#include <string>
+
+using namespace std;
 
 class IndexWriter {
 private:
 //	string DIR
-	Dictionary dict;
+	string dirPath;
 public:
+	IndexWriter(const string &dirPath);
 	virtual void write(Document &doc);
 	virtual void close();
 	virtual ~IndexWriter() {}

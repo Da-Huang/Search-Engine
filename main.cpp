@@ -6,6 +6,7 @@
 #include <StringField.h>
 #include <TextField.h>
 #include <Document.h>
+#include <IndexWriter.h>
 
 //using namespace boost;
 using namespace std;
@@ -39,6 +40,7 @@ int main() {
 	doc.addField(f2);
 	cout << doc.toString() << endl;
 	*/
+	/*
 	Analyzer analyzer;
 	ifstream in("Makefile.sub");//, ios::binary);
 	TokenStream t = analyzer.tokenStream(in);
@@ -46,6 +48,8 @@ int main() {
 		Token token = t.next();
 		cout << token.toString() << endl;
 	}
+	*/
+	IndexWriter iw("/home/dhuang/index");
 
 	return 0;
 }
