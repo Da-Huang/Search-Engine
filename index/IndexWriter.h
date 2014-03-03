@@ -11,7 +11,7 @@ using namespace std;
 
 class IndexWriter {
 private:
-	const string &dirPath;
+	const string dirPath;
 	MMIndex mmIndex;
 	size_t currentDocID;
 

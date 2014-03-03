@@ -1,5 +1,7 @@
-#include <IndexWriter.h>
+#include <iostream>
 #include <cstdlib>
+#include <fstream>
+#include <IndexWriter.h>
 
 using namespace std;
 
@@ -20,8 +22,10 @@ IndexWriter::IndexWriter(const string &dirPath)
 void IndexWriter::write(Document &doc) {
 	for (auto it = doc.fields.begin(); it != doc.fields.end(); it ++) {
 		Field& field = it->second;
-		field.writeTo(&mmIndex, fieldIDMap, currentDocID);
+		addField(field.getFieldName());
+		field.writeTo(mmIndex, fieldIDMap, currentDocID);
 	}
+//	cerr << mmIndex.toString() << endl;
 }
 
 void IndexWriter::merge() {
@@ -45,13 +49,42 @@ void IndexWriter::merge() {
 	cmd += dirPath;
 	cmd += "/_.fld";
 	system(cmd.c_str());
+
+	cmd = "mv ";
+	cmd += dirPath;
+	cmd += "/__1.pst ";
+	cmd += dirPath;
+	cmd += "/_.pst";
+	system(cmd.c_str());
 }
 
 void IndexWriter::close() {
+	string idxPath = dirPath;
+	idxPath += "/__1.idx";
+	string fldPath = dirPath;
+	fldPath += "/__1.fld";
+	string trmPath = dirPath;
+	trmPath += "/__1.trm";
+	string pstPath = dirPath;
+	pstPath += "/__1.pst";
+
+	ofstream idxOut(idxPath);
+	ofstream fldOut(fldPath);
+	ofstream trmOut(trmPath);
+	ofstream pstOut(pstPath);
+
+	mmIndex.writeTo(idxOut, fldOut, trmOut, pstOut, fields.size());
+
+	idxOut.close();
+	fldOut.close();
+	trmOut.close();
+	pstOut.close();
+
 	merge();
 	string cmd = "rm -f ";
 	cmd += dirPath;
 	cmd += "/__*";
 	system(cmd.c_str());
 }
+
 

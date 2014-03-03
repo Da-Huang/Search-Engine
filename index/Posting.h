@@ -2,6 +2,7 @@
 #define _POSTING_H_
 
 #include <ostream>
+#include <string>
 
 using namespace std;
 
@@ -14,6 +15,7 @@ public:
 	virtual void writeTo(ostream &out) const;
 	virtual size_t merge(const Posting &posting);
 	inline virtual size_t size() const { return sizeof(docID); }
+	virtual string toString() const;
 	virtual ~Posting() {}
 };
 

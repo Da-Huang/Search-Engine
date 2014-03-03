@@ -1,3 +1,4 @@
+#include <iostream>
 #include <StringField.h>
 #include <Posting.h>
 #include <MMIndex.h>

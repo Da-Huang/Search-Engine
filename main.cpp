@@ -31,25 +31,13 @@ int main() {
 	write_ini(out, pt);
 	out.close();
 	*/
-	/*
-	Analyzer analyzer;
-	Document doc;
-	StringField f1("abc", "efg");
-	TextField f2("text", "text2", analyzer);
-	doc.addField(f1);
-	doc.addField(f2);
-	cout << doc.toString() << endl;
-	*/
-	/*
-	Analyzer analyzer;
-	ifstream in("Makefile.sub");//, ios::binary);
-	TokenStream t = analyzer.tokenStream(in);
-	while ( t.hasNext() ) {
-		Token token = t.next();
-		cout << token.toString() << endl;
-	}
-	*/
 	IndexWriter iw("/home/dhuang/index");
+	StringField field = StringField("a", "a");
+	Document doc = Document();
+	doc.addField(field);
+	iw.write(doc);
+	iw.close();
+
 
 	return 0;
 }

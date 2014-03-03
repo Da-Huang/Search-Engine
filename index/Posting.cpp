@@ -9,4 +9,6 @@ void Posting::writeTo(ostream &out) const {
 	out.write((char*)&docID, sizeof(docID));
 }
 
-
+string Posting::toString() const {
+	return to_string(docID);
+}

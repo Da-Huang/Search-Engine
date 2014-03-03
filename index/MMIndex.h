@@ -22,9 +22,10 @@ public:
 	MMIndex() : sizeByte(0) {}
 	virtual void add(const string &term, 
 			size_t fieldID, const Posting &posting);
-	virtual void writeTo(ostream &indexOut, ostream &metaOut,
-			ostream &termOut, ostream &postingOut, size_t fieldNum) const;
+	void writeTo(ostream &idxOut, ostream &fldOut, 
+			ostream &trmOut, ostream &pstOut, size_t fieldNum) const;
 	virtual void reset();
+	virtual string toString() const;
 	virtual ~MMIndex();
 	inline virtual size_t size() const { return sizeByte; }
 };
