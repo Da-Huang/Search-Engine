@@ -13,7 +13,7 @@ public:
 	StringField(const string &fieldName, const string &str) 
 		: Field(fieldName), str(str) {}
 
-	virtual void writeTo(MMIndex &mmIndex) const;
+	virtual void writeTo(MMIndex &mmIndex, size_t docID) const;
 	virtual string toString() const;
 	virtual ~StringField() {}
 };

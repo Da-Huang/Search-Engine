@@ -14,7 +14,7 @@ private:
 	const Analyzer &analyzer;
 public:
 	TextField(const string &fieldName, 
-			istream &in, Analyzer &analyzer) 
+			istream &in, const Analyzer &analyzer) 
 		: Field(fieldName), in(in), analyzer(analyzer) {}
 
 	TextField(const string &fieldName,
@@ -22,7 +22,7 @@ public:
 		: Field(fieldName), in(*new istringstream(str)), 
 		analyzer(analyzer) {}
 
-	virtual void writeTo(MMIndex &mmIndex) const;
+	virtual void writeTo(MMIndex &mmIndex, size_t docID) const;
 	virtual ~TextField() {}
 	virtual string toString() const;
 };

@@ -12,6 +12,7 @@ class IndexWriter {
 private:
 	const string &dirPath;
 	MMIndex mmIndex;
+	size_t currentDocID;
 public:
 	IndexWriter(const string &dirPath);
 	virtual void write(Document &doc);
