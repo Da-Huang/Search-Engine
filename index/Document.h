@@ -1,9 +1,9 @@
 #ifndef _DOCUMENT_H_
 #define _DOCUMENT_H_
 
-#include <Field.h>
-#include <string>
 #include <map>
+#include <string>
+#include <Field.h>
 
 using namespace std;
 

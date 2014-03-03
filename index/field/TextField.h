@@ -1,11 +1,11 @@
 #ifndef _TEXT_FIELD_H_
 #define _TEXT_FIELD_H_
 
-#include <Field.h>
-#include <Analyzer.h>
 #include <istream>
 #include <sstream>
-#include <string>
+#include <Field.h>
+#include <Analyzer.h>
+
 using namespace std;
 
 class TextField : public Field {
@@ -22,7 +22,8 @@ public:
 		: Field(fieldName), in(*new istringstream(str)), 
 		analyzer(analyzer) {}
 
-	virtual void writeTo(MMIndex &mmIndex, size_t docID) const;
+	virtual void writeTo(MMIndex &mmIndex, 
+			const map<string, size_t> &fieldIDMap, size_t docID) const;
 	virtual ~TextField() {}
 	virtual string toString() const;
 };

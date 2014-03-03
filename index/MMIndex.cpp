@@ -2,9 +2,8 @@
 
 
 void MMIndex::add(const string &term, 
-		const string &field, const Posting &posting) {
-	fields.insert(field);
-	vector<Posting> &postingList = index[term][field];
+		size_t fieldID, const Posting &posting) {
+	vector<Posting> &postingList = index[term][fieldID];
 	const size_t N = postingList.size();
 
 	if ( N > 0 && postingList[N - 1].docID == posting.docID ) {
@@ -16,18 +15,18 @@ void MMIndex::add(const string &term,
 }
 
 void MMIndex::writeTo(ostream &indexOut, ostream &metaOut,
-		ostream &termOut, ostream &postingOut) const {
+		ostream &termOut, ostream &postingOut, size_t fieldNum) const {
+
+	metaOut.write((char*)&fieldNum, sizeof(fieldNum));
+
 	for (auto termIt = index.begin(); termIt != index.end(); termIt ++) {
 		size_t termBegin = termOut.tellp();
 		indexOut.write((char*)&termBegin, sizeof(termBegin));
 		termOut.write(termIt->first.c_str(), termIt->first.length() + 1);
 
 		/* Write each field. */
-		for (auto fieldIt = fields.begin();
-				fieldIt != fields.end(); fieldIt ++) {
-			metaOut.write(fieldIt->c_str(), fieldIt->length() + 1);
-
-			auto postingListIt = termIt->second.find(*fieldIt);
+		for (size_t fieldIt = 0; fieldIt < fieldNum; fieldIt ++) {
+			auto postingListIt = termIt->second.find(fieldIt);
 			size_t fieldBegin = termOut.tellp();
 			indexOut.write((char*)&fieldBegin, sizeof(fieldBegin));
 			if ( postingListIt == termIt->second.end() ) {
@@ -50,7 +49,6 @@ void MMIndex::writeTo(ostream &indexOut, ostream &metaOut,
 }
 
 void MMIndex::reset() {
-	fields.clear();
 	index.clear();
 	sizeByte = 0;
 }

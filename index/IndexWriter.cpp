@@ -3,6 +3,13 @@
 
 using namespace std;
 
+void IndexWriter::addField(const string &field) {
+	auto it = fieldIDMap.find(field);
+	if ( it != fieldIDMap.end() ) return;
+	fieldIDMap[field] = fields.size();
+	fields.push_back(field);
+}
+
 IndexWriter::IndexWriter(const string &dirPath) 
 	: dirPath(dirPath), currentDocID(0) {
 	string cmd = "mkdir -p ";
@@ -13,7 +20,7 @@ IndexWriter::IndexWriter(const string &dirPath)
 void IndexWriter::write(Document &doc) {
 	for (auto it = doc.fields.begin(); it != doc.fields.end(); it ++) {
 		Field& field = it->second;
-		field.writeTo(mmIndex, currentDocID);
+		field.writeTo(&mmIndex, fieldIDMap, currentDocID);
 	}
 }
 

@@ -5,8 +5,9 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <Posting.h>
 #include <ostream>
+#include <Posting.h>
+//#include <IndexWriter.h>
 
 using namespace std;
 
@@ -15,15 +16,14 @@ using namespace std;
   ********************/
 class MMIndex {
 private:
-	set<string> fields;
-	map<string, map<string, vector<Posting>>> index;
+	map<string, map<size_t, vector<Posting>>> index;
 	size_t sizeByte;
 public:
 	MMIndex() : sizeByte(0) {}
 	virtual void add(const string &term, 
-			const string &field, const Posting &posting);
+			size_t fieldID, const Posting &posting);
 	virtual void writeTo(ostream &indexOut, ostream &metaOut,
-			ostream &termOut, ostream &postingOut) const;
+			ostream &termOut, ostream &postingOut, size_t fieldNum) const;
 	virtual void reset();
 	virtual ~MMIndex();
 	inline virtual size_t size() const { return sizeByte; }

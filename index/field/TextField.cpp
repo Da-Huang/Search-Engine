@@ -1,12 +1,17 @@
 #include <TextField.h>
 #include <TokenStream.h>
 #include <Posting.h>
+#include <MMIndex.h>
 
-void TextField::writeTo(MMIndex &mmIndex, size_t docID) const {
+void TextField::writeTo(MMIndex &mmIndex, 
+		const map<string, size_t> &fieldIDMap, size_t docID) const {
+	auto it = fieldIDMap.find(fieldName);
+	if ( it == fieldIDMap.end() ) return;
+
 	TokenStream ts = analyzer.tokenStream(in);
 	while ( ts.hasNext() ) {
 		Token token = ts.next();
-		mmIndex.add(token.value, fieldName, Posting(docID));
+		mmIndex.add(token.value, it->second, Posting(docID));
 	}
 }
 
