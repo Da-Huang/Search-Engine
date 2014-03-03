@@ -14,6 +14,7 @@ public:
 	virtual void writeTo(MMIndex &mmIndex, 
 			const map<string, size_t> &fieldIDMap, size_t docID) const;
 	virtual string toString() const;
+	virtual const string &getStr() const { return str; }
 	virtual ~StringField() {}
 };
 

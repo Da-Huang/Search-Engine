@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <fstream>
 #include <Document.h>
 #include <Dictionary.h>
 #include <MMIndex.h>
@@ -14,6 +15,8 @@ private:
 	const string dirPath;
 	MMIndex mmIndex;
 	size_t currentDocID;
+	ofstream docOut;
+	ofstream cntOut;
 
 	map<string, size_t> fieldIDMap;
 	vector<string> fields;

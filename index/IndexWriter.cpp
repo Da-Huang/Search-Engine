@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
+#include <StringField.h>
 #include <IndexWriter.h>
 
 using namespace std;
@@ -17,14 +18,37 @@ IndexWriter::IndexWriter(const string &dirPath)
 	string cmd = "mkdir -p ";
 	cmd += dirPath;
 	system(cmd.c_str());
+
+	string docPath = dirPath;
+	docPath += "/_.doc";
+	string cntPath = dirPath;
+	cntPath += "/_.cnt";
+
+	docOut.open(docPath);
+	cntOut.open(cntPath);
 }
 
 void IndexWriter::write(Document &doc) {
+	size_t cntBegin = cntOut.tellp();
+	docOut.write((char*)&cntBegin, sizeof(cntBegin));
+	
+	size_t cntSize = 0;
 	for (auto it = doc.fields.begin(); it != doc.fields.end(); it ++) {
 		Field& field = it->second;
-		addField(field.getFieldName());
+		const string &fieldName = field.getFieldName();
+		addField(fieldName);
 		field.writeTo(mmIndex, fieldIDMap, currentDocID);
+
+		size_t fieldID = fieldIDMap[fieldName];
+
+		if ( dynamic_cast<StringField*>(&field) ) {
+			cntOut.write((char*)&fieldID, sizeof(fieldID));
+			cntOut.write(((StringField&)field).getStr().c_str(), 
+					((StringField&)field).getStr().length() + 1);
+			cntSize ++;
+		}
 	}
+	docOut.write((char*)&cntSize, sizeof(cntSize));
 	currentDocID ++;
 //	cerr << mmIndex.toString() << endl;
 }
@@ -81,6 +105,8 @@ void IndexWriter::close() {
 	trmOut.close();
 	pstOut.close();
 
+	docOut.close();
+	cntOut.close();
 	merge();
 	string cmd = "rm -f ";
 	cmd += dirPath;
