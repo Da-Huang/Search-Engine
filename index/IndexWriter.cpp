@@ -12,8 +12,14 @@ IndexWriter::IndexWriter(const string &dirPath) : dirPath(dirPath) {
 void IndexWriter::write(Document &doc) {
 }
 
-
-void IndexWriter::close() {
+void IndexWriter::merge() {
 }
 
+void IndexWriter::close() {
+	merge();
+	string cmd = "rm -f ";
+	cmd += dirPath;
+	cmd += "/__*";
+	system(cmd);
+}
 

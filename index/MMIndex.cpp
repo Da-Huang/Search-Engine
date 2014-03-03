@@ -5,9 +5,11 @@ void MMIndex::add(const string &term, const Posting &posting) {
 	vector<Posting> &postingList = index[term];
 	const size_t N = postingList.size();
 	if ( postingList[N - 1].docID == posting.docID )
-		postingList[N - 1].merge(posting);
-	else 
+		sizeByte += postingList[N - 1].merge(posting);
+	else {
 		postingList.push_back(posting);
+		sizeByte += posting.size();
+	}
 }
 
 void MMIndex::writeTo(ostream &indexOut, 

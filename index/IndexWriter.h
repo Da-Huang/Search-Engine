@@ -9,12 +9,12 @@ using namespace std;
 
 class IndexWriter {
 private:
-//	string DIR
-	string dirPath;
+	const string &dirPath;
 public:
 	IndexWriter(const string &dirPath);
 	virtual void write(Document &doc);
 	virtual void close();
+	virtual void merge();
 	virtual ~IndexWriter() {}
 };
 

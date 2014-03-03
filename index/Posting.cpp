@@ -1,8 +1,8 @@
 #include <Posting.h>
 
-void Posting::merge(const Posting &posting) {
-	if ( docID != posting.docID ) return;
-	return;
+size_t Posting::merge(const Posting &posting) {
+	if ( docID != posting.docID ) return 0;
+	return 0;
 }
 
 void Posting::writeTo(ostream &out) const {

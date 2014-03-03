@@ -12,7 +12,8 @@ public:
 public:
 	Posting(size_t docID) : docID(docID) {}
 	virtual void writeTo(ostream &out) const;
-	virtual void merge(const Posting &posting);
+	virtual size_t merge(const Posting &posting);
+	inline virtual size_t size() const { return sizeof(docID); }
 	virtual ~Posting() {}
 };
 
