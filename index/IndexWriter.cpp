@@ -1,14 +1,12 @@
 #include <IndexWriter.h>
-#include <fstream>
-#include <iostream>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <cstdlib>
 
 using namespace std;
 
 IndexWriter::IndexWriter(const string &dirPath) : dirPath(dirPath) {
-//	string path = dirPath;
-	mkdir(dirPath.c_str(), (mode_t)0x775);
+	string cmd = "mkdir -p ";
+	cmd += dirPath;
+	system(cmd.c_str());
 }
 
 void IndexWriter::write(Document &doc) {

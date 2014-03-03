@@ -1,6 +1,6 @@
 #include <TokenStream.h>
-#include <ctype.h>
-#include <string.h>
+#include <cctype>
+#include <cstring>
 #include <algorithm>
 
 using namespace std;
