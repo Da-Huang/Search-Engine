@@ -25,6 +25,7 @@ void IndexWriter::write(Document &doc) {
 		addField(field.getFieldName());
 		field.writeTo(mmIndex, fieldIDMap, currentDocID);
 	}
+	currentDocID ++;
 //	cerr << mmIndex.toString() << endl;
 }
 

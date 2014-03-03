@@ -32,10 +32,15 @@ int main() {
 	out.close();
 	*/
 	IndexWriter iw("/home/dhuang/index");
-	StringField field = StringField("a", "a");
-	Document doc = Document();
-	doc.addField(field);
-	iw.write(doc);
+	Analyzer analyzer;
+	for (int i = 0; i < 5; i ++) {
+		TextField field1 = TextField("a", "This is a good day!", analyzer);
+		StringField field2 = StringField("b", "good");
+		Document doc = Document();
+		doc.addField(field1);
+		doc.addField(field2);
+		iw.write(doc);
+	}
 	iw.close();
 
 
