@@ -8,7 +8,7 @@ class NotQuery {
 private:
 	const Query &query;
 public:
-	public NotQuery(const Query &query) : query(query) {}
+	NotQuery(const Query &query) : query(query) {}
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
 	virtual ~NotQuery() {}
 };
