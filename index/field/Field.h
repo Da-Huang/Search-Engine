@@ -16,6 +16,7 @@ protected:
 public:
 	virtual void writeTo(MMIndex &mmIndex, 
 			const FieldNameMap &fieldNameMap, size_t docID) const = 0;
+	virtual string get() const { return ""; }
 	virtual string toString() const = 0;
 	virtual const string &getFieldName() const { return fieldName; }
 	virtual ~Field() {};

@@ -1,12 +1,11 @@
 #include <IndexWriter.h>
 #include <Document.h>
 
-/*
-StringField Document::getStringField(const string &fieldName) {
-	auto it = fields.getFieldName();
-	if ( it == fields.end() ) return new StringField();
+string Document::get(const string &fieldName) const {
+	auto it = fields.find(fieldName);
+	if ( it == fields.end() ) return "";
+	return it->second.get();
 }
-*/
 
 void Document::addField(Field &field) {
 	fields.insert(pair<string, Field&>(field.getFieldName(), field));

@@ -19,6 +19,17 @@ FileIndex::FileIndex(const string &prefix, size_t recordSize)
 	TERM_NUM = idxIn.tellg() / RECORD_SIZE;
 }
 
+size_t FileIndex::findTermID(const string &term) {
+	size_t first = 1, last = TERM_NUM;
+	while ( first <= last ) {
+		size_t mid = (first + last) / 2;
+		string midStr = fetchTerm(mid);
+		if ( midStr < term ) first = mid + 1;
+		else if ( midStr > term ) last = mid - 1; 
+		else return mid;
+	}
+	return 0;
+}
 
 string FileIndex::fetchTerm(size_t termID) {
 	if ( termID == 0 || termID > TERM_NUM ) return "";

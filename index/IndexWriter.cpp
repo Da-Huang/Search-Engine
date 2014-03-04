@@ -40,8 +40,8 @@ void IndexWriter::write(Document &doc) {
 
 		if ( dynamic_cast<StringField*>(&field) ) {
 			cntOut.write((char*)&fieldID, sizeof(fieldID));
-			cntOut.write(((StringField&)field).getStr().c_str(), 
-					((StringField&)field).getStr().length() + 1);
+			string fieldValue = field.get();
+			cntOut.write(fieldValue.c_str(), fieldValue.length() + 1);
 			cntSize ++;
 		}
 	}

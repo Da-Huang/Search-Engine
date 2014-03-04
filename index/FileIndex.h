@@ -18,6 +18,7 @@ private:
 	size_t TERM_NUM;
 public:
 	FileIndex(const string &prefix, size_t recordSize);
+	virtual size_t findTermID(const string &term);
 	virtual inline size_t getTermNum() const { return TERM_NUM; }
 	virtual string fetchTerm(size_t termID);
 	virtual ~FileIndex();
