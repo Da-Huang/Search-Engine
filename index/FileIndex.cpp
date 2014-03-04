@@ -1,5 +1,6 @@
 #include <iostream>
 #include <FileIndex.h>
+#include <PostingStream.h>
 
 
 FileIndex::FileIndex(const string &prefix, size_t recordSize)
@@ -63,18 +64,31 @@ string FileIndex::toString() {
 		res += to_string(i);
 		res += ".";
 		res += fetchTerm(i);
-		res += ":";
+		res += ": ";
 		for (size_t j = 1; j <= getFieldNum(); j ++) {
+			res += to_string(j);
+			res += "'[";
+
 			pair<size_t, size_t> pstListInfo = getPostingListInfo(i, j);
 			size_t pstListBegin = pstListInfo.first;
 			size_t pstListSize = pstListInfo.second;
+			size_t pstListEnd = pstListBegin + pstListSize * sizeof(size_t);
+			cerr << pstListBegin << " " << pstListEnd << endl;
+			PostingStream postingStream(pstIn, pstListBegin, pstListEnd);
+			while ( postingStream.hasNext() ) {
+				Posting posting = postingStream.next();
+				res += posting.toString();
+				res += ",";
+			}
+			if ( res[res.length() - 1] == ',' ) res.erase(res.length() - 1);
+			res += "],";
 		}
-		res += "[";
-		res += "]";
+		if ( res[res.length() - 1] == ',' ) res.erase(res.length() - 1);
 		res += "\n";
 	}
 	return res;
 }
+
 
 FileIndex::~FileIndex() {
 	idxIn.close();

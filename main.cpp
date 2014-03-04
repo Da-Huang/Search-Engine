@@ -36,7 +36,7 @@ int main() {
 	out.close();
 	*/
 	
-/*
+
 	IndexWriter iw("/home/dhuang/index");
 	Analyzer analyzer;
 	for (int i = 0; i < 5; i ++) {
@@ -48,7 +48,7 @@ int main() {
 		iw.write(doc);
 	}
 	iw.close();
-*/
+
 
 //	doc.~Document();
 	

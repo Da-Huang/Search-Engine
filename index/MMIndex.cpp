@@ -26,7 +26,7 @@ void MMIndex::writeTo(ostream &idxOut, ostream &fldOut,
 		trmOut.write(termIt->first.c_str(), termIt->first.length() + 1);
 
 		/* Write each field. */
-		for (size_t fieldIt = 0; fieldIt < fieldNum; fieldIt ++) {
+		for (size_t fieldIt = 1; fieldIt <= fieldNum; fieldIt ++) {
 			auto postingListIt = termIt->second.find(fieldIt);
 			size_t fieldBegin = pstOut.tellp();
 			idxOut.write((char*)&fieldBegin, sizeof(fieldBegin));
@@ -73,8 +73,9 @@ string MMIndex::toString() const {
 				res += ",";
 			}
 			if ( res[res.length() - 1] == ',' ) res.erase(res.length() - 1);
-			res += "], ";
+			res += "],";
 		}
+		if ( res[res.length() - 1] == ',' ) res.erase(res.length() - 1);
 		res += "\n";
 	}
 	return res;
