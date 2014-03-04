@@ -10,6 +10,8 @@
 #include <FileIndex.h>
 #include <IndexSearcher.h>
 #include <DocDB.h>
+#include <TermQuery.h>
+#include <ScoreDoc.h>
 
 //using namespace boost;
 using namespace std;
@@ -36,7 +38,7 @@ int main() {
 	out.close();
 	*/
 	
-
+/*
 	IndexWriter iw("/home/dhuang/index");
 	Analyzer analyzer;
 	for (int i = 0; i < 5; i ++) {
@@ -48,13 +50,19 @@ int main() {
 		iw.write(doc);
 	}
 	iw.close();
-
+*/
 
 //	doc.~Document();
 	
 	
 	IndexSearcher is("/home/dhuang/index/_");
-	cout << is.toString() << endl;
+	cout << is.toString() 
+		<< "=======================================" << endl;
+
+	vector<ScoreDoc> scoreDocs = is.search(TermQuery("a", "good"));
+	for (auto it = scoreDocs.begin(); it != scoreDocs.end(); it ++) {
+		cout << is.doc(it->id()).toString() << endl;
+	}
 
 
 	return 0;

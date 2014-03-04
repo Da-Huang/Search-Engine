@@ -3,11 +3,11 @@
 
 #include <vector>
 #include <DocDB.h>
-#include <Query.h>
 #include <ScoreDoc.h>
 #include <FileIndex.h>
 #include <FieldNameMap.h>
 
+class Query;
 
 class IndexSearcher {
 private:
@@ -20,6 +20,8 @@ public:
 	virtual Document doc(const ScoreDoc &scoreDoc);
 	virtual string toString();
 	virtual ~IndexSearcher();
+
+	friend class TermQuery;
 };
 
 #endif

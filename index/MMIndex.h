@@ -26,7 +26,7 @@ public:
 			ostream &trmOut, ostream &pstOut, size_t fieldNum) const;
 	virtual void reset();
 	virtual string toString() const;
-	virtual ~MMIndex();
+	virtual ~MMIndex() {}
 	inline virtual size_t size() const { return sizeByte; }
 };
 

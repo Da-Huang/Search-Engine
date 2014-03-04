@@ -3,7 +3,9 @@
 
 #include <fstream>
 #include <string>
+#include <vector>
 #include <utility>
+#include <ScoreDoc.h>
 
 using namespace std;
 
@@ -24,6 +26,7 @@ public:
 	virtual pair<size_t, size_t> getPostingListInfo(
 			size_t termID, size_t fieldID);
 	virtual size_t getFieldNum() const;
+	virtual vector<ScoreDoc> search(size_t fieldID, const string &term);
 	virtual string fetchTerm(size_t termID);
 	virtual string toString();
 	virtual ~FileIndex();

@@ -54,10 +54,6 @@ void MMIndex::reset() {
 	sizeByte = 0;
 }
 
-MMIndex::~MMIndex() {
-	cerr << toString() << endl;
-}
-
 string MMIndex::toString() const {
 	string res;
 	for (auto idxIt = index.begin(); idxIt != index.end(); idxIt ++) {

@@ -11,6 +11,7 @@ private:
 	vector<size_t> nears;
 public:
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
+	virtual ~PhraseQuery() {}
 };
 
 

@@ -73,7 +73,6 @@ string FileIndex::toString() {
 			size_t pstListBegin = pstListInfo.first;
 			size_t pstListSize = pstListInfo.second;
 			size_t pstListEnd = pstListBegin + pstListSize * sizeof(size_t);
-			cerr << pstListBegin << " " << pstListEnd << endl;
 			PostingStream postingStream(pstIn, pstListBegin, pstListEnd);
 			while ( postingStream.hasNext() ) {
 				Posting posting = postingStream.next();
@@ -89,6 +88,21 @@ string FileIndex::toString() {
 	return res;
 }
 
+vector<ScoreDoc> FileIndex::search(size_t fieldID, const string &term) {
+	vector<ScoreDoc> res;
+	size_t termID = findTermID(term);
+	if ( termID == 0 || fieldID == 0 ) return res;
+	pair<size_t, size_t> pstListInfo = getPostingListInfo(termID, fieldID);
+	size_t pstListBegin = pstListInfo.first;
+	size_t pstListSize = pstListInfo.second;
+	size_t pstListEnd = pstListBegin + pstListSize * sizeof(size_t);
+	PostingStream postingStream(pstIn, pstListBegin, pstListEnd);
+	while ( postingStream.hasNext() ) {
+		Posting posting = postingStream.next();
+		res.push_back(ScoreDoc(posting.getDocID()));
+	}
+	return res;
+}
 
 FileIndex::~FileIndex() {
 	idxIn.close();

@@ -11,6 +11,7 @@ class IndexSearcher;
 class Query {
 public:
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const = 0;
+	virtual ~Query() {}
 };
 
 

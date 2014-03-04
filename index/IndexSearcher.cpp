@@ -18,7 +18,7 @@ IndexSearcher::IndexSearcher(const string &prefix) {
 }
 
 vector<ScoreDoc> IndexSearcher::search(const Query &query) {
-	return vector<ScoreDoc>();
+	return query.search(*this);
 }
 
 Document IndexSearcher::doc(const ScoreDoc &scoreDoc) {

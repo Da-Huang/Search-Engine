@@ -6,10 +6,12 @@
 class ScoreDoc {
 private:
 	size_t docID;
-	double score;
+	double docScore;
 public:
-	ScoreDoc(size_t docID, double score=0) : docID(docID), score(score) {}
+	ScoreDoc(size_t docID, double score=0) 
+		: docID(docID), docScore(score) {}
 	virtual inline size_t id() const { return docID; }
+	virtual inline double score() const { return docScore; }
 	virtual ~ScoreDoc() {}
 };
 
