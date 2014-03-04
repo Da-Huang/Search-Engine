@@ -23,7 +23,7 @@ public:
 		analyzer(analyzer) {}
 
 	virtual void writeTo(MMIndex &mmIndex, 
-			const map<string, size_t> &fieldIDMap, size_t docID) const;
+			const FieldNameMap &fieldNameMap, size_t docID) const;
 	virtual ~TextField() {}
 	virtual string toString() const;
 };

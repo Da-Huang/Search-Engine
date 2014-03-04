@@ -1,17 +1,19 @@
-#include <TextField.h>
-#include <TokenStream.h>
 #include <Posting.h>
 #include <MMIndex.h>
+#include <TextField.h>
+#include <TokenStream.h>
+#include <FieldNameMap.h>
+
 
 void TextField::writeTo(MMIndex &mmIndex, 
-		const map<string, size_t> &fieldIDMap, size_t docID) const {
-	auto it = fieldIDMap.find(fieldName);
-	if ( it == fieldIDMap.end() ) return;
+		const FieldNameMap &fieldNameMap, size_t docID) const {
+	size_t fieldID = fieldNameMap.getFieldID(fieldName);
+	if ( fieldID == 0 ) return;
 
 	TokenStream ts = analyzer.tokenStream(in);
 	while ( ts.hasNext() ) {
 		Token token = ts.next();
-		mmIndex.add(token.value, it->second, Posting(docID));
+		mmIndex.add(token.value, fieldID, Posting(docID));
 	}
 }
 

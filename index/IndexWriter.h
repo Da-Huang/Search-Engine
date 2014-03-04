@@ -7,6 +7,7 @@
 #include <Document.h>
 #include <Dictionary.h>
 #include <MMIndex.h>
+#include <FieldNameMap.h>
 
 using namespace std;
 
@@ -18,12 +19,11 @@ private:
 	ofstream docOut;
 	ofstream cntOut;
 
-	map<string, size_t> fieldIDMap;
-	vector<string> fields;
+	FieldNameMap fieldNameMap;
 	
 public:
 	IndexWriter(const string &dirPath);
-	void addField(const string &field);
+	void addFieldName(const string &fieldName);
 	virtual void write(Document &doc);
 	virtual void close();
 	virtual void merge();

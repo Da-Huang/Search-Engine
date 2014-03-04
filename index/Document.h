@@ -11,9 +11,10 @@ class Document {
 private:
 	map<string, Field&> fields;
 public:
+//	Field& getField(const string &fieldName);
 	void addField(Field &field);
 	virtual string toString() const;
-	virtual ~Document() {}
+	virtual ~Document();
 
 	friend class IndexWriter;
 };

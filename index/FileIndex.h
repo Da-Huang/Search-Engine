@@ -7,16 +7,20 @@
 using namespace std;
 
 
+class FieldNameMap;
+
 class FileIndex {
 private:
 	ifstream idxIn;
 	ifstream trmIn;
 	ifstream pstIn;
 	const size_t RECORD_SIZE;
-	size_t N;
+	size_t TERM_NUM;
 public:
 	FileIndex(const string &prefix, size_t recordSize);
+	virtual inline size_t getTermNum() const { return TERM_NUM; }
 	virtual string fetchTerm(size_t termID);
+	virtual ~FileIndex();
 };
 
 

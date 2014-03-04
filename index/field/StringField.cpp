@@ -1,13 +1,16 @@
 #include <iostream>
-#include <StringField.h>
 #include <Posting.h>
 #include <MMIndex.h>
+#include <StringField.h>
+#include <FieldNameMap.h>
+#include <Field.h>
+
 
 void StringField::writeTo(MMIndex &mmIndex, 
-		const map<string, size_t> &fieldIDMap, size_t docID) const {
-	auto it = fieldIDMap.find(fieldName);
-	if ( it == fieldIDMap.end() ) return;
-	mmIndex.add(str, it->second, Posting(docID));
+		const FieldNameMap &fieldNameMap, size_t docID) const {
+	size_t fieldID = fieldNameMap.getFieldID(fieldName);
+	if ( fieldID == 0 ) return;
+	mmIndex.add(str, fieldID, Posting(docID));
 }
 
 string StringField::toString() const {
