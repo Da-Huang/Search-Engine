@@ -8,6 +8,8 @@
 class AndQuery {
 private:
 	vector<Query> queries;
+public:
+	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
 };
 
 

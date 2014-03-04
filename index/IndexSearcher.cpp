@@ -8,25 +8,33 @@ IndexSearcher::IndexSearcher(const string &prefix) {
 	fldPath += ".fld";
 	ifstream fldIn(fldPath);
 
-	FieldNameMap fieldNameMap;
-	fieldNameMap.load(fldIn);
+	fieldNameMap = new FieldNameMap;
+	fieldNameMap->load(fldIn);
 	fldIn.close();
-	size_t recordSize = (fieldNameMap.size() * 2 + 1) * sizeof(size_t);
+	size_t recordSize = (fieldNameMap->size() * 2 + 1) * sizeof(size_t);
 
 	fileIndex = new FileIndex(prefix, recordSize);
-	docDB = new DocDB(prefix, fieldNameMap);
+	docDB = new DocDB(prefix, *fieldNameMap);
 }
 
-TopDoc IndexSearcher::search(const Query &query) {
-	return TopDoc(0, vector<ScoreDoc>());
+vector<ScoreDoc> IndexSearcher::search(const Query &query) {
+	return vector<ScoreDoc>();
 }
 
 Document IndexSearcher::doc(const ScoreDoc &scoreDoc) {
 	return docDB->fetchDocument(scoreDoc.id());
 }
 
+string IndexSearcher::toString() {
+	string res = fileIndex->toString();
+	res += "\n";
+	res += docDB->toString();
+	return res;
+}
+
 IndexSearcher::~IndexSearcher() {
 	delete fileIndex;
 	delete docDB;
+	delete fieldNameMap;
 }
 

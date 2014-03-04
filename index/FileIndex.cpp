@@ -42,6 +42,39 @@ string FileIndex::fetchTerm(size_t termID) {
 	return res;
 }
 
+size_t FileIndex::getFieldNum() const {
+	return (RECORD_SIZE / sizeof(size_t) - 1) / 2;
+}
+
+pair<size_t, size_t> FileIndex::getPostingListInfo(
+		size_t termID, size_t fieldID) {
+	size_t BASE = (termID - 1) * RECORD_SIZE + 
+					RECORD_SIZE - getFieldNum() * 2 * sizeof(size_t);
+	idxIn.seekg(BASE + (fieldID - 1) * 2 * sizeof(size_t));
+	size_t pstListBegin, pstListSize;
+	idxIn.read((char*)&pstListBegin, sizeof(pstListBegin));
+	idxIn.read((char*)&pstListSize, sizeof(pstListSize));
+	return make_pair(pstListBegin, pstListSize);
+}
+
+string FileIndex::toString() {
+	string res = "index:\n";
+	for (size_t i = 1; i <= TERM_NUM; i ++) {
+		res += to_string(i);
+		res += ".";
+		res += fetchTerm(i);
+		res += ":";
+		for (size_t j = 1; j <= getFieldNum(); j ++) {
+			pair<size_t, size_t> pstListInfo = getPostingListInfo(i, j);
+			size_t pstListBegin = pstListInfo.first;
+			size_t pstListSize = pstListInfo.second;
+		}
+		res += "[";
+		res += "]";
+		res += "\n";
+	}
+	return res;
+}
 
 FileIndex::~FileIndex() {
 	idxIn.close();

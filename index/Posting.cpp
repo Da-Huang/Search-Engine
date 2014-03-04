@@ -1,5 +1,6 @@
 #include <Posting.h>
 
+
 size_t Posting::merge(const Posting &posting) {
 	if ( docID != posting.docID ) return 0;
 	return 0;

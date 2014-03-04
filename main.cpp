@@ -8,6 +8,7 @@
 #include <Document.h>
 #include <IndexWriter.h>
 #include <FileIndex.h>
+#include <IndexSearcher.h>
 #include <DocDB.h>
 
 //using namespace boost;
@@ -52,21 +53,9 @@ int main() {
 //	doc.~Document();
 	
 	
-	FileIndex fidx("/home/dhuang/index/_", sizeof(size_t) * 5);
-	for (size_t i = 1; i <= fidx.getTermNum(); i ++) {
-		cout << fidx.fetchTerm(i) << endl;
-	}
-	FieldNameMap fieldNameMap;
-	ifstream fldIn("/home/dhuang/index/_.fld");
-	fieldNameMap.load(fldIn);
-	cout << fieldNameMap.toString() << endl;;
-	DocDB docDB("/home/dhuang/index/_", fieldNameMap);
-	for (size_t i = 1; i <= docDB.getDocNum(); i ++) {
-		Document doc = docDB.fetchDocument(i);
-		cout << doc.toString() << endl;
-	}
+	IndexSearcher is("/home/dhuang/index/_");
+	cout << is.toString() << endl;
 
-	fldIn.close();
 
 	return 0;
 }

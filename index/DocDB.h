@@ -20,6 +20,7 @@ public:
 	DocDB(const string &prefix, const FieldNameMap& fieldNameMap);
 	virtual Document fetchDocument(size_t docID);
 	virtual inline size_t getDocNum() const { return DOC_NUM; }
+	virtual string toString();
 	virtual ~DocDB();
 };
 

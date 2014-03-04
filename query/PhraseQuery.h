@@ -6,6 +6,11 @@
 
 
 class PhraseQuery : public Query {
+private:
+	vector<string> terms;
+	vector<size_t> nears;
+public:
+	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
 };
 
 

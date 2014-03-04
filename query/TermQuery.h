@@ -5,7 +5,12 @@
 
 
 class TermQuery : public Query {
+private:
+	string term;
+public:
+	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
 };
+
 
 
 #endif

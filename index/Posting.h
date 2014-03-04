@@ -1,7 +1,7 @@
 #ifndef _POSTING_H_
 #define _POSTING_H_
 
-#include <ostream>
+#include <iostream>
 #include <string>
 
 using namespace std;

@@ -113,4 +113,3 @@ void IndexWriter::close() {
 	system(cmd.c_str());
 }
 
-

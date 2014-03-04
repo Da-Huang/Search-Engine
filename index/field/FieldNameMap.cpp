@@ -33,14 +33,9 @@ string FieldNameMap::toString() const {
 }
 
 void FieldNameMap::load(istream &in) {
-	in.seekg(0);
-	size_t N;
-	in.read((char*)&N, sizeof(N));
-	size_t i = 0;
+	in.seekg(sizeof(size_t));
 	string line;
-	while ( i ++ < N && getline(in, line, '\0') ) {
-		addFieldName(line);
-	}
+	while ( getline(in, line, '\0') ) addFieldName(line);
 }
 
 void FieldNameMap::save(ostream &out) {

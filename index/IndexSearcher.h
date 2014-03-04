@@ -2,20 +2,23 @@
 #define _INDEX_SEARCHER_H_
 
 #include <vector>
-#include <TopDoc.h>
-#include <FileIndex.h>
 #include <DocDB.h>
-#include <FieldNameMap.h>
 #include <Query.h>
+#include <ScoreDoc.h>
+#include <FileIndex.h>
+#include <FieldNameMap.h>
+
 
 class IndexSearcher {
 private:
 	FileIndex *fileIndex;
 	DocDB *docDB;
+	FieldNameMap *fieldNameMap;
 public:
 	IndexSearcher(const string &prefix);
-	virtual TopDoc search(const Query &query);
+	virtual vector<ScoreDoc> search(const Query &query);
 	virtual Document doc(const ScoreDoc &scoreDoc);
+	virtual string toString();
 	virtual ~IndexSearcher();
 };
 

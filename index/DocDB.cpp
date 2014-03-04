@@ -39,6 +39,20 @@ Document DocDB::fetchDocument(size_t docID) {
 	return res;
 }
 
+string DocDB::toString() {
+	string res = "fieldNameMap:";
+	res += fieldNameMap.toString();
+	res += "\n";
+	res += "doc:\n";
+	for (size_t i = 1; i <= DOC_NUM; i ++) {
+		res += to_string(i);
+		res += ".";
+		res += fetchDocument(i).toString();
+		res += "\n";
+	}
+	return res;
+}
+
 DocDB::~DocDB() {
 	docIn.close();
 	cntIn.close();
