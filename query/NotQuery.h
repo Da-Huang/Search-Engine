@@ -4,7 +4,8 @@
 
 #include <Query.h>
 
-class NotQuery {
+
+class NotQuery : public Query {
 private:
 	const Query &query;
 public:

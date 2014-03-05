@@ -5,7 +5,7 @@
 #include <Query.h>
 
 
-class OrQuery {
+class OrQuery : public Query {
 private:
 	vector<Query> queries;
 public:

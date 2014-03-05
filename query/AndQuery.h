@@ -5,7 +5,7 @@
 #include <Query.h>
 
 
-class AndQuery {
+class AndQuery : public Query {
 private:
 	vector<Query> queries;
 public:
