@@ -31,9 +31,13 @@ vector<ScoreDoc> OrQuery::merge(
 	vector<ScoreDoc> res;
 	size_t i = 0, j = 0;
 	while ( i < docs1.size() && j < docs2.size() ) {
-		if ( docs1[i].id() < docs2[j].id() ) i ++;
-		else if ( docs1[i].id() > docs2[j].id() ) j ++;
-		else {
+		if ( docs1[i].id() < docs2[j].id() ) {
+			res.push_back(docs1[i ++]);
+
+		} else if ( docs1[i].id() > docs2[j].id() ) {
+			res.push_back(docs2[j ++]);
+
+		} else {
 			res.push_back(docs1[i]);
 			i ++; j ++;
 		}

@@ -1,3 +1,10 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cerrno>
+
 #include <KernelTest.h>
 #include <IndexWriter.h>
 #include <StringField.h>
@@ -15,8 +22,51 @@ static vector<vector<string>> tests = {
 };
 
 
-void KernelTest::index() {
+bool isFile(const string &path) {
+	struct stat st;
+	int ret = stat(path.c_str(), &st);
+	return ret >= 0 && S_ISREG(st.st_mode);
+}
 
+void KernelTest::index(const string &docDirPath, const string &indexPath) {
+	DIR *dir;
+	struct dirent *ent;
+	if ( (dir = opendir(docDirPath.c_str())) == NULL ) {
+		cerr << "Can't open " << docDirPath << endl;
+		return;
+	}
+
+	IndexWriter iw("/home/dhuang/index");
+	Analyzer analyzer;
+
+	while ( (ent = readdir(dir)) != NULL ) {
+		string fullPath = docDirPath;
+		fullPath += "/";
+		fullPath += ent->d_name;
+		string fileName = ent->d_name;
+		if ( isFile(fullPath) ) {
+			Document doc = Document();
+
+			ifstream in(fullPath);
+			TextField f1("content", in, analyzer);
+			StringField f2("fileName", fileName);
+			StringField f3("filePath", fullPath);
+
+			doc.addField(f1);
+			doc.addField(f2);
+			doc.addField(f3);
+
+			iw.write(doc);
+			in.close();
+		}
+	}
+
+	closedir(dir);
+	iw.close();
+}
+
+
+void littleTest() {
 	IndexWriter iw("/home/dhuang/index");
 	Analyzer analyzer;
 	for (size_t i = 0; i < tests.size(); i ++) {
@@ -30,8 +80,6 @@ void KernelTest::index() {
 		}
 		iw.write(doc);
 	}
-	cout << iw.toString() << endl << endl;
+//	cout << iw.toString() << endl << endl;
 	iw.close();
 }
-
-

@@ -30,31 +30,30 @@ istream &get(const string &str) {
 
 
 int main() {
-	KernelTest::index();
+//	KernelTest::index("/media/DISK_D/input", "/home/dhuang/index");
 
 
 	IndexSearcher is("/home/dhuang/index/_");
-	cout << is.toString() 
-		<< "=======================================" << endl;
+//	cout << is.toString() 
+//		<< "=======================================" << endl;
 //	Query *query = new NotQuery(TermQuery("c", "day"));
 
 	const Query *query = QueryParser::parseBool(
-			"( calpurnia & brutus & caesar ) ",
+//			"( calpurnia & brutus & caesar ) ",
 //			"( ( ignoble | strife ) & ( crowd | madding ) & ( slain | killed ) ) ",
 //			"( ( brutus | caesar ) & ! calpurnia )",
-//			"( a | b ) & ( c | d )",
-//			"a | ( b & c | ( d & e ) )",
-//			"a & ( b | c & ( d | e ) )",
+//			"brutus | caesar",
+			"caesar",
 			"content", 
 			BoolAnalyzer());
 	cout << query->toString() << endl;
 	
-	/*
-	vector<ScoreDoc> scoreDocs = is.search(NotQuery(TermQuery("c", "day")));
+	vector<ScoreDoc> scoreDocs = is.search(*query);
+	cout << scoreDocs.size() << endl;
 	for (auto it = scoreDocs.begin(); it != scoreDocs.end(); it ++) {
 		cout << it->id() << "." << is.doc(it->id()).toString() << endl;
 	}
-*/	
+	
 	delete query;
 	return 0;
 }

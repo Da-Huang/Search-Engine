@@ -13,7 +13,7 @@ void TextField::writeTo(MMIndex &mmIndex,
 	TokenStream &ts = analyzer.tokenStream(in);
 	while ( ts.hasNext() ) {
 		Token token = ts.next();
-		cerr << token.toString() << endl;
+//		cerr << token.toString() << endl;
 		mmIndex.add(token.value, fieldID, Posting(docID));
 	}
 	delete &ts;
@@ -22,11 +22,11 @@ void TextField::writeTo(MMIndex &mmIndex,
 string TextField::toString() const {
 	string res = "<";
 	res += fieldName;
-	res += ",";
+	res += ":";
 	ostringstream os;
-	os << "istream:" << in;
+	os << "istream(" << in;
 	res += os.str();
-	res += ">";
+	res += ")>";
 	return res;
 }
 
