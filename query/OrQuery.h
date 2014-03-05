@@ -7,10 +7,11 @@
 
 class OrQuery : public Query {
 private:
-	vector<Query> queries;
+	vector<const Query*> queries;
 public:
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
-	virtual ~OrQuery() {}
+	virtual string toString() const;
+	virtual ~OrQuery();
 };
 
 

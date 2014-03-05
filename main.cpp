@@ -36,7 +36,7 @@ vector<vector<string>> tests = {
 
 int main() {
 	
-
+/*
 	IndexWriter iw("/home/dhuang/index");
 	Analyzer analyzer;
 	for (size_t i = 0; i < tests.size(); i ++) {
@@ -52,16 +52,38 @@ int main() {
 	cout << iw.toString() << endl << endl;
 	iw.close();
 
+	*/
 
 	IndexSearcher is("/home/dhuang/index/_");
 	cout << is.toString() 
 		<< "=======================================" << endl;
 
+//	Query *query = new NotQuery(TermQuery("c", "day"));
+	/*
+	const Query &tq = TermQuery("c", "day");
+	const Query &nq = NotQuery(tq);
+	const Query &nnq = NotQuery(nq);
+	cerr << nnq.toString() << endl;
+	*/
+	const Query &q = *new NotQuery(*new NotQuery(
+			*new NotQuery(
+				*new TermQuery("c", "day")
+			)
+		));
+
+	cerr << q.toString() << endl;
+	delete &q;
+//	cerr << tq.toString() << endl;
+//	cerr << nq.toString() << endl;
+//	cerr << q.toString() << endl;
+/*	
 	vector<ScoreDoc> scoreDocs = is.search(NotQuery(TermQuery("c", "day")));
 	for (auto it = scoreDocs.begin(); it != scoreDocs.end(); it ++) {
 		cout << it->id() << "." << is.doc(it->id()).toString() << endl;
 	}
-
+	cerr << "OK" << endl;
+	
+*/
 	return 0;
 }
 

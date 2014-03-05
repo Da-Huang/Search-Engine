@@ -2,9 +2,6 @@
 #define _TERM_QUERY_H_
 
 #include <Query.h>
-#include <string>
-
-using namespace std;
 
 
 class TermQuery : public Query {
@@ -15,6 +12,7 @@ public:
 	TermQuery(const string &field, const string &term) 
 		: field(field), term(term) {}
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
+	virtual string toString() const;
 	virtual ~TermQuery() {}
 
 	friend class FileIndex;
