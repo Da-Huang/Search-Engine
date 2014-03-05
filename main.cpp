@@ -40,10 +40,16 @@ int main() {
 
 	const Query *query = QueryParser::parseBool(
 //			"( calpurnia & brutus & caesar ) ",
+//			"ignoble | strife",
+//			"macbeth | exeunt",
+//			"crowd | madding",
 //			"( ( ignoble | strife ) & ( crowd | madding ) & ( slain | killed ) ) ",
 //			"( ( brutus | caesar ) & ! calpurnia )",
 //			"brutus | caesar",
-			"caesar",
+//			"( brutus | caesar ) & ! calpurnia",
+//			"brutus & caesar & calpurnia",
+//			"! calpurnia",
+//			"caesar",
 			"content", 
 			BoolAnalyzer());
 	cout << query->toString() << endl;

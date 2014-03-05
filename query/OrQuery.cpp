@@ -42,6 +42,8 @@ vector<ScoreDoc> OrQuery::merge(
 			i ++; j ++;
 		}
 	}
+	while ( i < docs1.size() ) res.push_back(docs1[i ++]);
+	while ( j < docs2.size() ) res.push_back(docs2[j ++]);
 	return res;
 }
 

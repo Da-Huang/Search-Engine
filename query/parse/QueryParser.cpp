@@ -34,7 +34,7 @@ const Query* QueryParser::parseBool(const string &keywords,
 	while ( ts.hasNext() || !atEnd ) {
 		if ( !ts.hasNext() ) atEnd = true;
 		Token token = atEnd ? Token(" ", 0, 0) : ts.next();
-		cerr << "token: " << token.toString() << endl;
+//		cerr << "token: " << token.toString() << endl;
 //		cerr << "atEnd: " << atEnd << endl;
 		auto it = priority.find(token.value);
 
@@ -43,12 +43,12 @@ const Query* QueryParser::parseBool(const string &keywords,
 
 		} else if ( it->first == "(" ) {
 			s2.push(it->first);
-			cerr << "push op: " << it->first << endl;
+//			cerr << "push op: " << it->first << endl;
 
 		} else {
 			while ( !s2.empty() && priority[s2.top()] >= it->second ) {
 				string op = s2.top();
-				cerr << "while: " << op << endl;
+//				cerr << "while: " << op << endl;
 				s2.pop();
 				if ( s1.empty() ) continue;
 				if ( op == "!" ) {
@@ -67,7 +67,7 @@ const Query* QueryParser::parseBool(const string &keywords,
 					s1.pop();
 					const Query *q = new AndQuery(*q2, *q1);
 					s1.push(q);
-					cerr << "push: " << q->toString() << endl;
+//					cerr << "push: " << q->toString() << endl;
 
 				} else if ( op == "|" ) {
 					const Query *q1 = s1.top();
@@ -76,11 +76,11 @@ const Query* QueryParser::parseBool(const string &keywords,
 					s1.pop();
 					const Query *q = new OrQuery(*q2, *q1);
 					s1.push(q);
-					cerr << "push: " << q->toString() << endl;
+//					cerr << "push: " << q->toString() << endl;
 
 				}
 			}
-			cerr << "push op: " << it->first << endl;
+//			cerr << "push op: " << it->first << endl;
 			if ( it->first != ")" ) s2.push(it->first);
 		}
 	}

@@ -22,6 +22,10 @@ vector<ScoreDoc> NotQuery::search(IndexSearcher &is) const {
 
 		} else j ++;
 	}
+	while ( i <= is.docDB->getDocNum() ) {
+		res.push_back(ScoreDoc(i));
+		i ++;
+	}
 	return res;
 }
 
