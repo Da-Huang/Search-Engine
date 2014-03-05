@@ -4,6 +4,8 @@
 #include <TokenStream.h>
 
 class WSTokenStream : public TokenStream {
+protected:
+	bool isTokenChar(char c) const;
 public:
 	WSTokenStream(istream& in);
 	virtual bool hasNext() const;

@@ -17,13 +17,14 @@ const Query* QueryParser::parse(const string &keywords,
 
 const Query* QueryParser::parseBool(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer) {
+	cerr << keywords << endl;
 	map<string, size_t> priority;
 	priority[")"] = 1;
 	priority["|"] = 2;
 	priority["&"] = 3;
 	priority["!"] = 4;
 	priority["("] = 5;
-	priority[""]  = 6;
+	priority[" "] = 6;
 	stack<const Query*> s1;
 	stack<string> s2;
 
@@ -32,8 +33,8 @@ const Query* QueryParser::parseBool(const string &keywords,
 	TokenStream &ts = analyzer.tokenStream(istr);
 	while ( ts.hasNext() && !atEnd ) {
 		if ( !ts.hasNext() ) atEnd = true;
-		Token token = atEnd ? Token() : ts.next();
-		cerr << token.toString() << endl;
+		Token token = atEnd ? Token(" ", 0, 0) : ts.next();
+//		cerr << token.toString() << endl;
 		auto it = priority.find(token.value);
 
 		if ( it == priority.end() ) 

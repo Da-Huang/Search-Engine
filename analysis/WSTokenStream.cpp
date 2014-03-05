@@ -1,26 +1,33 @@
 #include <WSTokenStream.h>
+#include <iostream>
+
+using namespace std;
 
 
-WSTokenStream::WSTokenStream(istream &in) : TokenStream(in) {
-	while ( !in.eof() && in.peek() == ' ' ) in.get();
-}
+WSTokenStream::WSTokenStream(istream &in) : TokenStream(in) {}
 
 bool WSTokenStream::hasNext() const {
 	return in;
 }
 
+bool WSTokenStream::isTokenChar(char c) const {
+	return isalnum(c) || isSpecialAccept(c, "&|!()");
+}
+
 Token WSTokenStream::next() {
+	while ( !in.eof() && !isTokenChar(in.peek()) ) in.get();
+
 	string str;
-	size_t begin, end;
+	size_t begin = in.tellg(), end = in.tellg();
 	if ( !in.eof() ) {
-		begin = (size_t) in.tellg();
 		str.push_back(in.get());
-		while ( !in.eof() && in.peek() != ' ' )
+		while ( !in.eof() && isTokenChar(in.peek()) )
 			str.push_back(in.get());
 		end = in.tellg();
 
-		while ( !in.eof() && in.peek() == ' ' ) in.get();
+		while ( !in.eof() && !isTokenChar(in.peek()) ) in.get();
 	}
+	if ( in.eof() ) end = begin + str.length();
 	return Token(str, begin, end);
 }
 

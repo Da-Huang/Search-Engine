@@ -45,7 +45,7 @@ string OrQuery::toString() const {
 	string res = "(";
 	for (auto it = queries.cbegin(); it != queries.cend(); it ++) {
 		res += (*it)->toString();
-		res += " & ";
+		res += " | ";
 	}
 	if ( res.length() > 1 ) res.erase(res.length() - 3);
 	res += ")";

@@ -62,15 +62,19 @@ int main() {
 //	Query *query = new NotQuery(TermQuery("c", "day"));
 
 	const Query *query = QueryParser::parseBool(
-			"( brutus | caesar ) & ! calpurnia  )", "content", 
+//			"(calpurnia & brutus & caesar)",
+//			"((ignoble | strife) & (crowd | madding) & (slain | killed))",
+			"((brutus | caesar) & ! calpurnia)",
+			"content", 
 			BoolAnalyzer());
 	cout << query->toString() << endl;
 	
+	/*
 	vector<ScoreDoc> scoreDocs = is.search(NotQuery(TermQuery("c", "day")));
 	for (auto it = scoreDocs.begin(); it != scoreDocs.end(); it ++) {
 		cout << it->id() << "." << is.doc(it->id()).toString() << endl;
 	}
-	
+*/	
 	delete query;
 	return 0;
 }
