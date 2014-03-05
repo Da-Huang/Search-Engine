@@ -15,13 +15,24 @@ void KernelTest::search(const string &indexPath, const string &qStr) {
 //	cout << is.toString() 
 //		<< "=======================================" << endl;
 
+	string queryString;
+	for (size_t i = 0; i < qStr.length(); i ++) {
+		if ( qStr[i] == '(' || qStr[i] == ')' || qStr[i] == '|' ||
+				qStr[i] == '&' || qStr[i] == '!' ) {
+			queryString.push_back(' ');
+			queryString.push_back(qStr[i]);
+			queryString.push_back(' ');
+
+		} else queryString.push_back(qStr[i]);
+	}
 	const Query *bQuery = QueryParser::parseBool(
-			qStr,
+			queryString,
 			"content", 
 			BoolAnalyzer());
-
 	const Query *tQuery = new TermQuery("fileName", qStr);
-	const Query *query = new OrQuery(*bQuery, *tQuery);
+
+	const Query *query = bQuery == NULL ? tQuery : 
+		new OrQuery(*bQuery, *tQuery);
 
 	cout << "Inner Query:  " << query->toString() << endl;
 	
