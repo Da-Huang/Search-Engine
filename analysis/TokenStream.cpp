@@ -21,20 +21,20 @@ bool TokenStream::isTokenChar(char c) const {
 
 TokenStream::TokenStream(istream &in) : in(in) {
 	in.seekg(0);
+	while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 }
 
 bool TokenStream::hasNext() const {
-	return in;
+	return !in.eof() && in.peek();
 }
 
 Token TokenStream::next() {
-	while ( !in.eof() && !isTokenChar(in.peek()) ) in.get();
-
+//	while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 	string str;
 	size_t begin = in.tellg(), end = in.tellg();
-	if ( !in.eof() ) {
+	if ( hasNext() ) {
 		str.push_back(in.get());
-		while ( !in.eof() && isTokenChar(in.peek()) )
+		while ( hasNext() && isTokenChar(in.peek()) )
 			str.push_back(in.get());
 		end = in.tellg();
 
@@ -42,9 +42,8 @@ Token TokenStream::next() {
 		transform(str.begin(), str.end(), 
 				str.begin(), ptr_fun<int, int>(tolower));
 
-		while ( !in.eof() && !isTokenChar(in.peek()) ) in.get();
+		while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 	}
-	if ( in.eof() ) end = begin + str.length();
 	return Token(str, begin, end);
 }
 

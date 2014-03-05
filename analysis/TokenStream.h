@@ -12,6 +12,7 @@ protected:
 
 	bool isSpecialAccept(char c, const char *accept) const;
 	bool isTokenChar(char c) const;
+	TokenStream(istream& in, void *null) : in(in) {}
 public:
 	TokenStream(istream& in);
 	virtual bool hasNext() const;

@@ -17,6 +17,7 @@
 #include <OrQuery.h>
 #include <ScoreDoc.h>
 #include <QueryParser.h>
+#include <KernelTest.h>
 
 using namespace std;
 
@@ -27,44 +28,23 @@ istream &get(const string &str) {
 	return t;
 }
 
-vector<vector<string>> tests = {
-	{"This is a good day!", "", "It is a hot day.", "Hot day Today."},
-	{"OK", "Today is a cold day.", "", "My day is a happy day."},
-	{"BAD", "", "This is a test.", ""},
-	{"USEFUL", "", "This goes right.", "The day comes."},
-	{"SHIT", "", "", "It goes right this day."},
-};
-
 
 int main() {
-/*	
-
-	IndexWriter iw("/home/dhuang/index");
-	Analyzer analyzer;
-	for (size_t i = 0; i < tests.size(); i ++) {
-		StringField field0 = StringField("title", tests[i][0]);
-		Document doc = Document();
-		doc.addField(field0);
-		for (size_t j = 1; j < tests[i].size(); j ++) {
-			doc.addField(
-					*new TextField(string(1, 'a' + j - 1), tests[i][j], analyzer));
-		}
-		iw.write(doc);
-	}
-	cout << iw.toString() << endl << endl;
-	iw.close();
+	KernelTest::index();
 
 
-*/
 	IndexSearcher is("/home/dhuang/index/_");
 	cout << is.toString() 
 		<< "=======================================" << endl;
 //	Query *query = new NotQuery(TermQuery("c", "day"));
 
 	const Query *query = QueryParser::parseBool(
-//			"(calpurnia & brutus & caesar)",
-//			"((ignoble | strife) & (crowd | madding) & (slain | killed))",
-			"((brutus | caesar) & ! calpurnia)",
+			"( calpurnia & brutus & caesar ) ",
+//			"( ( ignoble | strife ) & ( crowd | madding ) & ( slain | killed ) ) ",
+//			"( ( brutus | caesar ) & ! calpurnia )",
+//			"( a | b ) & ( c | d )",
+//			"a | ( b & c | ( d & e ) )",
+//			"a & ( b | c & ( d | e ) )",
 			"content", 
 			BoolAnalyzer());
 	cout << query->toString() << endl;

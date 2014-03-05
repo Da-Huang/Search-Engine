@@ -13,6 +13,7 @@ void TextField::writeTo(MMIndex &mmIndex,
 	TokenStream &ts = analyzer.tokenStream(in);
 	while ( ts.hasNext() ) {
 		Token token = ts.next();
+		cerr << token.toString() << endl;
 		mmIndex.add(token.value, fieldID, Posting(docID));
 	}
 	delete &ts;
