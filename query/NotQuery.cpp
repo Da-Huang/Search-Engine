@@ -1,5 +1,6 @@
 #include <NotQuery.h>
 
+
 string NotQuery::toString() const {
 	string res = "-";
 	res += this->query.toString();

@@ -8,6 +8,8 @@
 class AndQuery : public Query {
 private:
 	vector<const Query*> queries;
+	static vector<ScoreDoc> merge(
+		const vector<ScoreDoc> &docs1, const vector<ScoreDoc> &docs2);
 public:
 	AndQuery() {}
 	AndQuery(const Query &q1, const Query &q2);

@@ -59,31 +59,14 @@ int main() {
 		<< "=======================================" << endl;
 
 //	Query *query = new NotQuery(TermQuery("c", "day"));
-	/*
-	const Query &tq = TermQuery("c", "day");
-	const Query &nq = NotQuery(tq);
-	const Query &nnq = NotQuery(nq);
-	cerr << nnq.toString() << endl;
-	*/
-	const Query &q = *new NotQuery(*new NotQuery(
-			*new NotQuery(
-				*new TermQuery("c", "day")
-			)
-		));
 
-	cerr << q.toString() << endl;
-	delete &q;
-//	cerr << tq.toString() << endl;
-//	cerr << nq.toString() << endl;
-//	cerr << q.toString() << endl;
-/*	
+	
 	vector<ScoreDoc> scoreDocs = is.search(NotQuery(TermQuery("c", "day")));
 	for (auto it = scoreDocs.begin(); it != scoreDocs.end(); it ++) {
 		cout << it->id() << "." << is.doc(it->id()).toString() << endl;
 	}
-	cerr << "OK" << endl;
 	
-*/
+
 	return 0;
 }
 

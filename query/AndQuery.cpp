@@ -8,23 +8,38 @@ AndQuery::AndQuery(const Query &q1, const Query &q2) {
 	add(q2);
 }
 
-class LessQuery {
-public:
-	bool operator () (
-			const pair<const Query*, vector<ScoreDoc>> &q1,
-			const pair<const Query*, vector<ScoreDoc>> &q2) const {
-		return q1.second.size() < q2.second.size();
+vector<ScoreDoc> AndQuery::merge(
+		const vector<ScoreDoc> &docs1, const vector<ScoreDoc> &docs2) {
+	vector<ScoreDoc> res;
+	size_t i = 0, j = 0;
+	while ( i < docs1.size() && j < docs2.size() ) {
+		if ( docs1[i].id() < docs2[j].id() ) i ++;
+		else if ( docs1[i].id() > docs2[j].id() ) j ++;
+		else {
+			res.push_back(docs1[i]);
+			i ++; j ++;
+		}
 	}
-};
+	return res;
+}
 
 vector<ScoreDoc> AndQuery::search(IndexSearcher &is) const {
 	
-	vector<pair<const Query*, vector<ScoreDoc>>> qs;
+	if ( queries.size() == 0 ) return vector<ScoreDoc>();
+
+	vector<pair<size_t, size_t>> querySeq;
+	vector<vector<ScoreDoc>> allRes;
 	for (size_t i = 0; i < queries.size(); i ++) {
-		qs.push_back(make_pair(queries[i], queries[i]->search(is)));
+		allRes.push_back(queries[i]->search(is));
+		querySeq.push_back(make_pair(allRes[allRes.size() - 1].size(), i));
 	}
-//	sort(qs.begin(), qs.end());
-	return vector<ScoreDoc>();
+	sort(querySeq.begin(), querySeq.end());
+
+	vector<ScoreDoc> res = allRes[querySeq[0].second];
+	for (size_t i = 1; i < querySeq.size(); i ++)
+		res = merge(res, allRes[querySeq[i].second]);
+	
+	return res;
 }
 
 string AndQuery::toString() const {
