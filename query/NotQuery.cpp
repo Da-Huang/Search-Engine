@@ -2,7 +2,7 @@
 
 
 string NotQuery::toString() const {
-	string res = "-";
+	string res = "!";
 	res += this->query.toString();
 	return res;
 }

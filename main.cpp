@@ -11,10 +11,12 @@
 #include <IndexSearcher.h>
 #include <DocDB.h>
 #include <TermQuery.h>
+#include <BoolAnalyzer.h>
 #include <NotQuery.h>
 #include <AndQuery.h>
 #include <OrQuery.h>
 #include <ScoreDoc.h>
+#include <QueryParser.h>
 
 using namespace std;
 
@@ -35,8 +37,8 @@ vector<vector<string>> tests = {
 
 
 int main() {
-	
-/*
+/*	
+
 	IndexWriter iw("/home/dhuang/index");
 	Analyzer analyzer;
 	for (size_t i = 0; i < tests.size(); i ++) {
@@ -52,21 +54,24 @@ int main() {
 	cout << iw.toString() << endl << endl;
 	iw.close();
 
-	*/
 
+*/
 	IndexSearcher is("/home/dhuang/index/_");
 	cout << is.toString() 
 		<< "=======================================" << endl;
-
 //	Query *query = new NotQuery(TermQuery("c", "day"));
 
+	const Query *query = QueryParser::parseBool(
+			"( brutus | caesar ) & ! calpurnia  )", "content", 
+			BoolAnalyzer());
+	cout << query->toString() << endl;
 	
 	vector<ScoreDoc> scoreDocs = is.search(NotQuery(TermQuery("c", "day")));
 	for (auto it = scoreDocs.begin(); it != scoreDocs.end(); it ++) {
 		cout << it->id() << "." << is.doc(it->id()).toString() << endl;
 	}
 	
-
+	delete query;
 	return 0;
 }
 

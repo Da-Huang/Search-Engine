@@ -1,6 +1,6 @@
 #include <Analyzer.h>
 
 
-TokenStream Analyzer::tokenStream(istream &in) const {
-	return TokenStream(in);
+TokenStream& Analyzer::tokenStream(istream &in) const {
+	return *new TokenStream(in);
 }

@@ -7,7 +7,7 @@
 using namespace std;
 
 class TokenStream {
-private:
+protected:
 	istream &in;
 
 	bool isSpecialAccept(char c, const char *accept) const;

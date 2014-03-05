@@ -10,11 +10,12 @@ void TextField::writeTo(MMIndex &mmIndex,
 	size_t fieldID = fieldNameMap.getFieldID(fieldName);
 	if ( fieldID == 0 ) return;
 
-	TokenStream ts = analyzer.tokenStream(in);
+	TokenStream &ts = analyzer.tokenStream(in);
 	while ( ts.hasNext() ) {
 		Token token = ts.next();
 		mmIndex.add(token.value, fieldID, Posting(docID));
 	}
+	delete &ts;
 }
 
 string TextField::toString() const {

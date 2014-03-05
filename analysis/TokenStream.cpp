@@ -19,7 +19,7 @@ bool TokenStream::isTokenChar(char c) const {
 	return isalnum(c) || isSpecialAccept(c, "&");
 }
 
-TokenStream::TokenStream(istream& in) : in(in) {
+TokenStream::TokenStream(istream &in) : in(in) {
 //	in.seekg(0);
 	while ( !in.eof() && !isTokenChar(in.peek()) ) in.get();
 }

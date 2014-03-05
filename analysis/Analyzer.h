@@ -5,7 +5,8 @@
 
 class Analyzer {
 public:
-	virtual TokenStream tokenStream(istream &in) const;
+	/* The Return Value need to be deleted */
+	virtual TokenStream& tokenStream(istream &in) const;
 	virtual ~Analyzer() {}
 };
 
