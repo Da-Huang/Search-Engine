@@ -36,7 +36,7 @@ void KernelTest::index(const string &docDirPath, const string &indexPath) {
 		return;
 	}
 
-	IndexWriter iw("/home/dhuang/index");
+	IndexWriter iw(indexPath);
 	Analyzer analyzer;
 
 	while ( (ent = readdir(dir)) != NULL ) {
@@ -83,3 +83,5 @@ void littleTest() {
 //	cout << iw.toString() << endl << endl;
 	iw.close();
 }
+
+

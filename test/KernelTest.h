@@ -10,6 +10,7 @@ using namespace std;
 class KernelTest {
 public:
 	static void index(const string &docDirPath, const string &indexPath);
+	static void search(const string &indexPath, const string &qStr);
 };
 
 

@@ -14,6 +14,8 @@ public:
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
 	virtual string toString() const;
 	virtual ~NotQuery();
+
+	friend class QueryParser;
 };
 
 

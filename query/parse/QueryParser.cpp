@@ -7,6 +7,50 @@
 #include <NotQuery.h>
 #include <AndQuery.h>
 #include <OrQuery.h>
+#include <PhraseQuery.h>
+
+
+const Query* QueryParser::optimize(const Query *query) {
+	if ( dynamic_cast<const PhraseQuery*>(query) )
+		return new PhraseQuery((const PhraseQuery&)*query);
+	if ( dynamic_cast<const TermQuery*>(query) )
+		return new TermQuery((const TermQuery&)*query);
+	if ( dynamic_cast<const NotQuery*>(query) )
+		return new NotQuery(*optimize(&(((NotQuery*)query)->query)));
+	if ( dynamic_cast<const AndQuery*>(query) ) {
+		const AndQuery *caq = (const AndQuery*)query;
+		AndQuery *aq = new AndQuery();
+		for (size_t i = 0; i < caq->queries.size(); i ++) {
+			const Query *subQuery = optimize(caq->queries[i]);
+			if ( dynamic_cast<const AndQuery*>(subQuery) ) {
+				const AndQuery *subAndQuery = (const AndQuery*)subQuery;
+				aq->queries.insert(aq->queries.end(),
+						subAndQuery->queries.cbegin(), 
+						subAndQuery->queries.cend());
+			} else {
+				aq->queries.push_back(subQuery);
+			}
+		}
+		return aq;
+	}
+	if ( dynamic_cast<const OrQuery*>(query) ) {
+		const OrQuery *coq = (const OrQuery*)query;
+		OrQuery *oq = new OrQuery();
+		for (size_t i = 0; i < coq->queries.size(); i ++) {
+			const Query *subQuery = optimize(coq->queries[i]);
+			if ( dynamic_cast<const OrQuery*>(subQuery) ) {
+				const OrQuery *subOrQuery = (const OrQuery*)subQuery;
+				oq->queries.insert(oq->queries.end(),
+						subOrQuery->queries.cbegin(), 
+						subOrQuery->queries.cend());
+			} else {
+				oq->queries.push_back(subQuery);
+			}
+		}
+		return oq;
+	}
+	return NULL;
+}
 
 
 const Query* QueryParser::parse(const string &keywords, 
@@ -14,10 +58,9 @@ const Query* QueryParser::parse(const string &keywords,
 	return parseBool(keywords, fieldName, analyzer);
 }
 
-
 const Query* QueryParser::parseBool(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer) {
-	cerr << keywords << endl;
+//	cerr << keywords << endl;
 	map<string, size_t> priority;
 	priority[" "] = 0;
 	priority[")"] = 1;
@@ -85,7 +128,14 @@ const Query* QueryParser::parseBool(const string &keywords,
 		}
 	}
 	delete &ts;
-	return s1.empty() ? NULL : s1.top();
+
+	if ( s1.empty() ) return NULL;
+	const Query *res = optimize(s1.top());
+	while ( !s1.empty() ) {
+		delete s1.top();
+		s1.pop();
+	}
+	return res;
 }
 
 

@@ -5,13 +5,18 @@
 #include <Analyzer.h>
 
 
+/** The Result Need to be Deleted! **/
 class QueryParser {
 public:
+	/** The original query would deleted in this method. **/
+	static const Query* optimize(const Query *query);
+
 	static const Query *parse(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer);
-	/* The Result Need to be Deleted! */
+
 	static const Query *parseBool(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer);
+
 	static const Query *parsePhrase(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer);
 };
