@@ -1,11 +1,11 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-//#include <boost/regex.hpp>
 #include <string>
 #include <StringField.h>
 #include <TextField.h>
 #include <Document.h>
+#include <TokenStream.h>
 #include <IndexWriter.h>
 #include <FileIndex.h>
 #include <IndexSearcher.h>
@@ -13,7 +13,6 @@
 #include <TermQuery.h>
 #include <ScoreDoc.h>
 
-//using namespace boost;
 using namespace std;
 
 
@@ -23,38 +22,34 @@ istream &get(const string &str) {
 	return t;
 }
 
-#include <TokenStream.h>
-//#include <boost/property_tree/ptree.hpp>
-//#include <boost/property_tree/ini_parser.hpp>
-//using namespace boost::property_tree;
+vector<vector<string>> tests = {
+	{"This is a good day!", "", "It is a hot day."},
+	{"OK", "Today is a cold day.", "", "My day is a happy day."},
+	{"BAD", "", "This is a test.", ""},
+	{"USEFUL", "", "This goes right.", "The day comes."},
+	{"OK", "", "", "It goes right this day."},
+};
 
 
 int main() {
-	/*
-	ptree pt;
-	pt.put("field fields", 1);
-	ofstream out("test.ini");
-	write_ini(out, pt);
-	out.close();
-	*/
 	
 /*
 	IndexWriter iw("/home/dhuang/index");
 	Analyzer analyzer;
-	for (int i = 0; i < 5; i ++) {
-		TextField field1 = TextField("a", "This is a good day!", analyzer);
-		StringField field2 = StringField("b", "good");
+	for (size_t i = 0; i < tests.size(); i ++) {
+		StringField field0 = StringField(string(1, 'a'), tests[i][0]);
 		Document doc = Document();
-		doc.addField(field1);
-		doc.addField(field2);
+		doc.addField(field0);
+		for (size_t j = 1; j < tests[i].size(); j ++) {
+			doc.addField(
+					*new TextField(string(1, 'a' + j), tests[i][j], analyzer));
+		}
 		iw.write(doc);
 	}
+	cout << iw.toString() << endl << endl;
 	iw.close();
 */
 
-//	doc.~Document();
-	
-	
 	IndexSearcher is("/home/dhuang/index/_");
 	cout << is.toString() 
 		<< "=======================================" << endl;
@@ -63,7 +58,6 @@ int main() {
 	for (auto it = scoreDocs.begin(); it != scoreDocs.end(); it ++) {
 		cout << is.doc(it->id()).toString() << endl;
 	}
-
 
 	return 0;
 }

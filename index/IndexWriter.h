@@ -27,6 +27,7 @@ public:
 	virtual void write(Document &doc);
 	virtual void close();
 	virtual void merge();
+	virtual string toString() const;
 	virtual ~IndexWriter() {}
 };
 

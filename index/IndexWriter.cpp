@@ -113,3 +113,7 @@ void IndexWriter::close() {
 	system(cmd.c_str());
 }
 
+string IndexWriter::toString() const {
+	return mmIndex.toString();
+}
+
