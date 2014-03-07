@@ -12,6 +12,7 @@ static const vector<string> usages = {
 
 
 int main(int argc, char* argv[]) {
+	/*
 	int i = 1;
 	for (i = 1; i < argc; i ++) {
 		if ( string(argv[i]) == "-index" ) {
@@ -36,6 +37,9 @@ int main(int argc, char* argv[]) {
 
 	for (size_t i = 0; i < usages.size(); i ++)
 		cerr << usages[i] << endl;
+		*/
+//	KernelTest::index("/media/DISK_D/input", "../index");
+	KernelTest::search("../index", "((caesar | do | a)) & (the | go))");
 
 	return -1;
 }

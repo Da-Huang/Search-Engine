@@ -5,7 +5,7 @@
 
 class WSTokenStream : public TokenStream {
 protected:
-	bool isTokenChar(char c) const;
+	inline bool isTokenChar(char c) const { return c != ' '; }
 	WSTokenStream(istream& in, void *null) : TokenStream(in, null) {}
 public:
 	WSTokenStream(istream& in);

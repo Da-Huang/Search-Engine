@@ -5,6 +5,15 @@
 
 using namespace std;
 
+
+size_t TokenStream::getLength() const {
+	size_t origin = in.tellg();
+	in.seekg(0, ios::end);
+	size_t res = in.tellg();
+	in.seekg(origin);
+	return res;
+}
+
 bool TokenStream::isSpecialAccept(char c, const char *accept) const {
 	if ( accept == NULL ) return false;
 	size_t i = 0;
@@ -19,17 +28,16 @@ bool TokenStream::isTokenChar(char c) const {
 	return isalnum(c) || isSpecialAccept(c, "&");
 }
 
-TokenStream::TokenStream(istream &in) : in(in) {
+TokenStream::TokenStream(istream &in) : in(in), LEN(getLength()) {
 	in.seekg(0);
 	while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 }
 
 bool TokenStream::hasNext() const {
-	return !in.eof() && in.peek();
+	return !in.eof() && (size_t) in.tellg() != LEN;
 }
 
 Token TokenStream::next() {
-//	while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 	string str;
 	size_t begin = in.tellg(), end = in.tellg();
 	if ( hasNext() ) {

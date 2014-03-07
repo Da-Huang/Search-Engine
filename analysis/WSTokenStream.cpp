@@ -8,10 +8,6 @@ WSTokenStream::WSTokenStream(istream &in) : TokenStream(in, NULL) {
 	while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 }
 
-bool WSTokenStream::isTokenChar(char c) const {
-	return isalnum(c) || isSpecialAccept(c, "&|!()");
-}
-
 Token WSTokenStream::next() {
 	string str;
 	size_t begin = in.tellg(), end = in.tellg();
