@@ -14,13 +14,14 @@
 
 
 static vector<vector<string>> tests = {
-	{"This is a good day!", "", "It is a hot day.", "Hot day Today."},
-	{"OK", "Today is a cold day.", "", "My day is a happy day."},
+	{"This is a good day!", "", "It is a hot day", "Hot day Today."},
+	{"OK", "Today is a cold day.", "", "My day is a happy day"},
 	{"BAD", "", "This is a test.", ""},
-	{"USEFUL", "", "This goes right.", "The day comes."},
+	{"USEFUL", "", "This goes right", "The day comes"},
 	{"SHIT", "", "", "It goes right this day."},
 };
 
+extern void littleTest();
 
 bool isFile(const string &path) {
 	struct stat st;
@@ -29,6 +30,7 @@ bool isFile(const string &path) {
 }
 
 void KernelTest::index(const string &docDirPath, const string &indexPath) {
+//	littleTest(); return;
 	DIR *dir;
 	struct dirent *ent;
 	if ( (dir = opendir(docDirPath.c_str())) == NULL ) {

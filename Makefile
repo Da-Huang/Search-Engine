@@ -10,11 +10,19 @@ COMMA = ","
 
 TARGET = main
 
-SOURCE_DIR = $(shell find . -type d \( ! -path '*/.*' -o -prune \) \( ! -name ".*" \))
-SOURCE_FILES = $(wildcard *.cpp) $(foreach dir,$(SOURCE_DIR),$(wildcard $(dir)/*.cpp))
+SOURCE_DIR = \
+$(shell find . -type d \( ! -path '*/.*' -o -prune \) \( ! -name ".*" \))
+SOURCE_FILES = \
+$(wildcard *.cpp) $(foreach dir,$(SOURCE_DIR),$(wildcard $(dir)/*.cpp))
+
 #$(patsubst %,$(wildcard %/*.cpp),$(SOURCE_DIR))# $(wildcard field/*.cpp)
 OBJS = $(patsubst %.cpp,%.o,$(SOURCE_FILES))
 DEPS = $(patsubst %.cpp,%.d,$(SOURCE_FILES))
+OUTS = \
+$(wildcard *.o) $(wildcard *.d) $(wildcard *.out) \
+$(foreach dir,$(SOURCE_DIR),$(wildcard $(dir)/*.o)) \
+$(foreach dir,$(SOURCE_DIR),$(wildcard $(dir)/*.d)) \
+$(foreach dir,$(SOURCE_DIR),$(wildcard $(dir)/*.out))
 #OBJS = $(SOURCE_FILES:.cpp=.o)
 #DEPS = $(SOURCE_FILES:.cpp=.d)
 
@@ -31,8 +39,11 @@ $(TARGET): $(OBJS)
 
 clean:
 	@echo $(subst TEXT,"Removing $(TARGET)$(COMMA) Object Files$(COMMA) and Dependency Files.",$(TEXT_TEMPLATE))
-	$(RM) $(TARGET) $(OBJS) $(DEPS)
-	find . -name "gmon.out" | xargs $(RM)
+	$(RM) $(TARGET)
+#	$(RM) $(OBJS)
+#	$(RM) $(DEPS)
+	$(RM) $(OUTS)
+#	find . -name "gmon.out" | xargs $(RM)
 	@echo $(subst TEXT,"Clean.",$(TEXT_TEMPLATE))
 
 .PHONY: clean
