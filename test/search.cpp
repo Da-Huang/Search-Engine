@@ -12,13 +12,13 @@ void KernelTest::search(const string &indexPath, const string &qStr) {
 	string indexPrefix = indexPath;
 	indexPrefix += "/_";
 	IndexSearcher is(indexPrefix);
-
+/*
 	static bool isOut = true;
 	if ( isOut )
 		cout << is.toString() 
 			<< "=======================================" << endl;
 	isOut  = false;
-
+*/
 	string queryString;
 	for (size_t i = 0; i < qStr.length(); i ++) {
 		if ( qStr[i] == '(' || qStr[i] == ')' || qStr[i] == '|' ||

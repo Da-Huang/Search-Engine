@@ -93,8 +93,7 @@ vector<ScoreDoc> FileIndex::search(size_t fieldID, const string &term) {
 	if ( termID == 0 || fieldID == 0 ) return res;
 	pair<size_t, size_t> pstListInfo = getPostingListInfo(termID, fieldID);
 	size_t pstListBegin = pstListInfo.first;
-	size_t pstListSize = pstListInfo.second;
-	size_t pstListEnd = pstListBegin + pstListSize * sizeof(size_t);
+	size_t pstListEnd = pstListInfo.second;
 	PostingStream postingStream(pstIn, pstListBegin, pstListEnd);
 	while ( postingStream.hasNext() ) {
 		Posting posting = postingStream.next();
