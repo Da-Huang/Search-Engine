@@ -2,7 +2,14 @@
 
 
 PostingStream::PostingStream(istream &in, size_t begin, size_t end)
-	: in(in), begin(begin), end(end), current(begin) {}
+	: in(in), begin(begin), end(end), current(begin) {
+	in.seekg(end);
+	size_t skipsNum;
+	in.read((char*)&skipsNum, sizeof(skipsNum));
+	for (size_t i = 0; i < skipsNum; i ++) {
+		skips.push_back(SkipEntry(in));
+	}
+}
 
 Posting	PostingStream::next() {
 	in.seekg(current);

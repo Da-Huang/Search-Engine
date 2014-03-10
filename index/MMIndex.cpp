@@ -59,6 +59,9 @@ void MMIndex::writeTo(ostream &idxOut, ostream &fldOut,
 			}
 			size_t pstListEnd = pstOut.tellp();
 			idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
+
+			size_t skipsNum = 0;
+			pstOut.write((char*)&skipsNum, sizeof(skipsNum));
 		}
 	}
 }
