@@ -23,7 +23,7 @@ private:
 	
 public:
 	IndexWriter(const string &dirPath);
-	void addFieldName(const string &fieldName);
+	virtual void addFieldName(const string &fieldName);
 	virtual void write(Document &doc);
 	virtual void close();
 	virtual void merge();
