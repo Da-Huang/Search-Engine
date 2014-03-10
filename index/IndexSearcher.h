@@ -23,6 +23,7 @@ public:
 
 	friend class TermQuery;
 	friend class NotQuery;
+	friend class PhraseQuery;
 };
 
 #endif

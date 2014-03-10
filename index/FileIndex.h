@@ -6,11 +6,10 @@
 #include <vector>
 #include <utility>
 #include <ScoreDoc.h>
+#include <PostingStream.h>
 
 using namespace std;
 
-
-class FieldNameMap;
 
 class FileIndex {
 private:
@@ -27,10 +26,10 @@ public:
 			size_t termID, size_t fieldID);
 	virtual size_t getFieldNum() const;
 	virtual vector<ScoreDoc> search(size_t fieldID, const string &term);
+	PostingStream* fetchPostingStream(size_t fieldID, const string &term);
 	virtual string fetchTerm(size_t termID);
 	virtual string toString();
 	virtual ~FileIndex();
 };
-
 
 #endif

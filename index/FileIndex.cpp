@@ -87,6 +87,17 @@ string FileIndex::toString() {
 	return res;
 }
 
+/** the result need to be deleted. **/
+PostingStream* FileIndex::fetchPostingStream(
+		size_t fieldID, const string &term) {
+	size_t termID = findTermID(term);
+	if ( termID == 0 || fieldID == 0 ) return NULL;
+	pair<size_t, size_t> pstListInfo = getPostingListInfo(termID, fieldID);
+	size_t pstListBegin = pstListInfo.first;
+	size_t pstListEnd = pstListInfo.second;
+	return new PostingStream(pstIn, pstListBegin, pstListEnd);
+}
+
 vector<ScoreDoc> FileIndex::search(size_t fieldID, const string &term) {
 	vector<ScoreDoc> res;
 	size_t termID = findTermID(term);
