@@ -2,6 +2,19 @@
 #include <MMIndex.h>
 
 
+void MMIndex::add(const string &term, size_t fieldID,
+		size_t docID, size_t pos) {
+	vector<Posting> &postingList = index[term][fieldID];
+	const size_t N = postingList.size();
+	if ( N > 0 && postingList[N - 1].docID == docID ) {
+		postingList[N - 1].pushPos(pos);
+		sizeByte += sizeof(docID);
+	} else {
+		postingList.push_back(Posting(docID, pos));
+		sizeByte += sizeof(docID) + sizeof(pos);
+	}
+}
+
 void MMIndex::add(const string &term, 
 		size_t fieldID, const Posting &posting) {
 	vector<Posting> &postingList = index[term][fieldID];
