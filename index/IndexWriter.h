@@ -5,7 +5,6 @@
 #include <string>
 #include <fstream>
 #include <Document.h>
-#include <Dictionary.h>
 #include <MMIndex.h>
 #include <FieldNameMap.h>
 

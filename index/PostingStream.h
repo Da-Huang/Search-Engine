@@ -3,6 +3,7 @@
 
 #include <istream>
 #include <Posting.h>
+#include <SkipEntry.h>
 
 using namespace std;
 
@@ -14,6 +15,8 @@ private:
 	size_t end;
 	size_t current;
 	
+	vector<SkipEntry> skips;
+
 public:
 	PostingStream(istream &in, size_t begin, size_t end);
 	virtual Posting next();
