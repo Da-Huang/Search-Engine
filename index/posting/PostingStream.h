@@ -9,7 +9,7 @@ using namespace std;
 
 
 class PostingStream {
-private:
+protected:
 	istream &in;
 	size_t begin;
 	size_t end;
@@ -19,6 +19,7 @@ private:
 
 public:
 	PostingStream(istream &in, size_t begin, size_t end);
+//	virtual void writeTo(ostream &out);
 	virtual Posting next();
 	virtual Posting peek();
 	virtual size_t nextDocID();

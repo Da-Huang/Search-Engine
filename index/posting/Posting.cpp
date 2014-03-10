@@ -16,6 +16,16 @@ void Posting::writeTo(ostream &out) const {
 	}
 }
 
+void Posting::writeTo(FILE *fp) const {
+	fwrite(&docID, sizeof(docID), 1, fp);
+	size_t posListSize = posList.size();
+	fwrite(&posListSize, sizeof(posListSize), 1, fp);
+	for (auto posIt = posList.begin(); 
+			posIt != posList.end(); posIt ++) {
+		fwrite(&*posIt, sizeof(*posIt), 1, fp);
+	}
+}
+
 string Posting::toString() const {
 	string res = "<";
 	res += to_string(docID);

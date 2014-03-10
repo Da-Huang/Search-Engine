@@ -1,6 +1,9 @@
 #include <iostream>
 #include <KernelTest.h>
 #include <vector>
+#include <fstream>
+#include <string.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -37,10 +40,11 @@ int main(int argc, char* argv[]) {
 
 	for (size_t i = 0; i < usages.size(); i ++)
 		cerr << usages[i] << endl;
-		*/
+	*/
 	
+	
+	/*
 	KernelTest::index("/media/DISK_D/input", "/home/dhuang/index");
-	
 
 	KernelTest::search("/home/dhuang/index", "((brutus | caesar) & ! calpurnia)");
 	KernelTest::search("/home/dhuang/index", "((brutus & (caesar & calpurnia))");
@@ -53,8 +57,7 @@ int main(int argc, char* argv[]) {
 	KernelTest::search("/home/dhuang/index", "! brutus & ! caesar");
 	KernelTest::search("/home/dhuang/index", "brutus | caesar");
 	KernelTest::search("/home/dhuang/index", "README");
-	
-
+	*/
 
 	return -1;
 }
