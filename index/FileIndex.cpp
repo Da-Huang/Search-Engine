@@ -52,10 +52,10 @@ pair<size_t, size_t> FileIndex::getPostingListInfo(
 	size_t BASE = (termID - 1) * RECORD_SIZE + 
 					RECORD_SIZE - getFieldNum() * 2 * sizeof(size_t);
 	idxIn.seekg(BASE + (fieldID - 1) * 2 * sizeof(size_t));
-	size_t pstListBegin, pstListSize;
+	size_t pstListBegin, pstListEnd;
 	idxIn.read((char*)&pstListBegin, sizeof(pstListBegin));
-	idxIn.read((char*)&pstListSize, sizeof(pstListSize));
-	return make_pair(pstListBegin, pstListSize);
+	idxIn.read((char*)&pstListEnd, sizeof(pstListEnd));
+	return make_pair(pstListBegin, pstListEnd);
 }
 
 string FileIndex::toString() {
@@ -71,18 +71,17 @@ string FileIndex::toString() {
 
 			pair<size_t, size_t> pstListInfo = getPostingListInfo(i, j);
 			size_t pstListBegin = pstListInfo.first;
-			size_t pstListSize = pstListInfo.second;
-			size_t pstListEnd = pstListBegin + pstListSize * sizeof(size_t);
+			size_t pstListEnd = pstListInfo.second;
 			PostingStream postingStream(pstIn, pstListBegin, pstListEnd);
 			while ( postingStream.hasNext() ) {
 				Posting posting = postingStream.next();
 				res += posting.toString();
 				res += ",";
 			}
-			if ( res[res.length() - 1] == ',' ) res.erase(res.length() - 1);
+			if ( res.back() == ',' ) res.erase(res.length() - 1);
 			res += "],";
 		}
-		if ( res[res.length() - 1] == ',' ) res.erase(res.length() - 1);
+		if ( res.back() == ',' ) res.erase(res.length() - 1);
 		res += "\n";
 	}
 	return res;

@@ -28,9 +28,16 @@ bool TokenStream::isTokenChar(char c) const {
 	return isalnum(c) || isSpecialAccept(c, "&");
 }
 
-TokenStream::TokenStream(istream &in) : in(in), LEN(getLength()) {
+TokenStream::TokenStream(istream &in) : in(in), LEN(getLength()), pos(0) {
 	in.seekg(0);
 	while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
+}
+
+TokenStream::TokenCharType TokenStream::getTokenCharType(char c) const {
+	if ( isdigit(c) ) return NUMBER;
+	else if ( isalpha(c) ) return ALPHA;
+	else if ( isTokenChar(c) ) return SPECIAL;
+	else return ILLEGAL;
 }
 
 bool TokenStream::hasNext() const {
@@ -42,7 +49,8 @@ Token TokenStream::next() {
 	size_t begin = in.tellg(), end = in.tellg();
 	if ( hasNext() ) {
 		str.push_back(in.get());
-		while ( hasNext() && isTokenChar(in.peek()) )
+		while ( hasNext() && isTokenChar(in.peek()) &&
+			getTokenCharType(in.peek()) == getTokenCharType(str.back()) )
 			str.push_back(in.get());
 		end = in.tellg();
 
@@ -52,6 +60,6 @@ Token TokenStream::next() {
 
 		while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 	}
-	return Token(str, begin, end);
+	return Token(str, begin, end, ++ pos);
 }
 

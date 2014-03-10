@@ -9,10 +9,11 @@ public:
 	string value;
 	size_t begin;
 	size_t end;
+	size_t pos;
 public:
 	Token() {}
-	Token(const string &value, size_t begin, size_t end) :
-		value(value), begin(begin), end(end) {}
+	Token(const string &value, size_t begin, size_t end, size_t pos=0) :
+		value(value), begin(begin), end(end), pos(pos) {}
 	virtual string toString() const;
 	virtual ~Token() {}
 };

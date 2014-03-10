@@ -19,7 +19,7 @@ Token WSTokenStream::next() {
 
 		while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 	}
-	return Token(str, begin, end);
+	return Token(str, begin, end, ++ pos);
 }
 
 

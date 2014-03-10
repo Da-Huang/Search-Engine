@@ -4,26 +4,26 @@
 
 void MMIndex::add(const string &term, size_t fieldID,
 		size_t docID, size_t pos) {
-	vector<Posting> &postingList = index[term][fieldID];
-	const size_t N = postingList.size();
-	if ( N > 0 && postingList[N - 1].docID == docID ) {
-		postingList[N - 1].pushPos(pos);
+	vector<Posting> &pstList = index[term][fieldID];
+	const size_t N = pstList.size();
+	if ( N > 0 && pstList[N - 1].docID == docID ) {
+		pstList[N - 1].pushPos(pos);
 		sizeByte += sizeof(docID);
 	} else {
-		postingList.push_back(Posting(docID, pos));
+		pstList.push_back(Posting(docID, pos));
 		sizeByte += sizeof(docID) + sizeof(pos);
 	}
 }
 
 void MMIndex::add(const string &term, 
 		size_t fieldID, const Posting &posting) {
-	vector<Posting> &postingList = index[term][fieldID];
-	const size_t N = postingList.size();
+	vector<Posting> &pstList = index[term][fieldID];
+	const size_t N = pstList.size();
 
-	if ( N > 0 && postingList[N - 1].docID == posting.docID ) {
-		sizeByte += postingList[N - 1].merge(posting);
+	if ( N > 0 && pstList[N - 1].docID == posting.docID ) {
+		sizeByte += pstList[N - 1].merge(posting);
 	} else {
-		postingList.push_back(posting);
+		pstList.push_back(posting);
 		sizeByte += posting.size();
 	}
 }
@@ -40,24 +40,25 @@ void MMIndex::writeTo(ostream &idxOut, ostream &fldOut,
 
 		/* Write each field. */
 		for (size_t fieldIt = 1; fieldIt <= fieldNum; fieldIt ++) {
-			auto postingListIt = termIt->second.find(fieldIt);
-			size_t fieldBegin = pstOut.tellp();
-			idxOut.write((char*)&fieldBegin, sizeof(fieldBegin));
-			if ( postingListIt == termIt->second.end() ) {
-				size_t fieldSize = 0;
-				idxOut.write((char*)&fieldSize, sizeof(fieldSize));
+			auto pstListIt = termIt->second.find(fieldIt);
+			size_t pstListBegin = pstOut.tellp();
+			idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
+			if ( pstListIt == termIt->second.end() ) {
+				size_t pstListEnd = pstListBegin;
+				idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
 				continue;
 			}
 
-			const vector<Posting> &postingList = postingListIt->second;
-			size_t fieldSize = postingList.size();
-			idxOut.write((char*)&fieldSize, sizeof(fieldSize));
-
+//			cout << termIt->first << endl;
 			/* Write each posting. */
-			for (auto postingIt = postingList.begin(); 
-					postingIt != postingList.end(); postingIt ++) {
-				postingIt->writeTo(pstOut);
+			const vector<Posting> &pstList = pstListIt->second;
+			for (auto pstIt = pstList.begin(); 
+					pstIt != pstList.end(); pstIt ++) {
+//				cout << pstIt->toString() << endl;
+				pstIt->writeTo(pstOut);
 			}
+			size_t pstListEnd = pstOut.tellp();
+			idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
 		}
 	}
 }
@@ -81,10 +82,10 @@ string MMIndex::toString() const {
 				res += it->toString();
 				res += ",";
 			}
-			if ( res[res.length() - 1] == ',' ) res.erase(res.length() - 1);
+			if ( res.back() == ',' ) res.erase(res.length() - 1);
 			res += "],";
 		}
-		if ( res[res.length() - 1] == ',' ) res.erase(res.length() - 1);
+		if ( res.back() == ',' ) res.erase(res.length() - 1);
 		res += "\n";
 	}
 	return res;

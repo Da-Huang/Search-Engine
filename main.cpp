@@ -38,7 +38,10 @@ int main(int argc, char* argv[]) {
 	for (size_t i = 0; i < usages.size(); i ++)
 		cerr << usages[i] << endl;
 		*/
-//	KernelTest::index("/media/DISK_D/input", "../index");
+	
+	KernelTest::index("/media/DISK_D/input", "../index");
+	
+
 	KernelTest::search("../index", "((brutus | caesar) & ! calpurnia)");
 	KernelTest::search("../index", "((brutus & (caesar & calpurnia))");
 	KernelTest::search("../index", "((madding | crowd) & (ignoble | strife) & (killed | slain))");
@@ -47,6 +50,7 @@ int main(int argc, char* argv[]) {
 	KernelTest::search("../index", "caesar");
 	KernelTest::search("../index", "! brutus & ! caesar");
 	KernelTest::search("../index", "brutus | caesar");
+	KernelTest::search("../index", "README");
 
 
 	return -1;

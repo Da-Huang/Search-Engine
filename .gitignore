@@ -24,3 +24,6 @@ main
 
 # ini test
 *.ini
+
+# log file
+*.log

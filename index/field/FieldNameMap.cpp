@@ -27,7 +27,7 @@ string FieldNameMap::toString() const {
 		res += to_string(it->second);
 		res += ",";
 	}
-	if ( res[res.length() - 1] == ',' ) res.erase(res.length() - 1);
+	if ( res.back() == ',' ) res.erase(res.length() - 1);
 	res += "}";
 	return res;
 }

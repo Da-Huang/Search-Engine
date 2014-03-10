@@ -17,7 +17,7 @@ string Document::toString() const {
 		res += it->second.toString();
 		res += ",";
 	}
-	if ( res.length() > 1 ) res.erase(res.length() - 1);
+	if ( res.back() == ',' ) res.erase(res.length() - 1);
 	res.push_back(']');
 	return res;
 }

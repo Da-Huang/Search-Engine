@@ -64,6 +64,8 @@ void KernelTest::index(const string &docDirPath, const string &indexPath) {
 	}
 
 	closedir(dir);
+//	cout << iw.toString() << "================" << endl;
+
 	iw.close();
 }
 
