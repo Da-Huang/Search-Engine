@@ -13,16 +13,18 @@ PhraseQuery::PhraseQuery(const string &field, const vector<string> &terms,
 
 vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 	vector<ScoreDoc> res;
-
 	if ( terms.size() == 0 ) return res;
+
 	size_t fieldID = is.fieldNameMap->getFieldID(field);
 	PostingStream *ps = is.fileIndex->fetchPostingStream(fieldID, terms[0]);
+	if ( ps == NULL ) return res;
 
 	while ( ps->hasNext() ) {
-		res.push_back(ps->nextDocID());
+		res.push_back(ScoreDoc(ps->nextDocID()));
 	}
+	delete ps;
 	
-	return vector<ScoreDoc>();
+	return res;
 }
 
 string PhraseQuery::toString() const {

@@ -100,16 +100,14 @@ PostingStream* FileIndex::fetchPostingStream(
 
 vector<ScoreDoc> FileIndex::search(size_t fieldID, const string &term) {
 	vector<ScoreDoc> res;
-	size_t termID = findTermID(term);
-	if ( termID == 0 || fieldID == 0 ) return res;
-	pair<size_t, size_t> pstListInfo = getPostingListInfo(termID, fieldID);
-	size_t pstListBegin = pstListInfo.first;
-	size_t pstListEnd = pstListInfo.second;
-	PostingStream postingStream(pstIn, pstListBegin, pstListEnd);
-	while ( postingStream.hasNext() ) {
-		size_t docID = postingStream.nextDocID();
-		res.push_back(ScoreDoc(docID));
+	PostingStream* ps = fetchPostingStream(fieldID, term);
+	if ( ps == NULL ) return res;
+
+	while ( ps->hasNext() ) {
+		res.push_back(ScoreDoc(ps->nextDocID()));
 	}
+	delete ps;
+
 	return res;
 }
 
