@@ -96,8 +96,11 @@ vector<ScoreDoc> FileIndex::search(size_t fieldID, const string &term) {
 	size_t pstListEnd = pstListInfo.second;
 	PostingStream postingStream(pstIn, pstListBegin, pstListEnd);
 	while ( postingStream.hasNext() ) {
-		Posting posting = postingStream.next();
-		res.push_back(ScoreDoc(posting.getDocID()));
+//		cout << postingStream.peekDocID() << endl;
+//		Posting posting = postingStream.next();
+//		res.push_back(ScoreDoc(posting.getDocID()));
+		size_t docID = postingStream.nextDocID();
+		res.push_back(ScoreDoc(docID));
 	}
 	return res;
 }

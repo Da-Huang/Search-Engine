@@ -28,4 +28,29 @@ Posting	PostingStream::next() {
 	return res;
 }
 
+Posting PostingStream::peek() {
+	size_t current = this->current;
+	Posting posting = next();
+	this->current = current;
+	return posting;
+}
+
+size_t PostingStream::nextDocID() {
+	in.seekg(current);
+	size_t docID;
+	in.read((char*)&docID, sizeof(docID));
+	size_t posListSize;
+	in.read((char*)&posListSize, sizeof(posListSize));
+	in.seekg(posListSize * sizeof(size_t), ios::cur);
+	current = in.tellg();
+	return docID;
+}
+
+size_t PostingStream::peekDocID() {
+	in.seekg(current);
+	size_t docID;
+	in.read((char*)&docID, sizeof(docID));
+	return docID;
+}
+
 
