@@ -1,7 +1,6 @@
 #include <TokenStream.h>
+#include <Analyzer.h>
 #include <cctype>
-#include <cstring>
-#include <algorithm>
 
 using namespace std;
 
@@ -28,7 +27,8 @@ bool TokenStream::isTokenChar(char c) const {
 	return isalnum(c) || isSpecialAccept(c, "&");
 }
 
-TokenStream::TokenStream(istream &in) : in(in), LEN(getLength()), pos(0) {
+TokenStream::TokenStream(istream &in, const Analyzer &analyzer) 
+	: in(in), LEN(getLength()), pos(0), analyzer(analyzer) {
 	in.seekg(0);
 	while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 }
@@ -54,9 +54,7 @@ Token TokenStream::next() {
 			str.push_back(in.get());
 		end = in.tellg();
 
-		/* To Lower Case */
-		transform(str.begin(), str.end(), 
-				str.begin(), ptr_fun<int, int>(tolower));
+		analyzer.refine(str);
 
 		while ( hasNext() && !isTokenChar(in.peek()) ) in.get();
 	}

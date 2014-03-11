@@ -11,6 +11,8 @@ T delta(T a, T b) {
 }
 
 string trim(const string &str);
+//string stem(const string &str);
+string stem(const string &str);
 
 
 }

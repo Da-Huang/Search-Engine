@@ -3,5 +3,5 @@
 
 
 TokenStream& BoolAnalyzer::tokenStream(istream &in) const {
-	return *new WSTokenStream(in);
+	return *new WSTokenStream(in, *this);
 }

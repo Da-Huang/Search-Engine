@@ -3,12 +3,14 @@
 
 #include <TokenStream.h>
 
+
 class WSTokenStream : public TokenStream {
 protected:
 	inline bool isTokenChar(char c) const { return c != ' '; }
-	WSTokenStream(istream& in, void *null) : TokenStream(in, null) {}
+	WSTokenStream(istream& in, const Analyzer &analyzer, void *null)
+		: TokenStream(in, analyzer, null) {}
 public:
-	WSTokenStream(istream& in);
+	WSTokenStream(istream& in, const Analyzer &analyzer);
 	virtual Token next();
 	virtual ~WSTokenStream() {}
 };

@@ -2,6 +2,7 @@
 #include <test.h>
 #include <vector>
 #include <fstream>
+#include <Analyzer.h>
 #include <string.h>
 #include <unistd.h>
 
