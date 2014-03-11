@@ -5,12 +5,12 @@
 #include <cstdlib>
 #include <cerrno>
 
-#include <KernelTest.h>
 #include <IndexWriter.h>
 #include <StringField.h>
 #include <Document.h>
 #include <TextField.h>
 #include <Analyzer.h>
+namespace test {
 
 
 static vector<vector<string>> tests = {
@@ -29,7 +29,7 @@ bool isFile(const string &path) {
 	return ret >= 0 && S_ISREG(st.st_mode);
 }
 
-void KernelTest::index(const string &docDirPath, const string &indexPath) {
+void index(const string &docDirPath, const string &indexPath) {
 //	littleTest(); return;
 	DIR *dir;
 	struct dirent *ent;
@@ -89,3 +89,4 @@ void littleTest() {
 }
 
 
+}

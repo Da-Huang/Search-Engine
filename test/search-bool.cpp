@@ -1,4 +1,3 @@
-#include <KernelTest.h>
 #include <IndexSearcher.h>
 #include <Query.h>
 #include <TermQuery.h>
@@ -6,36 +5,26 @@
 #include <ScoreDoc.h>
 #include <OrQuery.h>
 #include <BoolAnalyzer.h>
+#include <util.h>
+namespace test {
 
+static void searchBool(IndexSearcher &is, const string &qStr);
 
-void KernelTest::searchPhrase(const string &indexPath, const string &qStr) {
+void searchBool(const string &indexPath, istream &in) {
 	string indexPrefix = indexPath;
 	indexPrefix += "/_";
 	IndexSearcher is(indexPrefix);
 
-	string queryString = qStr;
-	const Query *pQuery = QueryParser::parsePhrase(
-			queryString,
-			"content", 
-			BoolAnalyzer());
-	const Query *tQuery = new TermQuery("fileName", qStr);
-
-	const Query *query = pQuery == NULL ? tQuery : 
-		new OrQuery(*pQuery, *tQuery);
-
-	cout << "Inner Query:  " << query->toString() << endl;
-	
-	vector<ScoreDoc> scoreDocs = is.search(*query);
-	cout << "Hit Numbers:  " << scoreDocs.size() << endl;
-	cout << "Hit Documents:" << endl;
-	for (size_t i = 0; i < scoreDocs.size(); i ++) {
-		fprintf(stdout, "%4ld. ", i + 1);
-		cout << is.doc(scoreDocs[i].id()).toString() << endl;
+	string line;
+	while ( getline(in, line, '\n') ) {
+		line = util::trim(line);
+		if ( line.length() == 0 ) continue;
+		cout << line << endl;
+		searchBool(is, line);
 	}
-	delete query;
-}
+}	
 
-void KernelTest::search(const string &indexPath, const string &qStr) {
+void searchBool(const string &indexPath, const string &qStr) {
 	string indexPrefix = indexPath;
 	indexPrefix += "/_";
 	IndexSearcher is(indexPrefix);
@@ -46,6 +35,10 @@ void KernelTest::search(const string &indexPath, const string &qStr) {
 			<< "=======================================" << endl;
 	isOut  = false;
 */
+	test::searchBool(is, qStr);
+}
+
+void searchBool(IndexSearcher &is, const string &qStr) {
 	string queryString;
 	for (size_t i = 0; i < qStr.length(); i ++) {
 		if ( qStr[i] == '(' || qStr[i] == ')' || qStr[i] == '|' ||
@@ -78,3 +71,4 @@ void KernelTest::search(const string &indexPath, const string &qStr) {
 }
 
 
+}
