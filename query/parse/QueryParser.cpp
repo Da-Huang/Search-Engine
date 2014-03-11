@@ -148,7 +148,7 @@ const Query* QueryParser::parsePhrase(const string &keywords,
 	while ( ts.hasNext() ) {
 		Token token = ts.next();
 //		cout << token.toString() << endl;
-		if ( token.value[0] == '~' ) {
+		if ( token.value[0] == '\\' ) {
 			size_t slop = stoi(token.value.substr(1));
 			if ( terms.size() >= slops.size() + 1 )
 				slops.push_back(slop);

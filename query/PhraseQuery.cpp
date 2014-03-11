@@ -94,9 +94,9 @@ string PhraseQuery::toString() const {
 	if ( terms.size() > 0 ) {
 		res += terms[0];
 		for (size_t i = 1; i < terms.size(); i ++) {
-			res += " ~";
+			res += " \\";
 			res += to_string(slops[i - 1]);
-			res += "~ ";
+			res += " ";
 			res += terms[i];
 		}
 	}
