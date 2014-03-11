@@ -4,12 +4,12 @@
 
 
 PhraseQuery::PhraseQuery(const string &field, const vector<string> &terms, 
-		const vector<size_t> &nears) 
-	: field(field) , terms(terms), nears(nears) {
-	if ( this->nears.size() == 0 && this->terms.size() > 1 ) 
-		this->nears.push_back(5);
-	while ( this->nears.size() + 1 < this->terms.size() ) {
-		this->nears.push_back(this->nears.back());
+		const vector<size_t> &slops) 
+	: field(field) , terms(terms), slops(slops) {
+	if ( this->slops.size() == 0 && this->terms.size() > 1 ) 
+		this->slops.push_back(5);
+	while ( this->slops.size() + 1 < this->terms.size() ) {
+		this->slops.push_back(this->slops.back());
 	}
 }
 
@@ -24,8 +24,12 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 	for (size_t i = 1; i < terms.size(); i ++) {
 		PostingStream *ps1 = ps;
 		PostingStream *ps2 = is.fileIndex->
-			fetchPostingStream(fieldID, terms[1]);
-		ps = intersect(ps1, ps2, nears[i - 1]);
+			fetchPostingStream(fieldID, terms[i]);
+		if ( ps2 == NULL ) {
+			delete ps;
+			return res;
+		}
+		ps = intersect(ps1, ps2, slops[i - 1]);
 		delete ps1;
 		delete ps2;
 	}
@@ -39,11 +43,12 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 }
 
 PostingStream* PhraseQuery::intersect(
-		PostingStream *ps1, PostingStream *ps2, size_t near) {
+		PostingStream *ps1, PostingStream *ps2, size_t slop) {
 	PostingStream *ps = new TmpPostingStream();
 	while ( ps1->hasNext() && ps2->hasNext() ) {
 		size_t docID1 = ps1->peekDocID();
 		size_t docID2 = ps2->peekDocID();
+//		cout << docID1 << "," << docID2 << endl;
 		if ( docID1 < docID2 ) {
 			ps1->nextDocID();
 
@@ -59,12 +64,12 @@ PostingStream* PhraseQuery::intersect(
 			vector<size_t> &posList2 = p2.posList;
 			size_t i = 0, j = 0;
 			while ( i < posList1.size() && j < posList2.size() ) {
-				// Equals to |i + 1 - j| <= near
 				size_t pos1 = posList1[i];
 				size_t pos2 = posList2[j];
 				size_t dpos = util::delta(pos1 + 1, pos2);
 //				cout << dpos << endl;
-				if ( dpos < near ) {
+				if ( dpos <= slop ) {
+//					cout << "pos: " << pos2 << endl;
 					posting.addPos(pos2);
 					j ++;
 
@@ -90,7 +95,7 @@ string PhraseQuery::toString() const {
 		res += terms[0];
 		for (size_t i = 1; i < terms.size(); i ++) {
 			res += " ~";
-			res += to_string(nears[i - 1]);
+			res += to_string(slops[i - 1]);
 			res += "~ ";
 			res += terms[i];
 		}
