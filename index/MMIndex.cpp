@@ -7,7 +7,7 @@ void MMIndex::add(const string &term, size_t fieldID,
 	vector<Posting> &pstList = index[term][fieldID];
 	const size_t N = pstList.size();
 	if ( N > 0 && pstList[N - 1].docID == docID ) {
-		pstList[N - 1].pushPos(pos);
+		pstList[N - 1].addPos(pos);
 		sizeByte += sizeof(docID);
 	} else {
 		pstList.push_back(Posting(docID, pos));

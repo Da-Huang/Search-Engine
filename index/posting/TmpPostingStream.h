@@ -9,9 +9,8 @@ class TmpPostingStream : public PostingStream {
 protected:
 	FILE *fp;
 public:
-	TmpPostingStream(size_t end) 
-		: PostingStream(cin, 0, end), fp(tmpfile()) {}
-	virtual void rewind();
+	TmpPostingStream() : PostingStream(cin, 0, 0), fp(tmpfile()) {}
+//	virtual void rewind();
 	virtual void write(const Posting &posting);
 	virtual Posting next();
 	virtual Posting peek();

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <Query.h>
+#include <PostingStream.h>
 
 using namespace std;
 
@@ -19,6 +20,8 @@ public:
 			const vector<size_t> &nears);
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
 	virtual string toString() const;
+	static PostingStream* intersect(
+			PostingStream *ps1, PostingStream *ps2, size_t near);
 	virtual ~PhraseQuery() {}
 };
 

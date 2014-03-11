@@ -16,7 +16,7 @@ private:
 public:
 	Posting(size_t docID) : docID(docID) {}
 	Posting(size_t docID, size_t pos) : docID(docID), posList(1, pos) {}
-	virtual void pushPos(size_t pos) { posList.push_back(pos); }
+	virtual void addPos(size_t pos) { posList.push_back(pos); }
 	virtual inline size_t getDocID() const { return docID; }
 	virtual void writeTo(ostream &out) const;
 	virtual void writeTo(FILE *fp) const;
@@ -26,6 +26,7 @@ public:
 	virtual ~Posting() {}
 
 	friend class MMIndex;
+	friend class PhraseQuery;
 };
 
 #endif

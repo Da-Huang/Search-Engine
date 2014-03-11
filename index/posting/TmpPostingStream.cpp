@@ -3,11 +3,14 @@
 
 void TmpPostingStream::write(const Posting &posting) {
 	posting.writeTo(fp);
+	end = ftell(fp);
 }
 
+/*
 void TmpPostingStream::rewind() {
-	fseek(fp, begin, SEEK_SET);
+	current = 0;
 }
+*/
 
 Posting TmpPostingStream::next() {
 	fseek(fp, current, SEEK_SET);
@@ -20,7 +23,7 @@ Posting TmpPostingStream::next() {
 	for (size_t i = 0; i < posListSize; i ++) {
 		size_t pos;
 		fread(&pos, sizeof(pos), 1, fp);
-		res.pushPos(pos);
+		res.addPos(pos);
 	}
 	current = ftell(fp);
 	return res;

@@ -22,7 +22,7 @@ Posting	PostingStream::next() {
 	for (size_t i = 0; i < posListSize; i ++) {
 		size_t pos;
 		in.read((char*)&pos, sizeof(pos));
-		res.pushPos(pos);
+		res.addPos(pos);
 	}
 	current = in.tellg();
 	return res;
