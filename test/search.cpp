@@ -8,6 +8,33 @@
 #include <BoolAnalyzer.h>
 
 
+void KernelTest::searchPhrase(const string &indexPath, const string &qStr) {
+	string indexPrefix = indexPath;
+	indexPrefix += "/_";
+	IndexSearcher is(indexPrefix);
+
+	string queryString = qStr;
+	const Query *pQuery = QueryParser::parsePhrase(
+			queryString,
+			"content", 
+			BoolAnalyzer());
+	const Query *tQuery = new TermQuery("fileName", qStr);
+
+	const Query *query = pQuery == NULL ? tQuery : 
+		new OrQuery(*pQuery, *tQuery);
+
+	cout << "Inner Query:  " << query->toString() << endl;
+	
+	vector<ScoreDoc> scoreDocs = is.search(*query);
+	cout << "Hit Numbers:  " << scoreDocs.size() << endl;
+	cout << "Hit Documents:" << endl;
+	for (size_t i = 0; i < scoreDocs.size(); i ++) {
+		fprintf(stdout, "%4ld. ", i + 1);
+		cout << is.doc(scoreDocs[i].id()).toString() << endl;
+	}
+	delete query;
+}
+
 void KernelTest::search(const string &indexPath, const string &qStr) {
 	string indexPrefix = indexPath;
 	indexPrefix += "/_";

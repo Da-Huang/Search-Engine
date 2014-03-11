@@ -141,7 +141,28 @@ const Query* QueryParser::parseBool(const string &keywords,
 
 const Query* QueryParser::parsePhrase(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer) {
-	return NULL;
+	vector<string> terms;
+	vector<size_t> nears;
+	istringstream istr(keywords);
+	TokenStream &ts = analyzer.tokenStream(istr);
+	while ( ts.hasNext() ) {
+		Token token = ts.next();
+//		cout << token.toString() << endl;
+		if ( token.value[0] == '~' ) {
+			size_t near = stoi(token.value.substr(1));
+			if ( terms.size() >= nears.size() + 1 )
+				nears.push_back(near);
+
+		} else {
+			if ( terms.size() >= nears.size() + 1 ) {
+				size_t near = 0;
+				nears.push_back(near);
+			}
+			terms.push_back(token.value);
+		}
+	}
+	
+	return new PhraseQuery(fieldName, terms, nears);
 }
 
 

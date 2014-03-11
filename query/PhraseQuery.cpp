@@ -1,5 +1,6 @@
 #include <PhraseQuery.h>
 #include <TmpPostingStream.h>
+#include <util.h>
 
 
 PhraseQuery::PhraseQuery(const string &field, const vector<string> &terms, 
@@ -44,15 +45,16 @@ PostingStream* PhraseQuery::intersect(
 		size_t docID1 = ps1->peekDocID();
 		size_t docID2 = ps2->peekDocID();
 		if ( docID1 < docID2 ) {
-			((TmpPostingStream*)ps)->write(ps1->next());
+			ps1->nextDocID();
 
 		} else if ( docID1 > docID2 ) {
-			((TmpPostingStream*)ps)->write(ps2->next());
+			ps2->nextDocID();
 
 		} else {
 			Posting posting(docID1);
-			Posting p1 = ps->next();
-			Posting p2 = ps->next();
+			Posting p1 = ps1->next();
+			Posting p2 = ps2->next();
+//			cout << p1.toString() << "::" << p2.toString() << endl;
 			vector<size_t> &posList1 = p1.posList;
 			vector<size_t> &posList2 = p2.posList;
 			size_t i = 0, j = 0;
@@ -60,7 +62,9 @@ PostingStream* PhraseQuery::intersect(
 				// Equals to |i + 1 - j| <= near
 				size_t pos1 = posList1[i];
 				size_t pos2 = posList2[j];
-				if ( pos1 + 1 <= pos2 + near && pos2 <= pos1 + 1 + near ) {
+				size_t dpos = util::delta(pos1 + 1, pos2);
+//				cout << dpos << endl;
+				if ( dpos < near ) {
 					posting.addPos(pos2);
 					j ++;
 
@@ -80,7 +84,8 @@ PostingStream* PhraseQuery::intersect(
 }
 
 string PhraseQuery::toString() const {
-	string res = "<";
+	string res = field;
+	res += ":<";
 	if ( terms.size() > 0 ) {
 		res += terms[0];
 		for (size_t i = 1; i < terms.size(); i ++) {

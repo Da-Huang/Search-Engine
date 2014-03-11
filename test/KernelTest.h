@@ -11,6 +11,7 @@ class KernelTest {
 public:
 	static void index(const string &docDirPath, const string &indexPath);
 	static void search(const string &indexPath, const string &qStr);
+	static void searchPhrase(const string &indexPath, const string &qStr);
 };
 
 

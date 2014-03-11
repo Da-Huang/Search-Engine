@@ -44,6 +44,7 @@ int main(int argc, char* argv[]) {
 	
 	
 	
+	/*
 	KernelTest::index("/media/DISK_D/input", "/home/dhuang/index");
 
 	KernelTest::search("/home/dhuang/index", "((brutus | caesar) & ! calpurnia)");
@@ -58,6 +59,8 @@ int main(int argc, char* argv[]) {
 	KernelTest::search("/home/dhuang/index", "brutus | caesar");
 	KernelTest::search("/home/dhuang/index", "README");
 	
+	*/
+	KernelTest::searchPhrase("/home/dhuang/index", "brutus ~4~ caesar");
 
 	return -1;
 }

@@ -5,8 +5,9 @@
 string TermQuery::toString() const {
 	string res;
 	res += field;
-	res += ":";
+	res += ":\"";
 	res += term;
+	res += "\"";
 	return res;
 }
 
