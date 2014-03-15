@@ -97,8 +97,7 @@ vector<PostingStream*> FuzzyQuery::fetchPostingStreams(
 	for (size_t i = first; i <= last; i ++) {
 		string term = is.fileIndex->fetchTerm(i);
 //		cout << term << endl;
-		if ( term == lastTerm ||
-			util::delta(term.length(), this->term.length()) > dis ||
+		if ( util::delta(term.length(), this->term.length()) > dis ||
 			util::editDistance(this->term, term) > dis ) continue;
 		PostingStream* ps = is.fileIndex->fetchPostingStream(fieldID, i);
 		if ( ps != NULL ) res.push_back(ps);
