@@ -16,7 +16,6 @@ public:
 	virtual string toString() const;
 	virtual ~TermQuery() {}
 
-	friend class FileIndex;
 	friend class PhraseQuery;
 };
 
