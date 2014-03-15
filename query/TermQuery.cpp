@@ -16,4 +16,9 @@ vector<ScoreDoc> TermQuery::search(IndexSearcher &is) const {
 	return is.fileIndex->search(fieldID, term);
 }
 
+/** the result need to be deleted. **/
+PostingStream* TermQuery::fetchPostingStream(IndexSearcher &is) const {
+	size_t fieldID = is.fieldNameMap->getFieldID(field);
+	return is.fileIndex->fetchPostingStream(fieldID, term);
+}
 

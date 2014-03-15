@@ -1,30 +1,45 @@
+#include <util.h>
+#include <FuzzyQuery.h>
 #include <PhraseQuery.h>
 #include <TmpPostingStream.h>
-#include <util.h>
 
 
 PhraseQuery::PhraseQuery(const string &field, const vector<string> &terms, 
-		const vector<size_t> &slops) 
-	: field(field) , terms(terms), slops(slops) {
-	if ( this->slops.size() == 0 && this->terms.size() > 1 ) 
-		this->slops.push_back(5);
-	while ( this->slops.size() + 1 < this->terms.size() ) {
-		this->slops.push_back(this->slops.back());
-	}
+			const vector<size_t> &slops, bool fuzzy) : slops(slops) {
+	for (size_t i = 0; i < terms.size(); i ++)
+		this->terms.push_back(fuzzy ?
+				new FuzzyQuery(field, terms[i]) :
+				new TermQuery(field, terms[i]));
+	fillSlops();
+}
+
+PhraseQuery::PhraseQuery(
+		const vector<TermQuery*> &terms, const vector<size_t> &slops) 
+	: terms(terms), slops(slops) {
+	fillSlops();
+}
+
+void PhraseQuery::fillSlops() {
+	if ( slops.size() == 0 && terms.size() > 1 ) 
+		slops.push_back(5);
+	while ( slops.size() + 1 < terms.size() )
+		slops.push_back(slops.back());
 }
 
 vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 	vector<ScoreDoc> res;
 	if ( terms.size() == 0 ) return res;
 
-	size_t fieldID = is.fieldNameMap->getFieldID(field);
-	PostingStream *ps = is.fileIndex->fetchPostingStream(fieldID, terms[0]);
+	PostingStream *ps = terms[0]->fetchPostingStream(is);
 	if ( ps == NULL ) return res;
 
 	for (size_t i = 1; i < terms.size(); i ++) {
 		PostingStream *ps1 = ps;
-		PostingStream *ps2 = is.fileIndex->
-			fetchPostingStream(fieldID, terms[i]);
+		if ( terms[i]->field != terms[0]->field ) {
+			delete ps;
+			return res;
+		}
+		PostingStream *ps2 = terms[i]->fetchPostingStream(is);
 		if ( ps2 == NULL ) {
 			delete ps;
 			return res;
@@ -89,19 +104,24 @@ PostingStream* PhraseQuery::intersect(
 }
 
 string PhraseQuery::toString() const {
-	string res = field;
-	res += ":<";
+	string res = "p<";
 	if ( terms.size() > 0 ) {
-		res += terms[0];
+		res += terms[0]->toString();
 		for (size_t i = 1; i < terms.size(); i ++) {
 			res += " \\";
 			res += to_string(slops[i - 1]);
 			res += " ";
-			res += terms[i];
+			res += terms[i]->toString();
 		}
 	}
 	res += ">";
 	return res;
+}
+
+
+PhraseQuery::~PhraseQuery() {
+	for (size_t i = 0; i < terms.size(); i ++)
+		if ( (size_t) terms[i] < i ) delete terms[i];
 }
 
 
