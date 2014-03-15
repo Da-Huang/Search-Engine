@@ -33,6 +33,7 @@ vector<ScoreDoc> FuzzyQuery::search(IndexSearcher &is) const {
 
 		res.push_back(ScoreDoc(docID));
 	}
+//	cout << "------------" << endl;
 	return res;
 }
 
@@ -89,11 +90,13 @@ vector<PostingStream*> FuzzyQuery::fetchPostingStreams(
 	size_t first = is.fileIndex->findGETermID(firstTerm);
 	string lastTerm = firstTerm;
 	lastTerm[lastTerm.length() - 1] ++;
-	size_t last = is.fileIndex->findLETermID(lastTerm);
+//	cout << "l:" << lastTerm << endl;
+	size_t last = is.fileIndex->findLTTermID(lastTerm);
 
 	size_t fieldID = is.fieldNameMap->getFieldID(field);
-	for (size_t i = first; i < last; i ++) {
+	for (size_t i = first; i <= last; i ++) {
 		string term = is.fileIndex->fetchTerm(i);
+//		cout << term << endl;
 		if ( term == lastTerm ||
 			util::delta(term.length(), this->term.length()) > dis ||
 			util::editDistance(this->term, term) > dis ) continue;

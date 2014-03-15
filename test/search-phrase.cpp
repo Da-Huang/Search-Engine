@@ -2,14 +2,15 @@
 #include <Query.h>
 #include <TermQuery.h>
 #include <QueryParser.h>
+#include <FuzzyQuery.h>
 #include <ScoreDoc.h>
 #include <OrQuery.h>
 #include <BoolAnalyzer.h>
 #include <util.h>
 namespace test {
 
-static void searchPhrase(IndexSearcher &is, const string &qStr, bool fuzzy);
 
+static void searchPhrase(IndexSearcher &is, const string &qStr, bool fuzzy);
 
 void searchPhrase(const string &indexPath, istream &in, bool fuzzy) {
 	string indexPrefix = indexPath;
@@ -46,8 +47,10 @@ void searchPhrase(IndexSearcher &is, const string &qStr, bool fuzzy) {
 	const Query *pQuery = QueryParser::parsePhrase(
 			queryString,
 			"content", 
-			BoolAnalyzer());
-	const Query *tQuery = new TermQuery("fileName", qStr);
+			BoolAnalyzer(), fuzzy);
+	const Query *tQuery = fuzzy ? 
+		new FuzzyQuery("fileName", qStr) :
+		new TermQuery("fileName", qStr);
 
 	const Query *query = pQuery == NULL ? tQuery : 
 		new OrQuery(*pQuery, *tQuery);

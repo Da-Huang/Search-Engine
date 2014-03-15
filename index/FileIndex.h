@@ -22,7 +22,7 @@ public:
 	FileIndex(const string &prefix, size_t recordSize);
 	virtual size_t findTermID(const string &term);
 	virtual size_t findGETermID(const string &term);
-	virtual size_t findLETermID(const string &term);
+	virtual size_t findLTTermID(const string &term);
 	virtual inline size_t getTermNum() const { return TERM_NUM; }
 	virtual pair<size_t, size_t> getPostingListInfo(
 			size_t termID, size_t fieldID);

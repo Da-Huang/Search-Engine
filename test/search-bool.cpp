@@ -2,6 +2,7 @@
 #include <Query.h>
 #include <TermQuery.h>
 #include <QueryParser.h>
+#include <FuzzyQuery.h>
 #include <ScoreDoc.h>
 #include <OrQuery.h>
 #include <IndexSearcher.h>
@@ -52,8 +53,10 @@ void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy) {
 	const Query *bQuery = QueryParser::parseBool(
 			queryString,
 			"content", 
-			BoolAnalyzer());
-	const Query *tQuery = new TermQuery("fileName", qStr);
+			BoolAnalyzer(), fuzzy);
+	const Query *tQuery = fuzzy ? 
+		new FuzzyQuery("fileName", qStr) : 
+		new TermQuery("fileName", qStr);
 
 	const Query *query = bQuery == NULL ? tQuery : 
 		new OrQuery(*bQuery, *tQuery);

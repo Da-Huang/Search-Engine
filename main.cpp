@@ -12,13 +12,13 @@ using namespace std;
 static const vector<string> usages = {
 	"usage: -index \"data directory\" \"index directory\"",
 	"usage: -search-bool \"index directory\" \"query string\"",
-	"usage: -search-f-bool \"index directory\" \"query string\"",
+	"usage: -search-bool-f \"index directory\" \"query string\"",
 	"usage: -search-bool-batch \"index directory\" \"query file\"",
-	"usage: -search-f-bool-batch \"index directory\" \"query file\"",
+	"usage: -search-bool-f-batch \"index directory\" \"query file\"",
 	"usage: -search-phrase \"index diectory\" \"query string\"",
-	"usage: -search-f-phrase \"index diectory\" \"query string\"",
+	"usage: -search-phrase-f \"index diectory\" \"query string\"",
 	"usage: -search-phrase-batch \"index directory\" \"query file\"",
-	"usage: -search-f-phrase-batch \"index directory\" \"query file\"",
+	"usage: -search-phrase-f-batch \"index directory\" \"query file\"",
 };
 
 int run(int argc, char* argv[]) {
@@ -41,7 +41,7 @@ int run(int argc, char* argv[]) {
 			test::searchBool(string(argv[i + 1]), string(argv[i + 2]));
 			return 0;
 
-		} else if ( string(argv[i]) == "-search-f-bool" ) {
+		} else if ( string(argv[i]) == "-search-bool-f" ) {
 			if ( i + 2 >= argc ) {
 				cerr << usages[1] << endl;
 				return -1;
@@ -60,7 +60,7 @@ int run(int argc, char* argv[]) {
 			in.close();
 			return 0;
 
-		} else if ( string(argv[i]) == "-search-f-bool-batch" ) {
+		} else if ( string(argv[i]) == "-search-bool-f-batch" ) {
 			if ( i + 2 >= argc ) {
 				cerr << usages[2] << endl;
 				return -1;
@@ -78,7 +78,7 @@ int run(int argc, char* argv[]) {
 			test::searchPhrase(string(argv[i + 1]), string(argv[i + 2]));
 			return 0;
 
-		} else if ( string(argv[i]) == "-search-f-phrase" ) {
+		} else if ( string(argv[i]) == "-search-phrase-f" ) {
 			if ( i + 2 >= argc ) {
 				cerr << usages[3] << endl;
 				return -1;
@@ -97,7 +97,7 @@ int run(int argc, char* argv[]) {
 			in.close();
 			return 0;
 
-		} else if ( string(argv[i]) == "-search-f-phrase-batch" ) {
+		} else if ( string(argv[i]) == "-search-phrase-f-batch" ) {
 			if ( i + 2 >= argc ) {
 				cerr << usages[4] << endl;
 				return -1;

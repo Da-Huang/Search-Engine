@@ -45,17 +45,17 @@ size_t FileIndex::findGETermID(const string &term) {
 	return firstStr >= term ? first : first + 1;
 }
 
-size_t FileIndex::findLETermID(const string &term) {
+size_t FileIndex::findLTTermID(const string &term) {
 	size_t first = 1, last = TERM_NUM;
 	while ( first < last ) {
 		size_t mid = (first + last) / 2;
 		string midStr = fetchTerm(mid);
 		if ( midStr < term ) first = mid + 1;
 		else if ( midStr > term ) last = mid - 1; 
-		else return mid;
+		else return mid - 1;
 	}
 	string firstStr = fetchTerm(first);
-	return firstStr <= term ? first : first - 1;
+	return firstStr < term ? first : first - 1;
 }
 
 string FileIndex::fetchTerm(size_t termID) {
