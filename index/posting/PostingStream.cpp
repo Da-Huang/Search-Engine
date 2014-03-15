@@ -53,4 +53,19 @@ size_t PostingStream::peekDocID() {
 	return docID;
 }
 
+string PostingStream::toString() {
+	size_t oldCurrent = current;
+//	current = begin;
+	string res = "[";
+	while ( hasNext() ) {
+//		res += next().toString();
+		res += to_string(nextDocID());
+		res += ";";
+	}
+	current = oldCurrent;
+	if ( res[res.length() - 1] == ';' ) res.erase(res.length() - 1);
+	res += "]";
+	return res;
+}	
+
 

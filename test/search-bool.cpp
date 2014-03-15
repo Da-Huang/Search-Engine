@@ -35,7 +35,7 @@ void searchBool(const string &indexPath, const string &qStr) {
 			<< "=======================================" << endl;
 	isOut  = false;
 */
-	test::searchBool(is, qStr);
+	searchBool(is, qStr);
 }
 
 void searchBool(IndexSearcher &is, const string &qStr) {

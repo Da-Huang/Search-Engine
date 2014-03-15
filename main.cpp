@@ -73,10 +73,23 @@ int run(int argc, char* argv[]) {
 }
 
 #include <util.h>
+#include <FuzzyQuery.h>
+#include <ScoreDoc.h>
+#include <IndexSearcher.h>
 int main(int argc, char* argv[]) {
-	cout << util::editDistance("abcda", "abcda") << endl;
-	cout << util::editDistance("abcda", "aucba") << endl;
-	cout << util::editDistance("aucabt", "aucba") << endl;
+	IndexSearcher is("../index/_");
+	FuzzyQuery fq("content", util::trim("caeassr"));
+	cout << fq.toString() << endl;
+	vector<ScoreDoc> res = is.search(fq);
+	for (size_t i = 0; i < res.size(); i ++) {
+		cout << is.doc(res[i].id()).toString() << endl;
+	}
+
+	cout << "---------------------------------" << endl;
+	TermQuery tq("content", util::trim("caesar"));
+	for (size_t i = 0; i < res.size(); i ++) {
+		cout << is.doc(res[i].id()).toString() << endl;
+	}
 	
 //	return run(argc, argv);
 	

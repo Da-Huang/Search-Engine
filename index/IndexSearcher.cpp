@@ -38,3 +38,4 @@ IndexSearcher::~IndexSearcher() {
 	delete fieldNameMap;
 }
 
+

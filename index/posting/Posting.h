@@ -27,6 +27,8 @@ public:
 
 	friend class MMIndex;
 	friend class PhraseQuery;
+	friend class GreaterPos;
+	friend class FuzzyQuery;
 };
 
 #endif

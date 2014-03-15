@@ -22,6 +22,7 @@ public:
 	virtual ~IndexSearcher();
 
 	friend class TermQuery;
+	friend class FuzzyQuery;
 	friend class NotQuery;
 	friend class PhraseQuery;
 };

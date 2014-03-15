@@ -32,6 +32,32 @@ size_t FileIndex::findTermID(const string &term) {
 	return 0;
 }
 
+size_t FileIndex::findGETermID(const string &term) {
+	size_t first = 1, last = TERM_NUM;
+	while ( first < last ) {
+		size_t mid = (first + last) / 2;
+		string midStr = fetchTerm(mid);
+		if ( midStr < term ) first = mid + 1;
+		else if ( midStr > term ) last = mid - 1; 
+		else return mid;
+	}
+	string firstStr = fetchTerm(first);
+	return firstStr >= term ? first : first + 1;
+}
+
+size_t FileIndex::findLETermID(const string &term) {
+	size_t first = 1, last = TERM_NUM;
+	while ( first < last ) {
+		size_t mid = (first + last) / 2;
+		string midStr = fetchTerm(mid);
+		if ( midStr < term ) first = mid + 1;
+		else if ( midStr > term ) last = mid - 1; 
+		else return mid;
+	}
+	string firstStr = fetchTerm(first);
+	return firstStr <= term ? first : first - 1;
+}
+
 string FileIndex::fetchTerm(size_t termID) {
 	if ( termID == 0 || termID > TERM_NUM ) return "";
 	idxIn.seekg((termID - 1) * RECORD_SIZE);
@@ -89,13 +115,20 @@ string FileIndex::toString() {
 
 /** the result need to be deleted. **/
 PostingStream* FileIndex::fetchPostingStream(
-		size_t fieldID, const string &term) {
-	size_t termID = findTermID(term);
-	if ( termID == 0 || fieldID == 0 ) return NULL;
+		size_t fieldID, size_t termID) {
+	if ( termID == 0 || fieldID == 0 || termID > TERM_NUM ) return NULL;
 	pair<size_t, size_t> pstListInfo = getPostingListInfo(termID, fieldID);
 	size_t pstListBegin = pstListInfo.first;
 	size_t pstListEnd = pstListInfo.second;
+	if ( pstListBegin >= pstListEnd ) return NULL;
 	return new PostingStream(pstIn, pstListBegin, pstListEnd);
+}
+
+/** the result need to be deleted. **/
+PostingStream* FileIndex::fetchPostingStream(
+		size_t fieldID, const string &term) {
+	size_t termID = findTermID(term);
+	return fetchPostingStream(fieldID, termID);
 }
 
 vector<ScoreDoc> FileIndex::search(size_t fieldID, const string &term) {

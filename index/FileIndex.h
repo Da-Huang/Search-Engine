@@ -21,12 +21,17 @@ private:
 public:
 	FileIndex(const string &prefix, size_t recordSize);
 	virtual size_t findTermID(const string &term);
+	virtual size_t findGETermID(const string &term);
+	virtual size_t findLETermID(const string &term);
 	virtual inline size_t getTermNum() const { return TERM_NUM; }
 	virtual pair<size_t, size_t> getPostingListInfo(
 			size_t termID, size_t fieldID);
 	virtual size_t getFieldNum() const;
 	virtual vector<ScoreDoc> search(size_t fieldID, const string &term);
-	PostingStream* fetchPostingStream(size_t fieldID, const string &term);
+	virtual PostingStream* fetchPostingStream(
+			size_t fieldID, const string &term);
+	virtual PostingStream* fetchPostingStream(
+			size_t fieldID, size_t termID);
 	virtual string fetchTerm(size_t termID);
 	virtual string toString();
 	virtual ~FileIndex();

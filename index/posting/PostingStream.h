@@ -25,6 +25,7 @@ public:
 	virtual size_t nextDocID();
 	virtual size_t peekDocID();
 	virtual inline bool hasNext() const { return current < end; }
+	virtual string toString();
 	virtual ~PostingStream() {}
 };
 

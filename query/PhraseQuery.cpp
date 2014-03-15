@@ -57,6 +57,7 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 	return res;
 }
 
+/** ps1 and ps2 must *not* be NULL **/
 PostingStream* PhraseQuery::intersect(
 		PostingStream *ps1, PostingStream *ps2, size_t slop) {
 	PostingStream *ps = new TmpPostingStream();
