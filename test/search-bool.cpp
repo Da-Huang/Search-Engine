@@ -1,16 +1,16 @@
-#include <IndexSearcher.h>
+#include <util.h>
 #include <Query.h>
 #include <TermQuery.h>
 #include <QueryParser.h>
 #include <ScoreDoc.h>
 #include <OrQuery.h>
+#include <IndexSearcher.h>
 #include <BoolAnalyzer.h>
-#include <util.h>
 namespace test {
 
-static void searchBool(IndexSearcher &is, const string &qStr);
+static void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy);
 
-void searchBool(const string &indexPath, istream &in) {
+void searchBool(const string &indexPath, istream &in, bool fuzzy) {
 	string indexPrefix = indexPath;
 	indexPrefix += "/_";
 	IndexSearcher is(indexPrefix);
@@ -20,11 +20,11 @@ void searchBool(const string &indexPath, istream &in) {
 		line = util::trim(line);
 		if ( line.length() == 0 ) continue;
 		cout << line << endl;
-		searchBool(is, line);
+		searchBool(is, line, fuzzy);
 	}
 }	
 
-void searchBool(const string &indexPath, const string &qStr) {
+void searchBool(const string &indexPath, const string &qStr, bool fuzzy) {
 	string indexPrefix = indexPath;
 	indexPrefix += "/_";
 	IndexSearcher is(indexPrefix);
@@ -35,10 +35,10 @@ void searchBool(const string &indexPath, const string &qStr) {
 			<< "=======================================" << endl;
 	isOut  = false;
 */
-	searchBool(is, qStr);
+	searchBool(is, qStr, fuzzy);
 }
 
-void searchBool(IndexSearcher &is, const string &qStr) {
+void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy) {
 	string queryString;
 	for (size_t i = 0; i < qStr.length(); i ++) {
 		if ( qStr[i] == '(' || qStr[i] == ')' || qStr[i] == '|' ||

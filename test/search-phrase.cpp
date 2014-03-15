@@ -8,10 +8,10 @@
 #include <util.h>
 namespace test {
 
-static void searchPhrase(IndexSearcher &is, const string &qStr);
+static void searchPhrase(IndexSearcher &is, const string &qStr, bool fuzzy);
 
 
-void searchPhrase(const string &indexPath, istream &in) {
+void searchPhrase(const string &indexPath, istream &in, bool fuzzy) {
 	string indexPrefix = indexPath;
 	indexPrefix += "/_";
 	IndexSearcher is(indexPrefix);
@@ -20,11 +20,12 @@ void searchPhrase(const string &indexPath, istream &in) {
 	while ( getline(in, line) ) {
 		line = util::trim(line);
 		if ( line.length() == 0 ) continue;
-		searchPhrase(is, line);
+		searchPhrase(is, line, fuzzy);
 	}
 }	
 
-void searchPhrase(const string &indexPath, const string &qStr) {
+void searchPhrase(const string &indexPath, const string &qStr, bool fuzzy) {
+
 	string indexPrefix = indexPath;
 	indexPrefix += "/_";
 	IndexSearcher is(indexPrefix);
@@ -35,11 +36,11 @@ void searchPhrase(const string &indexPath, const string &qStr) {
 			<< "=======================================" << endl;
 	isOut  = false;
 */
-	test::searchPhrase(is, qStr);
+	test::searchPhrase(is, qStr, fuzzy);
 }
 
 
-void searchPhrase(IndexSearcher &is, const string &qStr) {
+void searchPhrase(IndexSearcher &is, const string &qStr, bool fuzzy) {
 
 	string queryString = qStr;
 	const Query *pQuery = QueryParser::parsePhrase(

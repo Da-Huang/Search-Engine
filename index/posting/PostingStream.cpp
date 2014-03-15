@@ -55,11 +55,11 @@ size_t PostingStream::peekDocID() {
 
 string PostingStream::toString() {
 	size_t oldCurrent = current;
-//	current = begin;
+	current = begin;
 	string res = "[";
 	while ( hasNext() ) {
-//		res += next().toString();
-		res += to_string(nextDocID());
+		res += next().toString();
+//		res += to_string(nextDocID());
 		res += ";";
 	}
 	current = oldCurrent;

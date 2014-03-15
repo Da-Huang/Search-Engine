@@ -76,20 +76,33 @@ int run(int argc, char* argv[]) {
 #include <FuzzyQuery.h>
 #include <ScoreDoc.h>
 #include <IndexSearcher.h>
+#include <AndQuery.h>
 int main(int argc, char* argv[]) {
+	return run(argc, argv);
+
 	IndexSearcher is("../index/_");
-	FuzzyQuery fq("content", util::trim("caeassr"));
-	cout << fq.toString() << endl;
-	vector<ScoreDoc> res = is.search(fq);
+//	FuzzyQuery fq("content", util::stem("caeassr"));
+//	cout << fq.toString() << endl;
+
+	/*
+	TermQuery t1("content", util::stem("brutus"));
+	TermQuery t2("content", util::stem("caesar"));
+	TermQuery t3("content", util::stem("calpurnia"));
+	*/
+
+	FuzzyQuery t1("content", "brutus");
+	FuzzyQuery t2("content", "caessar");
+	FuzzyQuery t3("content", "calpturniag");
+	AndQuery aq(t1, t2);
+	aq.add(t3);
+	cout << aq.toString() << endl;
+
+	vector<ScoreDoc> res = is.search(aq);
 	for (size_t i = 0; i < res.size(); i ++) {
 		cout << is.doc(res[i].id()).toString() << endl;
 	}
 
-	cout << "---------------------------------" << endl;
-	TermQuery tq("content", util::trim("caesar"));
-	for (size_t i = 0; i < res.size(); i ++) {
-		cout << is.doc(res[i].id()).toString() << endl;
-	}
+
 	
 //	return run(argc, argv);
 	

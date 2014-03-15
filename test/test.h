@@ -10,11 +10,13 @@ namespace test {
 
 void index(const string &docDirPath, const string &indexPath);
 
-void searchBool(const string &indexPath, const string &qStr);
-void searchBool(const string &indexPath, istream &in);
+void searchBool(const string &indexPath, const string &qStr, 
+		bool fuzzy=false);
+void searchBool(const string &indexPath, istream &in, bool fuzzy=false);
 
-void searchPhrase(const string &indexPath, const string &qStr);
-void searchPhrase(const string &indexPath, istream &in);
+void searchPhrase(const string &indexPath, const string &qStr, 
+		bool fuzzy=false);
+void searchPhrase(const string &indexPath, istream &in, bool fuzzy=false);
 
 }
 #endif

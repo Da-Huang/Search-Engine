@@ -2,8 +2,10 @@
 #include <sstream>
 #include <string>
 #include <stack>
+#include <util.h>
 #include <QueryParser.h>
 #include <TermQuery.h>
+#include <FuzzyQuery.h>
 #include <NotQuery.h>
 #include <AndQuery.h>
 #include <OrQuery.h>
@@ -13,6 +15,8 @@
 const Query* QueryParser::optimize(const Query *query) {
 	if ( dynamic_cast<const PhraseQuery*>(query) )
 		return new PhraseQuery((const PhraseQuery&)*query);
+	if ( dynamic_cast<const FuzzyQuery*>(query) )
+		return new FuzzyQuery((const FuzzyQuery&)*query);
 	if ( dynamic_cast<const TermQuery*>(query) )
 		return new TermQuery((const TermQuery&)*query);
 	if ( dynamic_cast<const NotQuery*>(query) )
@@ -59,7 +63,8 @@ const Query* QueryParser::parse(const string &keywords,
 }
 
 const Query* QueryParser::parseBool(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer) {
+			const string &fieldName, const Analyzer &analyzer,
+			bool fuzzy) {
 //	cerr << keywords << endl;
 	map<string, size_t> priority;
 	priority[" "] = 0;
@@ -82,7 +87,9 @@ const Query* QueryParser::parseBool(const string &keywords,
 		auto it = priority.find(token.value);
 
 		if ( it == priority.end() ) {
-			s1.push(new TermQuery(fieldName, token.value));
+			s1.push(fuzzy ? 
+					new FuzzyQuery(fieldName, util::stem(token.value)) :
+					new TermQuery(fieldName, util::stem(token.value)));
 
 		} else if ( it->first == "(" ) {
 			s2.push(it->first);
@@ -140,7 +147,8 @@ const Query* QueryParser::parseBool(const string &keywords,
 
 
 const Query* QueryParser::parsePhrase(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer) {
+			const string &fieldName, const Analyzer &analyzer, 
+			bool fuzzy) {
 	vector<string> terms;
 	vector<size_t> slops;
 	istringstream istr(keywords);
@@ -158,11 +166,11 @@ const Query* QueryParser::parsePhrase(const string &keywords,
 				size_t slop = 0;
 				slops.push_back(slop);
 			}
-			terms.push_back(token.value);
+			terms.push_back(util::stem(token.value));
 		}
 	}
 	
-	return new PhraseQuery(fieldName, terms, slops);
+	return new PhraseQuery(fieldName, terms, slops, fuzzy);
 }
 
 

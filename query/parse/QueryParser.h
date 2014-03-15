@@ -15,10 +15,12 @@ public:
 			const string &fieldName, const Analyzer &analyzer);
 
 	static const Query *parseBool(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer);
+			const string &fieldName, const Analyzer &analyzer, 
+			bool fuzzy=false);
 
 	static const Query *parsePhrase(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer);
+			const string &fieldName, const Analyzer &analyzer,
+			bool fuzzy=false);
 };
 
 
