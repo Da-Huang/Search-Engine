@@ -2,7 +2,6 @@
 #include <sstream>
 #include <string>
 #include <stack>
-#include <util.h>
 #include <QueryParser.h>
 #include <TermQuery.h>
 #include <FuzzyQuery.h>
@@ -88,8 +87,8 @@ const Query* QueryParser::parseBool(const string &keywords,
 
 		if ( it == priority.end() ) {
 			s1.push(fuzzy ? 
-					new FuzzyQuery(fieldName, util::stem(token.value)) :
-					new TermQuery(fieldName, util::stem(token.value)));
+					new FuzzyQuery(fieldName, token.value) :
+					new TermQuery(fieldName, token.value));
 
 		} else if ( it->first == "(" ) {
 			s2.push(it->first);
@@ -166,7 +165,7 @@ const Query* QueryParser::parsePhrase(const string &keywords,
 				size_t slop = 0;
 				slops.push_back(slop);
 			}
-			terms.push_back(util::stem(token.value));
+			terms.push_back(token.value);
 		}
 	}
 	
