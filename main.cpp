@@ -17,9 +17,7 @@ static const vector<string> usages = {
 	"usage: -search-phrase-batch \"index directory\" \"query file\"",
 };
 
-
-int main(int argc, char* argv[]) {
-	
+int run(int argc, char* argv[]) {
 	int i = 1;
 	for (i = 1; i < argc; i ++) {
 		if ( string(argv[i]) == "-index" ) {
@@ -71,13 +69,21 @@ int main(int argc, char* argv[]) {
 
 	for (size_t i = 0; i < usages.size(); i ++)
 		cerr << usages[i] << endl;
+	return -1;
+}
+
+#include <util.h>
+int main(int argc, char* argv[]) {
+	cout << util::editDistance("abcda", "abcda") << endl;
+	cout << util::editDistance("abcda", "aucba") << endl;
+	cout << util::editDistance("aucabt", "aucba") << endl;
+	
+//	return run(argc, argv);
 	
 //	test::index("/media/DISK_D/input", "/home/dhuang/index");
 
 //	test::searchPhrase("/home/dhuang/index", "brutus ~4~ caesar");
 //	test::searchPhrase("/home/dhuang/index", argv[1]);
-
-	return -1;
 }
 
 

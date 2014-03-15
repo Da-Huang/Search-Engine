@@ -13,6 +13,8 @@ T delta(T a, T b) {
 string trim(const string &str);
 //string stem(const string &str);
 string stem(const string &str);
+size_t editDistance(const string &str1, const string &str2);
+
 
 
 }
