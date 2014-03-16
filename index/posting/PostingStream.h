@@ -27,6 +27,7 @@ public:
 	virtual inline bool hasNext() const { return current < end; }
 	virtual string toString();
 	virtual ~PostingStream() {}
+	virtual string info();
 };
 
 #endif

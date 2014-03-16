@@ -21,6 +21,7 @@ void searchPhrase(const string &indexPath, istream &in, bool fuzzy) {
 	while ( getline(in, line) ) {
 		line = util::trim(line);
 		if ( line.length() == 0 ) continue;
+		cout << line << endl;
 		searchPhrase(is, line, fuzzy);
 	}
 }	
@@ -61,7 +62,7 @@ void searchPhrase(IndexSearcher &is, const string &qStr, bool fuzzy) {
 	cout << "Hit Numbers:  " << scoreDocs.size() << endl;
 	cout << "Hit Documents:" << endl;
 	for (size_t i = 0; i < scoreDocs.size(); i ++) {
-		fprintf(stdout, "%4ld. #%4ld ", i + 1, scoreDocs[i].id());
+		fprintf(stdout, "%4ld. #%-4ld ", i + 1, scoreDocs[i].id());
 		cout << is.doc(scoreDocs[i].id()).toString() << endl;
 	}
 	delete query;

@@ -72,10 +72,12 @@ PostingStream* FuzzyQuery::fetchPostingStream(IndexSearcher &is) const {
 		while ( !pqPos.empty() ) {
 			size_t i = pqPos.top();
 			pqPos.pop();
-			mergedPosting.addPos(pv[i].posList[index[i]]);
+			mergedPosting.addPos(pv[i].posList[index[i] ++]);
+			if ( index[i] < pv[i].posList.size() ) pqPos.push(i);
 		}
 		((TmpPostingStream*)res)->write(mergedPosting);
 	}
+//	cout << res->info() << endl;
 	return res;
 }
 
@@ -101,6 +103,7 @@ vector<PostingStream*> FuzzyQuery::fetchPostingStreams(
 //		cout << term << endl;
 		PostingStream* ps = is.fileIndex->fetchPostingStream(fieldID, i);
 		if ( ps != NULL && ps->hasNext() ) res.push_back(ps);
+//		cout << ps->info() << endl;
 	}
 	return res;
 }

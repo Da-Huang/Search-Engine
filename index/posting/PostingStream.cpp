@@ -57,7 +57,7 @@ string PostingStream::toString() {
 	size_t oldCurrent = current;
 	current = begin;
 	string res = "[";
-	while ( hasNext() ) {
+	while ( this->hasNext() ) {
 		res += next().toString();
 //		res += to_string(nextDocID());
 		res += ";";
@@ -67,5 +67,22 @@ string PostingStream::toString() {
 	res += "]";
 	return res;
 }	
+
+string PostingStream::info() {
+	size_t oldCurrent = current;
+	current = begin;
+	string res = "[";
+	while ( hasNext() ) {
+		Posting posting = next();
+		res += to_string(posting.getDocID());
+		res += ":";
+		res += to_string(posting.size() - sizeof(posting.getDocID()));
+		res += ";";
+	}
+	current = oldCurrent;
+	if ( res[res.length() - 1] == ';' ) res.erase(res.length() - 1);
+	res += "]";
+	return res;
+}
 
 
