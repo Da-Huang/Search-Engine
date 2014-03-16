@@ -32,6 +32,7 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 
 	PostingStream *ps = terms[0]->fetchPostingStream(is);
 	if ( ps == NULL ) return res;
+//	cout << ps->toString() << endl;
 
 	for (size_t i = 1; i < terms.size(); i ++) {
 		PostingStream *ps1 = ps;
@@ -122,7 +123,7 @@ string PhraseQuery::toString() const {
 
 PhraseQuery::~PhraseQuery() {
 	for (size_t i = 0; i < terms.size(); i ++)
-		if ( (size_t) terms[i] < i ) delete terms[i];
+		if ( i > (size_t) terms[i] ) delete terms[i];
 }
 
 

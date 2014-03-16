@@ -57,7 +57,6 @@ PostingStream* FuzzyQuery::fetchPostingStream(IndexSearcher &is) const {
 		while ( !pq.empty() && pq.top()->peekDocID() == docID ) {
 			ps = pq.top();
 			pq.pop();
-			ps->nextDocID();
 			pv.push_back(ps->next());
 			if ( ps->hasNext() ) pq.push(ps);
 			else delete ps;
@@ -99,8 +98,9 @@ vector<PostingStream*> FuzzyQuery::fetchPostingStreams(
 //		cout << term << endl;
 		if ( util::delta(term.length(), this->term.length()) > dis ||
 			util::editDistance(this->term, term) > dis ) continue;
+//		cout << term << endl;
 		PostingStream* ps = is.fileIndex->fetchPostingStream(fieldID, i);
-		if ( ps != NULL ) res.push_back(ps);
+		if ( ps != NULL && ps->hasNext() ) res.push_back(ps);
 	}
 	return res;
 }
