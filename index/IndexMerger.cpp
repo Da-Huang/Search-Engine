@@ -1,5 +1,7 @@
+#include <queue>
 #include <fstream>
 #include <IndexMerger.h>
+#include <GreaterFileIndex.h>
 
 
 IndexMerger::IndexMerger(const string &path) {
@@ -46,11 +48,25 @@ IndexMerger::IndexMerger(const string &path) {
 //		cout << prefix << endl;
 		FileIndex *fileIndex = new FileIndex(prefix, fieldNum);
 		fileIndexes.push_back(fileIndex);
-		cout << fileIndex->toString() << endl;
+//		cout << fileIndex->toString() << endl;
 	}
 }
 
 void IndexMerger::merge() {
+	vector<size_t> index(fileIndexes.size(), 0);
+	GreaterFileIndex gfi(fileIndexes, index);
+	priority_queue<size_t, vector<size_t>, GreaterFileIndex> pq(gfi);
+	/*
+	while ( !qp.empty() ) {
+		vector<size_t> 
+		size_t i = qp.top();
+		pq.pop();
+		index[i] ++;
+		string term = fileIndexes[i]->fetchTerm(index[i]);
+		PostingStream *ps = fileIndexes[i].fetchPostingStream(j, i);
+
+	}
+	*/
 }
 
 void IndexMerger::close() {

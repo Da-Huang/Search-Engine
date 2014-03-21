@@ -39,45 +39,9 @@ vector<ScoreDoc> FuzzyQuery::search(IndexSearcher &is) const {
 
 PostingStream* FuzzyQuery::fetchPostingStream(IndexSearcher &is) const {
 	vector<PostingStream*> psv = fetchPostingStreams(is);
-	priority_queue<PostingStream*, vector<PostingStream*>, 
-		GreaterPostingStream> pq;
-	for (size_t i = 0; i < psv.size(); i ++) pq.push(psv[i]);
-
 	PostingStream *res = new TmpPostingStream();
-	while ( !pq.empty() ) {
-		PostingStream *ps = pq.top();
-		pq.pop();
-
-		vector<Posting> pv;
-		pv.push_back(ps->next());
-		size_t docID = pv[0].docID;
-		if ( ps->hasNext() ) pq.push(ps);
-		else delete ps;
-
-		while ( !pq.empty() && pq.top()->peekDocID() == docID ) {
-			ps = pq.top();
-			pq.pop();
-			pv.push_back(ps->next());
-			if ( ps->hasNext() ) pq.push(ps);
-			else delete ps;
-		}
-
-		vector<size_t> index(pv.size(), 0);
-		GreaterPos greaterPos(pv, index);
-		priority_queue<size_t, vector<size_t>, GreaterPos>
-			pqPos(greaterPos);
-		for (size_t i = 0; i < pv.size(); i ++) pqPos.push(i);
-
-		Posting mergedPosting(docID);
-		while ( !pqPos.empty() ) {
-			size_t i = pqPos.top();
-			pqPos.pop();
-			mergedPosting.addPos(pv[i].posList[index[i] ++]);
-			if ( index[i] < pv[i].posList.size() ) pqPos.push(i);
-		}
-		((TmpPostingStream*)res)->write(mergedPosting);
-	}
-//	cout << res->info() << endl;
+	res->writeMerge(psv);
+//	cout << res->toString() << endl;
 	return res;
 }
 

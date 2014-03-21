@@ -40,7 +40,9 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 			delete ps;
 			return res;
 		}
+//		cout << ps1->toString() << endl;
 		PostingStream *ps2 = terms[i]->fetchPostingStream(is);
+//		cout << ps2->toString() << endl;
 		if ( ps2 == NULL ) {
 			delete ps;
 			return res;
@@ -61,6 +63,10 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 /** ps1 and ps2 must *not* be NULL **/
 PostingStream* PhraseQuery::intersect(
 		PostingStream *ps1, PostingStream *ps2, size_t slop) {
+//	cout << "=============" << endl;
+//	cout << ps1->toString() << endl;
+//	cout << ps2->toString() << endl;
+//	cout << "=============" << endl;
 	PostingStream *ps = new TmpPostingStream();
 	while ( ps1->hasNext() && ps2->hasNext() ) {
 		size_t docID1 = ps1->peekDocID();

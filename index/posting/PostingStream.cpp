@@ -1,8 +1,11 @@
+#include <queue>
 #include <PostingStream.h>
+#include <GreaterPos.h>
+#include <GreaterPostingStream.h>
 
 
 PostingStream::PostingStream(istream &in, size_t begin, size_t end)
-	: in(in), begin(begin), end(end), current(begin) {
+	: in(in), out(cout), begin(begin), end(end), current(begin) {
 	in.seekg(end);
 	size_t skipsNum;
 	in.read((char*)&skipsNum, sizeof(skipsNum));
@@ -83,6 +86,52 @@ string PostingStream::info() {
 	if ( res[res.length() - 1] == ';' ) res.erase(res.length() - 1);
 	res += "]";
 	return res;
+}
+
+void PostingStream::write(const Posting &posting) {
+	posting.writeTo(out);
+	end = out.tellp();
+}
+
+void PostingStream::writeMerge(vector<PostingStream*> &psv) {
+	priority_queue<PostingStream*, vector<PostingStream*>, 
+		GreaterPostingStream> pq;
+	for (size_t i = 0; i < psv.size(); i ++) pq.push(psv[i]);
+
+	while ( !pq.empty() ) {
+		PostingStream *ps = pq.top();
+		pq.pop();
+
+		vector<Posting> pv;
+		pv.push_back(ps->next());
+		size_t docID = pv[0].docID;
+		if ( ps->hasNext() ) pq.push(ps);
+		else delete ps;
+
+		while ( !pq.empty() && pq.top()->peekDocID() == docID ) {
+			ps = pq.top();
+			pq.pop();
+			pv.push_back(ps->next());
+			if ( ps->hasNext() ) pq.push(ps);
+			else delete ps;
+		}
+
+		vector<size_t> index(pv.size(), 0);
+		GreaterPos greaterPos(pv, index);
+		priority_queue<size_t, vector<size_t>, GreaterPos>
+			pqPos(greaterPos);
+		for (size_t i = 0; i < pv.size(); i ++) pqPos.push(i);
+
+		Posting mergedPosting(docID);
+		while ( !pqPos.empty() ) {
+			size_t i = pqPos.top();
+			pqPos.pop();
+			mergedPosting.addPos(pv[i].posList[index[i] ++]);
+			if ( index[i] < pv[i].posList.size() ) pqPos.push(i);
+		}
+		write(mergedPosting);
+	}
+//	cout << info() << endl;
 }
 
 

@@ -26,6 +26,7 @@ public:
 	virtual ~Posting() {}
 
 	friend class MMIndex;
+	friend class PostingStream;
 	friend class PhraseQuery;
 	friend class GreaterPos;
 	friend class FuzzyQuery;
