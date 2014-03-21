@@ -52,33 +52,6 @@ void IndexWriter::write(Document &doc) {
 }
 
 void IndexWriter::merge() {
-	string cmd = "mv ";
-	cmd += dirPath;
-	cmd += "/__1.trm ";
-	cmd += dirPath;
-	cmd += "/_.trm";
-	system(cmd.c_str());
-
-	cmd = "mv ";
-	cmd += dirPath;
-	cmd += "/__1.idx ";
-	cmd += dirPath;
-	cmd += "/_.idx";
-	system(cmd.c_str());
-
-	cmd = "mv ";
-	cmd += dirPath;
-	cmd += "/__1.fld ";
-	cmd += dirPath;
-	cmd += "/_.fld";
-	system(cmd.c_str());
-
-	cmd = "mv ";
-	cmd += dirPath;
-	cmd += "/__1.pst ";
-	cmd += dirPath;
-	cmd += "/_.pst";
-	system(cmd.c_str());
 }
 
 void IndexWriter::saveSegment() {
@@ -121,14 +94,32 @@ void IndexWriter::saveSegment() {
 void IndexWriter::close() {
 	saveSegment();
 
+	string fldPath = dirPath;
+	fldPath += "/_.fld";
+	ofstream fldOut(fldPath);
+
+	size_t fieldNum = fieldNameMap.size();
+	fldOut.write((char*)&fieldNum, sizeof(fieldNum));
+	fieldNameMap.save(fldOut);
+	fldOut.close();
+
+	string metaPath = dirPath;
+	metaPath += "/__.meta";
+	ofstream metaOut(metaPath);
+	size_t segNum = currentSegID - 1;
+	metaOut.write((char*)&segNum, sizeof(segNum));
+	metaOut.close();
+
 	merge();
 
 	docOut.close();
 	cntOut.close();
+	/*
 	string cmd = "rm -f ";
 	cmd += dirPath;
 	cmd += "/__*";
 	system(cmd.c_str());
+	*/
 }
 
 string IndexWriter::toString() const {

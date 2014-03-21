@@ -5,7 +5,6 @@ const string& FieldNameMap::getFieldName(size_t fieldID) const {
 	return fieldNames[fieldID - 1];
 }
 
-
 size_t FieldNameMap::getFieldID(const string &fieldName) const {
 	auto it = fieldIDMap.find(fieldName);
 	if ( it == fieldIDMap.end() ) return 0;
