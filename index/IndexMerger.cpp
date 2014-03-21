@@ -11,5 +11,36 @@ IndexMerger::IndexMerger(const string &path) {
 	fieldNameMap->load(fldIn);
 	fldIn.close();
 
-//	size_t recordSize = (fieldNameMap->size() * 2 + 1) * sizeof(size_t)
+	string trmPath = path;
+	trmPath += "/_.trm";
+	string idxPath = path;
+	idxPath += "/_.idx";
+	string pstPath = path;
+	pstPath += "/_.pst";
+
+	trmOut.open(trmPath);
+	idxOut.open(idxPath);
+	pstOut.open(pstPath);
+
+	string metaPath = path;
+	metaPath += "__.meta";
+	ifstream metaIn(metaPath);
+	metaIn.close();
 }
+
+void IndexMerger::merge() {
+}
+
+void IndexMerger::close() {
+	trmOut.close();
+	idxOut.close();
+	pstOut.close();
+}
+
+IndexMerger::~IndexMerger() {
+	for (size_t i = 0; i < fileIndexes.size(); i ++)
+		delete fileIndexes[i];
+	delete fieldNameMap;
+}
+
+

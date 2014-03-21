@@ -10,7 +10,7 @@ void IndexWriter::addFieldName(const string &fieldName) {
 }
 
 IndexWriter::IndexWriter(const string &dirPath) 
-	: dirPath(dirPath), currentDocID(1) {
+	: dirPath(dirPath), currentDocID(1), currentSegID(1) {
 	string cmd = "mkdir -p ";
 	cmd += dirPath;
 	system(cmd.c_str());
@@ -47,6 +47,8 @@ void IndexWriter::write(Document &doc) {
 	docOut.write((char*)&cntSize, sizeof(cntSize));
 	currentDocID ++;
 //	cerr << mmIndex.toString() << endl;
+
+	if ( mmIndex.size() > SIZE_MAX ) saveSegment();
 }
 
 void IndexWriter::merge() {
@@ -79,16 +81,25 @@ void IndexWriter::merge() {
 	system(cmd.c_str());
 }
 
-void IndexWriter::close() {
+void IndexWriter::saveSegment() {
+	if ( mmIndex.size() == 0 ) return;
 
 	string idxPath = dirPath;
-	idxPath += "/__1.idx";
+	idxPath += "/__";
+	idxPath += to_string(currentSegID);
+	idxPath += ".idx";
 	string fldPath = dirPath;
-	fldPath += "/__1.fld";
+	fldPath += "/__";
+	fldPath += to_string(currentSegID);
+	fldPath += ".fld";
 	string trmPath = dirPath;
-	trmPath += "/__1.trm";
+	trmPath += "/__";
+	trmPath += to_string(currentSegID);
+	trmPath += ".trm";
 	string pstPath = dirPath;
-	pstPath += "/__1.pst";
+	pstPath += "/__";
+	pstPath += to_string(currentSegID);
+	pstPath += ".pst";
 
 	ofstream idxOut(idxPath);
 	ofstream fldOut(fldPath);
@@ -97,15 +108,23 @@ void IndexWriter::close() {
 
 	mmIndex.writeTo(idxOut, fldOut, trmOut, pstOut, fieldNameMap.size());
 	fieldNameMap.save(fldOut);
+	mmIndex.reset();
 
 	idxOut.close();
 	fldOut.close();
 	trmOut.close();
 	pstOut.close();
+	
+	currentSegID ++;
+}
+
+void IndexWriter::close() {
+	saveSegment();
+
+	merge();
 
 	docOut.close();
 	cntOut.close();
-	merge();
 	string cmd = "rm -f ";
 	cmd += dirPath;
 	cmd += "/__*";
@@ -115,4 +134,5 @@ void IndexWriter::close() {
 string IndexWriter::toString() const {
 	return mmIndex.toString();
 }
+
 

@@ -15,11 +15,14 @@ private:
 	const string dirPath;
 	MMIndex mmIndex;
 	size_t currentDocID;
+	size_t currentSegID;
 	ofstream docOut;
 	ofstream cntOut;
 
 	FieldNameMap fieldNameMap;
 	
+protected:
+	virtual void saveSegment();
 public:
 	IndexWriter(const string &dirPath);
 	virtual void addFieldName(const string &fieldName);
