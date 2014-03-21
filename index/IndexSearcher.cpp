@@ -11,9 +11,9 @@ IndexSearcher::IndexSearcher(const string &prefix) {
 	fieldNameMap = new FieldNameMap;
 	fieldNameMap->load(fldIn);
 	fldIn.close();
-	size_t recordSize = (fieldNameMap->size() * 2 + 1) * sizeof(size_t);
+//	size_t recordSize = (fieldNameMap->size() * 2 + 1) * sizeof(size_t);
 
-	fileIndex = new FileIndex(prefix, recordSize);
+	fileIndex = new FileIndex(prefix, fieldNameMap->size());
 	docDB = new DocDB(prefix, *fieldNameMap);
 }
 

@@ -12,7 +12,7 @@ size_t FieldNameMap::getFieldID(const string &fieldName) const {
 	return it->second;
 }
 
-
+/** Add Field Name if it does not exist. **/
 void FieldNameMap::addFieldName(const string &fieldName) {
 	if ( getFieldID(fieldName) > 0 ) return;
 	fieldNames.push_back(fieldName);

@@ -3,8 +3,13 @@
 #include <PostingStream.h>
 
 
-FileIndex::FileIndex(const string &prefix, size_t recordSize)
-	: RECORD_SIZE(recordSize) {
+size_t FileIndex::recordSize() const {
+	return (FIELD_NUM * 2 + 1) * sizeof(size_t);
+}
+
+FileIndex::FileIndex(const string &prefix, size_t fieldNum)
+	: FIELD_NUM(fieldNum), RECORD_SIZE(recordSize()) {
+//	cout << FIELD_NUM << " " << RECORD_SIZE << endl;
 	string idxPath = prefix;
 	idxPath += ".idx";
 	string trmPath = prefix;

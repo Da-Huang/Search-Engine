@@ -4,7 +4,6 @@
 #include <StringField.h>
 #include <IndexWriter.h>
 
-using namespace std;
 
 void IndexWriter::addFieldName(const string &fieldName) {
 	fieldNameMap.addFieldName(fieldName);

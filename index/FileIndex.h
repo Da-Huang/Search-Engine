@@ -16,10 +16,14 @@ private:
 	ifstream idxIn;
 	ifstream trmIn;
 	ifstream pstIn;
+	const size_t FIELD_NUM;
 	const size_t RECORD_SIZE;
 	size_t TERM_NUM;
+
+protected:
+	virtual size_t recordSize() const;
 public:
-	FileIndex(const string &prefix, size_t recordSize);
+	FileIndex(const string &prefix, size_t fieldNum);
 	virtual size_t findTermID(const string &term);
 	virtual size_t findGETermID(const string &term);
 	virtual size_t findLTTermID(const string &term);
