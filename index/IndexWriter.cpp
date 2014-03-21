@@ -3,6 +3,7 @@
 #include <fstream>
 #include <StringField.h>
 #include <IndexWriter.h>
+#include <IndexMerger.h>
 
 
 void IndexWriter::addFieldName(const string &fieldName) {
@@ -51,9 +52,6 @@ void IndexWriter::write(Document &doc) {
 	if ( mmIndex.size() > SIZE_MAX ) saveSegment();
 }
 
-void IndexWriter::merge() {
-}
-
 void IndexWriter::saveSegment() {
 	if ( mmIndex.size() == 0 ) return;
 
@@ -93,6 +91,8 @@ void IndexWriter::saveSegment() {
 
 void IndexWriter::close() {
 	saveSegment();
+	docOut.close();
+	cntOut.close();
 
 	string fldPath = dirPath;
 	fldPath += "/_.fld";
@@ -110,10 +110,10 @@ void IndexWriter::close() {
 	metaOut.write((char*)&segNum, sizeof(segNum));
 	metaOut.close();
 
-	merge();
+	IndexMerger indexMerger(dirPath);
+	indexMerger.merge();
+	indexMerger.close();
 
-	docOut.close();
-	cntOut.close();
 	/*
 	string cmd = "rm -f ";
 	cmd += dirPath;

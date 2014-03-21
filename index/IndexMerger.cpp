@@ -23,9 +23,31 @@ IndexMerger::IndexMerger(const string &path) {
 	pstOut.open(pstPath);
 
 	string metaPath = path;
-	metaPath += "__.meta";
+	metaPath += "/__.meta";
 	ifstream metaIn(metaPath);
+	size_t segNum;
+	metaIn.read((char*)&segNum, sizeof(segNum));
 	metaIn.close();
+
+//	cout << segNum << endl;
+	for (size_t i = 1; i <= segNum; i ++) {
+		string prefix = path;
+		prefix += "/__";
+		prefix += to_string(i);
+
+		string fldPath = prefix;
+		fldPath += ".fld";
+
+		ifstream fldIn(fldPath);
+		size_t fieldNum;
+		fldIn.read((char*)&fieldNum, sizeof(fieldNum));
+		fldIn.close();
+
+//		cout << prefix << endl;
+		FileIndex *fileIndex = new FileIndex(prefix, fieldNum);
+		fileIndexes.push_back(fileIndex);
+		cout << fileIndex->toString() << endl;
+	}
 }
 
 void IndexMerger::merge() {

@@ -28,7 +28,6 @@ public:
 	virtual void addFieldName(const string &fieldName);
 	virtual void write(Document &doc);
 	virtual void close();
-	virtual void merge();
 	virtual string toString() const;
 	virtual ~IndexWriter() {}
 };

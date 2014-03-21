@@ -9,7 +9,6 @@ size_t FileIndex::recordSize() const {
 
 FileIndex::FileIndex(const string &prefix, size_t fieldNum)
 	: FIELD_NUM(fieldNum), RECORD_SIZE(recordSize()) {
-//	cout << FIELD_NUM << " " << RECORD_SIZE << endl;
 	string idxPath = prefix;
 	idxPath += ".idx";
 	string trmPath = prefix;
@@ -100,14 +99,14 @@ string FileIndex::toString() {
 			res += to_string(j);
 			res += "'[";
 
-			pair<size_t, size_t> pstListInfo = getPostingListInfo(i, j);
-			size_t pstListBegin = pstListInfo.first;
-			size_t pstListEnd = pstListInfo.second;
-			PostingStream postingStream(pstIn, pstListBegin, pstListEnd);
-			while ( postingStream.hasNext() ) {
-				Posting posting = postingStream.next();
-				res += posting.toString();
-				res += ",";
+			PostingStream* ps = fetchPostingStream(j, i);
+			if ( ps ) {
+				while ( ps->hasNext() ) {
+					Posting posting = ps->next();
+					res += posting.toString();
+					res += ",";
+				}
+				delete ps;
 			}
 			if ( res.back() == ',' ) res.erase(res.length() - 1);
 			res += "],";
