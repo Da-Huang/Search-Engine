@@ -24,6 +24,9 @@ public:
 	PostingStream(istream &in, size_t begin, size_t end);
 	void writeMerge(vector<PostingStream*> &psv);
 	virtual void write(const Posting &posting);
+	virtual void writeSkips();
+	virtual inline size_t getBegin() const { return begin; }
+	virtual inline size_t getEnd() const { return end; }
 	virtual Posting next();
 	virtual Posting peek();
 	virtual size_t nextDocID();

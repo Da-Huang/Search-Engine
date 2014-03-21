@@ -1,5 +1,6 @@
 #include <iostream>
 #include <MMIndex.h>
+#include <PostingStream.h>
 
 
 void MMIndex::add(const string &term, size_t fieldID,
@@ -41,13 +42,15 @@ void MMIndex::writeTo(ostream &idxOut, ostream &fldOut,
 		/* Write each field. */
 		for (size_t fieldIt = 1; fieldIt <= fieldNum; fieldIt ++) {
 			auto pstListIt = termIt->second.find(fieldIt);
-			size_t pstListBegin = pstOut.tellp();
-			idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
 			if ( pstListIt == termIt->second.end() ) {
+				size_t pstListBegin = pstOut.tellp();
 				size_t pstListEnd = pstListBegin;
+				idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
 				idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
 				continue;
 			}
+
+			PostingStream ps(pstOut, pstOut.tellp(), pstOut.tellp());
 
 //			cout << termIt->first << endl;
 			/* Write each posting. */
@@ -55,13 +58,14 @@ void MMIndex::writeTo(ostream &idxOut, ostream &fldOut,
 			for (auto pstIt = pstList.begin(); 
 					pstIt != pstList.end(); pstIt ++) {
 //				cout << pstIt->toString() << endl;
-				pstIt->writeTo(pstOut);
+				ps.write(*pstIt);
 			}
-			size_t pstListEnd = pstOut.tellp();
-			idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
+			ps.writeSkips();
 
-			size_t skipsNum = 0;
-			pstOut.write((char*)&skipsNum, sizeof(skipsNum));
+			size_t pstListBegin = ps.getBegin();
+			size_t pstListEnd = ps.getEnd();
+			idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
+			idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
 		}
 	}
 }
@@ -93,4 +97,5 @@ string MMIndex::toString() const {
 	}
 	return res;
 }
+
 

@@ -28,9 +28,9 @@ public:
 	virtual size_t findGETermID(const string &term);
 	virtual size_t findLTTermID(const string &term);
 	virtual inline size_t getTermNum() const { return TERM_NUM; }
+	virtual inline size_t getFieldNum() const { return FIELD_NUM; }
 	virtual pair<size_t, size_t> getPostingListInfo(
 			size_t termID, size_t fieldID);
-	virtual size_t getFieldNum() const;
 	virtual vector<ScoreDoc> search(size_t fieldID, const string &term);
 	virtual PostingStream* fetchPostingStream(
 			size_t fieldID, const string &term);
@@ -39,6 +39,8 @@ public:
 	virtual string fetchTerm(size_t termID);
 	virtual string toString();
 	virtual ~FileIndex();
+
+	friend class IndexMerger;
 };
 
 #endif

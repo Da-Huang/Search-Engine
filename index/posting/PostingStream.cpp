@@ -93,6 +93,13 @@ void PostingStream::write(const Posting &posting) {
 	end = out.tellp();
 }
 
+void PostingStream::writeSkips() {
+	size_t size = skips.size();
+	out.write((char*)&size, sizeof(size));
+	for (size_t i = 0; i < skips.size(); i ++) skips[i].writeTo(out);
+}
+
+/** elements in psv would be deleted **/
 void PostingStream::writeMerge(vector<PostingStream*> &psv) {
 	priority_queue<PostingStream*, vector<PostingStream*>, 
 		GreaterPostingStream> pq;

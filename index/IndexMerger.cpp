@@ -56,17 +56,44 @@ void IndexMerger::merge() {
 	vector<size_t> index(fileIndexes.size(), 0);
 	GreaterFileIndex gfi(fileIndexes, index);
 	priority_queue<size_t, vector<size_t>, GreaterFileIndex> pq(gfi);
-	/*
-	while ( !qp.empty() ) {
-		vector<size_t> 
-		size_t i = qp.top();
+	for (size_t i = 0; i < index.size(); i ++) pq.push(i);
+	
+	while ( !pq.empty() ) {
+		vector<size_t> indexSet;
+		size_t i = pq.top();
+		indexSet.push_back(i);
 		pq.pop();
-		index[i] ++;
 		string term = fileIndexes[i]->fetchTerm(index[i]);
-		PostingStream *ps = fileIndexes[i].fetchPostingStream(j, i);
 
+		while ( !pq.empty() ) {
+			i = pq.top();
+			if ( fileIndexes[i]->fetchTerm(index[i]) != term ) break;
+			indexSet.push_back(i);
+			pq.pop();
+		}
+
+		for (size_t j = 1; j <= fieldNameMap->size(); j ++) {
+			vector<PostingStream*> psv;
+			for (size_t k = 0; k < indexSet.size(); k ++) {
+				size_t i = indexSet[k];
+				PostingStream *ps = 
+					fileIndexes[i]->fetchPostingStream(j, i);
+				if ( ps ) psv.push_back(ps);
+			}
+			PostingStream ps(pstOut, pstOut.tellp(), pstOut.tellp());
+			ps.writeMerge(psv);
+
+			size_t pstListBegin = ps.getBegin();
+			size_t pstListEnd = ps.getEnd();
+			idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
+			idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
+		}
+		for (size_t k = 0; k < indexSet.size(); k ++) {
+			size_t i = indexSet[k];
+			if ( index[i] <= fileIndexes[i]->TERM_NUM ) pq.push(i);
+		}
 	}
-	*/
+	
 }
 
 void IndexMerger::close() {
