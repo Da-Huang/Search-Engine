@@ -9,8 +9,7 @@ IndexMerger::IndexMerger(const string &path) {
 	fldPath += "/_.fld";
 	ifstream fldIn(fldPath);
 
-	fieldNameMap = new FieldNameMap;
-	fieldNameMap->load(fldIn);
+	fieldNameMap.load(fldIn);
 	fldIn.close();
 
 	string trmPath = path;
@@ -53,35 +52,43 @@ IndexMerger::IndexMerger(const string &path) {
 }
 
 void IndexMerger::merge() {
-	vector<size_t> index(fileIndexes.size(), 0);
-	GreaterFileIndex gfi(fileIndexes, index);
+	cout << "merge" << endl;
+	vector<size_t> termIndex(fileIndexes.size(), 1);
+	GreaterFileIndex gfi(fileIndexes, termIndex);
 	priority_queue<size_t, vector<size_t>, GreaterFileIndex> pq(gfi);
-	for (size_t i = 0; i < index.size(); i ++) pq.push(i);
+	for (size_t i = 0; i < termIndex.size(); i ++) pq.push(i);
 	
 	while ( !pq.empty() ) {
 		vector<size_t> indexSet;
 		size_t i = pq.top();
 		indexSet.push_back(i);
 		pq.pop();
-		string term = fileIndexes[i]->fetchTerm(index[i]);
+		string term = fileIndexes[i]->fetchTerm(termIndex[i]);
+		size_t termBegin = trmOut.tellp();
+		idxOut.write((char*)&termBegin, sizeof(termBegin));
+		trmOut.write(term.c_str(), term.length() + 1);
 
 		while ( !pq.empty() ) {
 			i = pq.top();
-			if ( fileIndexes[i]->fetchTerm(index[i]) != term ) break;
+			if ( fileIndexes[i]->fetchTerm(termIndex[i]) != term ) break;
 			indexSet.push_back(i);
 			pq.pop();
 		}
 
-		for (size_t j = 1; j <= fieldNameMap->size(); j ++) {
+		for (size_t j = 1; j <= fieldNameMap.size(); j ++) {
 			vector<PostingStream*> psv;
 			for (size_t k = 0; k < indexSet.size(); k ++) {
 				size_t i = indexSet[k];
 				PostingStream *ps = 
-					fileIndexes[i]->fetchPostingStream(j, i);
+					fileIndexes[i]->fetchPostingStream(j, termIndex[i]);
 				if ( ps ) psv.push_back(ps);
 			}
 			PostingStream ps(pstOut, pstOut.tellp(), pstOut.tellp());
+//			cerr << "emrge" << psv.size() <<endl;
+//			cerr << psv[0]->toString() << endl;
 			ps.writeMerge(psv);
+			ps.writeSkips();
+//			cout << ps.toString() << endl;
 
 			size_t pstListBegin = ps.getBegin();
 			size_t pstListEnd = ps.getEnd();
@@ -90,7 +97,8 @@ void IndexMerger::merge() {
 		}
 		for (size_t k = 0; k < indexSet.size(); k ++) {
 			size_t i = indexSet[k];
-			if ( index[i] <= fileIndexes[i]->TERM_NUM ) pq.push(i);
+			termIndex[i] ++;
+			if ( termIndex[i] <= fileIndexes[i]->TERM_NUM ) pq.push(i);
 		}
 	}
 	
@@ -105,7 +113,6 @@ void IndexMerger::close() {
 IndexMerger::~IndexMerger() {
 	for (size_t i = 0; i < fileIndexes.size(); i ++)
 		delete fileIndexes[i];
-	delete fieldNameMap;
 }
 
 

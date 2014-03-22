@@ -21,8 +21,6 @@ static vector<vector<string>> tests = {
 	{"SHIT", "", "", "It goes right this day."},
 };
 
-extern void littleTest();
-
 bool isFile(const string &path) {
 	struct stat st;
 	int ret = stat(path.c_str(), &st);
@@ -70,7 +68,7 @@ void index(const string &docDirPath, const string &indexPath) {
 }
 
 
-void littleTest() {
+void littleIndex() {
 	IndexWriter iw("/home/dhuang/index");
 	Analyzer analyzer;
 	for (size_t i = 0; i < tests.size(); i ++) {

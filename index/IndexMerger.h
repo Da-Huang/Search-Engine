@@ -12,7 +12,7 @@ using namespace std;
 class IndexMerger {
 private:
 	vector<FileIndex*> fileIndexes;
-	FieldNameMap *fieldNameMap;
+	FieldNameMap fieldNameMap;
 	ofstream trmOut;
 	ofstream idxOut;
 	ofstream pstOut;

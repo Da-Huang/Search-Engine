@@ -9,6 +9,7 @@ using namespace std;
 namespace test {
 
 void index(const string &docDirPath, const string &indexPath);
+void littleIndex();
 
 void searchBool(const string &indexPath, const string &qStr, 
 		bool fuzzy=false);

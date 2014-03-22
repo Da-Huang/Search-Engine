@@ -60,7 +60,7 @@ string PostingStream::toString() {
 	size_t oldCurrent = current;
 	current = begin;
 	string res = "[";
-	while ( this->hasNext() ) {
+	while ( hasNext() ) {
 		res += next().toString();
 //		res += to_string(nextDocID());
 		res += ";";
@@ -127,7 +127,9 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv) {
 		GreaterPos greaterPos(pv, index);
 		priority_queue<size_t, vector<size_t>, GreaterPos>
 			pqPos(greaterPos);
-		for (size_t i = 0; i < pv.size(); i ++) pqPos.push(i);
+		for (size_t i = 0; i < pv.size(); i ++) {
+			if ( index[i] < pv[i].posList.size() ) pqPos.push(i);
+		}
 
 		Posting mergedPosting(docID);
 		while ( !pqPos.empty() ) {
@@ -136,8 +138,10 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv) {
 			mergedPosting.addPos(pv[i].posList[index[i] ++]);
 			if ( index[i] < pv[i].posList.size() ) pqPos.push(i);
 		}
+		// This is a polymorphic write.
 		write(mergedPosting);
 	}
+//	end = out.tellg();
 //	cout << info() << endl;
 }
 
