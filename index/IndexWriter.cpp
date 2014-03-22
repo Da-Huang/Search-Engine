@@ -49,7 +49,8 @@ void IndexWriter::write(Document &doc) {
 	currentDocID ++;
 //	cerr << mmIndex.toString() << endl;
 
-	if ( mmIndex.size() > SIZE_MAX ) saveSegment();
+	if ( mmIndex.size() > 0 ) saveSegment();
+//	if ( mmIndex.size() > SIZE_MAX ) saveSegment();
 }
 
 void IndexWriter::saveSegment() {
@@ -114,12 +115,10 @@ void IndexWriter::close() {
 	indexMerger.merge();
 	indexMerger.close();
 
-	/*
 	string cmd = "rm -f ";
 	cmd += dirPath;
 	cmd += "/__*";
 	system(cmd.c_str());
-	*/
 }
 
 string IndexWriter::toString() const {
