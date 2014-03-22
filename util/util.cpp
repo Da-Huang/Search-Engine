@@ -1,4 +1,7 @@
 #include <algorithm>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <util.h>
 #include <string.h>
 extern int stemk(char *p, int i, int j);
@@ -44,5 +47,18 @@ size_t editDistance(const string &str1, const string &str2) {
 	}
 	return res[M][N];
 }
+
+bool isDir(const string &path) {
+	struct stat st;
+	int ret = lstat(path.c_str(), &st);
+	return ret == 0 && S_ISDIR(st.st_mode);
+}
+
+bool isFile(const string &path) {
+	struct stat st;
+	int ret = lstat(path.c_str(), &st);
+	return ret == 0 && S_ISREG(st.st_mode);
+}
+
 
 }

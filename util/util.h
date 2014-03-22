@@ -16,6 +16,8 @@ string trim(const string &str);
 string stem(const string &str);
 size_t editDistance(const string &str1, const string &str2);
 
+bool isDir(const string &path);
+bool isFile(const string &path);
 
 
 }

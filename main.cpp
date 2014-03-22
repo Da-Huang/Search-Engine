@@ -123,7 +123,7 @@ int run(int argc, char* argv[]) {
 using namespace tinyxml2;
 int main(int argc, char* argv[]) {
 	
-//	return run(argc, argv);
+	return run(argc, argv);
 //	test::littleIndex();
 //	return 0;
 

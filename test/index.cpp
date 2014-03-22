@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cerrno>
 
+#include <util.h>
 #include <IndexWriter.h>
 #include <StringField.h>
 #include <Document.h>
@@ -21,14 +22,8 @@ static vector<vector<string>> tests = {
 	{"SHIT", "", "", "It goes right this day."},
 };
 
-bool isFile(const string &path) {
-	struct stat st;
-	int ret = stat(path.c_str(), &st);
-	return ret >= 0 && S_ISREG(st.st_mode);
-}
-
-void index(const string &docDirPath, const string &indexPath) {
-//	littleTest(); return;
+void index(IndexWriter &iw, const Analyzer &analyzer,
+		const string &docDirPath, const string &indexPath) {
 	DIR *dir;
 	struct dirent *ent;
 	if ( (dir = opendir(docDirPath.c_str())) == NULL ) {
@@ -36,15 +31,21 @@ void index(const string &docDirPath, const string &indexPath) {
 		return;
 	}
 
-	IndexWriter iw(indexPath);
-	Analyzer analyzer;
-
 	while ( (ent = readdir(dir)) != NULL ) {
 		string fullPath = docDirPath;
 		fullPath += "/";
 		fullPath += ent->d_name;
 		string fileName = ent->d_name;
-		if ( isFile(fullPath) ) {
+		if ( fileName.length() == 0 || fileName[0] == '.' ) continue;
+
+		if ( util::isFile(fullPath) ) {
+			string postfix = "newsML.xml";
+//			string postfix = ".cpp";
+			if ( fileName.rfind(postfix) == string::npos ||
+					fileName.rfind(postfix) + postfix.length() != 
+					fileName.length() ) continue;
+
+//			cout << fileName << endl;
 			Document doc = Document();
 
 			ifstream in(fullPath);
@@ -58,15 +59,25 @@ void index(const string &docDirPath, const string &indexPath) {
 
 			iw.write(doc);
 			in.close();
+
+			cerr << ".";
+
+		} else if ( util::isDir(fullPath) ) {
+			index(iw, analyzer, fullPath, indexPath);
 		}
 	}
 
 	closedir(dir);
 //	cout << iw.toString() << "================" << endl;
-
-	iw.close();
 }
 
+void index(const string &docDirPath, const string &indexPath) {
+	IndexWriter iw("/home/dhuang/index");
+	Analyzer analyzer;
+	index(iw, analyzer, docDirPath, indexPath);
+	iw.close();
+	cerr << endl;
+}
 
 void littleIndex() {
 	IndexWriter iw("/home/dhuang/index");
