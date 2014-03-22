@@ -27,3 +27,9 @@ main
 
 # log file
 *.log
+
+# xml test file
+*.xml
+
+# backup file
+*.bak

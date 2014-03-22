@@ -119,10 +119,23 @@ int run(int argc, char* argv[]) {
 #include <ScoreDoc.h>
 #include <IndexSearcher.h>
 #include <AndQuery.h>
+#include <tinyxml2.h>
+using namespace tinyxml2;
 int main(int argc, char* argv[]) {
 	
-	return run(argc, argv);
-	test::littleIndex();
+//	return run(argc, argv);
+//	test::littleIndex();
+//	return 0;
+
+	XMLDocument doc;  
+	doc.LoadFile("test.xml");  
+	XMLElement *newsitem = doc.RootElement();
+	XMLElement *text = newsitem->FirstChildElement("text");  
+	XMLElement *p = text->FirstChildElement("p");
+	while ( p ) {
+		cout << p->GetText() << endl;
+		p = p->NextSiblingElement();
+	}
 	return 0;
 
 	IndexSearcher is("../index/_");
