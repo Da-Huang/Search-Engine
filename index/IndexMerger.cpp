@@ -52,7 +52,6 @@ IndexMerger::IndexMerger(const string &path) {
 }
 
 void IndexMerger::merge() {
-	cout << "merge" << endl;
 	vector<size_t> termIndex(fileIndexes.size(), 1);
 	GreaterFileIndex gfi(fileIndexes, termIndex);
 	priority_queue<size_t, vector<size_t>, GreaterFileIndex> pq(gfi);
@@ -86,12 +85,14 @@ void IndexMerger::merge() {
 			PostingStream ps(pstOut, pstOut.tellp(), pstOut.tellp());
 //			cerr << "emrge" << psv.size() <<endl;
 //			cerr << psv[0]->toString() << endl;
-			ps.writeMerge(psv);
-			ps.writeSkips();
-//			cout << ps.toString() << endl;
+			if ( psv.size() > 0 ) {
+				ps.writeMerge(psv);
+				ps.writeSkips();
+			}
 
 			size_t pstListBegin = ps.getBegin();
 			size_t pstListEnd = ps.getEnd();
+//			cout << "merge:" <<  pstListBegin << " " << pstListEnd << endl;
 			idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
 			idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
 		}

@@ -64,6 +64,7 @@ void MMIndex::writeTo(ostream &idxOut, ostream &fldOut,
 
 			size_t pstListBegin = ps.getBegin();
 			size_t pstListEnd = ps.getEnd();
+//			cout << pstListBegin << " " << pstListEnd << endl;
 			idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
 			idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
 		}
