@@ -24,7 +24,7 @@ public:
 
 	virtual void writeTo(MMIndex &mmIndex, 
 			const FieldNameMap &fieldNameMap, size_t docID) const;
-	virtual ~TextField() {}
+	virtual ~TextField();
 	virtual string toString() const;
 };
 

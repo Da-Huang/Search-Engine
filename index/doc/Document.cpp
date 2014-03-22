@@ -1,6 +1,7 @@
 #include <IndexWriter.h>
 #include <Document.h>
 
+
 string Document::get(const string &fieldName) const {
 	auto it = fields.find(fieldName);
 	if ( it == fields.end() ) return "";
@@ -24,7 +25,7 @@ string Document::toString() const {
 
 Document::~Document() {
 	for (auto it = fields.begin(); it != fields.end(); it ++)
-		if ( (size_t)&it > (size_t)&(it->second) ) delete &(it->second);
+		if ( size_t(&it) > size_t(&(it->second)) ) delete &(it->second);
 }
 
 

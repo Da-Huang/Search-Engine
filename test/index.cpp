@@ -6,6 +6,7 @@
 #include <cerrno>
 
 #include <util.h>
+#include <tinyxml2.h>
 #include <IndexWriter.h>
 #include <StringField.h>
 #include <Document.h>
@@ -22,8 +23,10 @@ static vector<vector<string>> tests = {
 	{"SHIT", "", "", "It goes right this day."},
 };
 
+using namespace tinyxml2;
 void index(IndexWriter &iw, const Analyzer &analyzer,
 		const string &docDirPath, const string &indexPath) {
+	static size_t num = 0;
 	DIR *dir;
 	struct dirent *ent;
 	if ( (dir = opendir(docDirPath.c_str())) == NULL ) {
@@ -45,12 +48,28 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 					fileName.rfind(postfix) + postfix.length() != 
 					fileName.length() ) continue;
 
-//			cout << fileName << endl;
-			Document doc = Document();
+			XMLDocument xmlDoc;  
+			xmlDoc.LoadFile("test.xml");  
+			XMLElement *newsitem = xmlDoc.RootElement();
+			XMLElement *xmlText = newsitem->FirstChildElement("text");  
+			XMLElement *p = xmlText->FirstChildElement("p");
+			string text;
+			while ( p ) {
+				text += p->GetText();
+				text += "\n";
+				p = p->NextSiblingElement();
+			}
+			string title = newsitem->FirstChildElement("title")->GetText();
 
-			ifstream in(fullPath);
-			TextField f1("content", in, analyzer);
-			StringField f2("fileName", fileName);
+//			cout << fileName << endl;
+			Document doc;
+
+//			ifstream in(fullPath);
+//			TextField f1("content", in, analyzer);
+//			StringField f2("fileName", fileName);
+
+			TextField f1("title", title, analyzer);
+			TextField f2("text", text, analyzer);
 			StringField f3("filePath", fullPath);
 
 			doc.addField(f1);
@@ -58,9 +77,9 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 			doc.addField(f3);
 
 			iw.write(doc);
-			in.close();
+//			in.close();
 
-			cerr << ".";
+			if ( ++ num % 1000 == 0 ) cerr << ".";
 
 		} else if ( util::isDir(fullPath) ) {
 			index(iw, analyzer, fullPath, indexPath);
@@ -72,11 +91,12 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 }
 
 void index(const string &docDirPath, const string &indexPath) {
-	IndexWriter iw("/home/dhuang/index");
+	IndexWriter iw(indexPath);
 	Analyzer analyzer;
 	index(iw, analyzer, docDirPath, indexPath);
+	cout << endl << "merging ..." << endl;
 	iw.close();
-	cerr << endl;
+	cerr << "Finish." << endl;
 }
 
 void littleIndex() {

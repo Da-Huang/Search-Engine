@@ -30,4 +30,9 @@ string TextField::toString() const {
 	return res;
 }
 
+TextField::~TextField() {
+	size_t i;
+	if ( size_t(&i) > size_t(&in) ) delete &in;
+}
+
 

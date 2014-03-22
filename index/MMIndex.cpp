@@ -73,6 +73,8 @@ void MMIndex::writeTo(ostream &idxOut, ostream &fldOut,
 
 void MMIndex::reset() {
 	index.clear();
+//	map<string, map<size_t, vector<Posting>>> index;
+//	index.swap(this->index);
 	sizeByte = 0;
 }
 

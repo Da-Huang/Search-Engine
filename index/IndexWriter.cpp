@@ -17,7 +17,7 @@ void IndexWriter::addFieldName(const string &fieldName) {
 
 IndexWriter::IndexWriter(const string &dirPath) 
 	: dirPath(dirPath), currentDocID(1), currentSegID(1), 
-		MAX_SIZE(util::MBtoB(1)) {
+		MAX_SIZE(util::MBtoB(128)) {
 
 	string cmd = "mkdir -p ";
 	cmd += dirPath;
@@ -56,6 +56,7 @@ void IndexWriter::write(Document &doc) {
 	currentDocID ++;
 //	cerr << mmIndex.toString() << endl;
 
+//	cout << mmIndex.size() << "," << MAX_SIZE << endl;
 	if ( mmIndex.size() > MAX_SIZE ) saveSegment();
 }
 
