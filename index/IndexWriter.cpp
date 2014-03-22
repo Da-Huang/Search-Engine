@@ -1,3 +1,4 @@
+#include <util.h>
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
@@ -6,12 +7,18 @@
 #include <IndexMerger.h>
 
 
+void IndexWriter::setMaxMBSize(size_t maxMBSize) {
+	MAX_SIZE = util::MBtoB(maxMBSize);
+}
+
 void IndexWriter::addFieldName(const string &fieldName) {
 	fieldNameMap.addFieldName(fieldName);
 }
 
 IndexWriter::IndexWriter(const string &dirPath) 
-	: dirPath(dirPath), currentDocID(1), currentSegID(1) {
+	: dirPath(dirPath), currentDocID(1), currentSegID(1), 
+		MAX_SIZE(util::MBtoB(1)) {
+
 	string cmd = "mkdir -p ";
 	cmd += dirPath;
 	system(cmd.c_str());
@@ -49,8 +56,7 @@ void IndexWriter::write(Document &doc) {
 	currentDocID ++;
 //	cerr << mmIndex.toString() << endl;
 
-	if ( mmIndex.size() > 0 ) saveSegment();
-//	if ( mmIndex.size() > SIZE_MAX ) saveSegment();
+	if ( mmIndex.size() > MAX_SIZE ) saveSegment();
 }
 
 void IndexWriter::saveSegment() {

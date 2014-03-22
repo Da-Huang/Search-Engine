@@ -120,6 +120,7 @@ int run(int argc, char* argv[]) {
 #include <IndexSearcher.h>
 #include <AndQuery.h>
 int main(int argc, char* argv[]) {
+	
 	return run(argc, argv);
 	test::littleIndex();
 	return 0;

@@ -20,6 +20,8 @@ private:
 	ofstream cntOut;
 
 	FieldNameMap fieldNameMap;
+
+	size_t MAX_SIZE;
 	
 protected:
 	virtual void saveSegment();
@@ -29,6 +31,7 @@ public:
 	virtual void write(Document &doc);
 	virtual void close();
 	virtual string toString() const;
+	virtual void setMaxMBSize(size_t maxMBSize);
 	virtual ~IndexWriter() {}
 };
 

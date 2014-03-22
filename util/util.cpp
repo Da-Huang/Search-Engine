@@ -5,6 +5,12 @@ extern int stemk(char *p, int i, int j);
 namespace util {
 
 
+size_t MBtoB(size_t value) {
+	const size_t KB = 1024;
+	const size_t MB = KB * KB;
+	return MB * value;
+}
+
 string trim(const string &str) {
 	size_t posL = str.find_first_not_of(' ');
 	if ( posL == string::npos ) return string();
