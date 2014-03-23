@@ -7,7 +7,10 @@
 #include <OrQuery.h>
 #include <IndexSearcher.h>
 #include <BoolAnalyzer.h>
+#include <tinyxml2.h>
 namespace test {
+using namespace tinyxml2;
+
 
 static void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy);
 
@@ -50,16 +53,23 @@ void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy) {
 
 		} else queryString.push_back(qStr[i]);
 	}
-	const Query *bQuery = QueryParser::parseBool(
+	const Query *bQuery1 = QueryParser::parseBool(
 			queryString,
-			"content", 
+			"text", 
 			BoolAnalyzer(), fuzzy);
+	const Query *bQuery2 = QueryParser::parseBool(
+			queryString,
+			"title", 
+			BoolAnalyzer(), fuzzy);
+	/*
 	const Query *tQuery = fuzzy ? 
 		new FuzzyQuery("fileName", qStr) : 
 		new TermQuery("fileName", qStr);
 
 	const Query *query = bQuery == NULL ? tQuery : 
 		new OrQuery(*bQuery, *tQuery);
+		*/
+	const Query *query = new OrQuery(*bQuery1, *bQuery2);
 
 	cout << "Inner Query:  " << query->toString() << endl;
 	
@@ -68,7 +78,16 @@ void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy) {
 	cout << "Hit Documents:" << endl;
 	for (size_t i = 0; i < scoreDocs.size(); i ++) {
 		fprintf(stdout, "%4ld. #%-4ld ", i + 1, scoreDocs[i].id());
-		cout << is.doc(scoreDocs[i].id()).toString() << endl;
+		Document doc = is.doc(scoreDocs[i].id());
+		cout << doc.get("filePath") << endl;
+
+		XMLDocument xmlDoc;
+		xmlDoc.LoadFile(doc.get("filePath").c_str());
+		XMLElement *newsitem = xmlDoc.RootElement();
+		XMLElement *title = newsitem->FirstChildElement("title");
+		cout << "\t" << title->GetText() << endl;
+
+//		cout << is.doc(scoreDocs[i].id()).toString() << endl;
 	}
 	delete query;
 }

@@ -45,16 +45,26 @@ void searchPhrase(const string &indexPath, const string &qStr, bool fuzzy) {
 void searchPhrase(IndexSearcher &is, const string &qStr, bool fuzzy) {
 
 	string queryString = qStr;
-	const Query *pQuery = QueryParser::parsePhrase(
+	BoolAnalyzer analyzer;
+	const Query *pQuery1 = QueryParser::parsePhrase(
 			queryString,
-			"content", 
-			BoolAnalyzer(), fuzzy);
+			"text", 
+			analyzer, fuzzy);
+	const Query *pQuery2 = QueryParser::parsePhrase(
+			queryString,
+			"title",
+			analyzer, fuzzy);
+
+	/*
 	const Query *tQuery = fuzzy ? 
 		new FuzzyQuery("fileName", qStr) :
 		new TermQuery("fileName", qStr);
 
 	const Query *query = pQuery == NULL ? tQuery : 
 		new OrQuery(*pQuery, *tQuery);
+		*/
+
+	const Query *query = new OrQuery(*pQuery1, *pQuery2);
 
 	cout << "Inner Query:  " << query->toString() << endl;
 	

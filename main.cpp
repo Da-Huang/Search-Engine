@@ -127,17 +127,6 @@ int main(int argc, char* argv[]) {
 //	test::littleIndex();
 //	return 0;
 
-	XMLDocument doc;  
-	doc.LoadFile("test.xml");  
-	XMLElement *newsitem = doc.RootElement();
-	XMLElement *text = newsitem->FirstChildElement("text");  
-	XMLElement *p = text->FirstChildElement("p");
-	while ( p ) {
-		cout << p->GetText() << endl;
-		p = p->NextSiblingElement();
-	}
-	return 0;
-
 	IndexSearcher is("../index/_");
 //	FuzzyQuery fq("content", util::stem("caeassr"));
 //	cout << fq.toString() << endl;
@@ -145,18 +134,20 @@ int main(int argc, char* argv[]) {
 	/*
 	TermQuery t1("content", util::stem("brutus"));
 	TermQuery t2("content", util::stem("caesar"));
-	TermQuery t3("content", util::stem("calpurnia"));
 	*/
-
+	TermQuery t3("text", util::stem("the"));
+/*
 	FuzzyQuery t1("content", "brutus");
 	FuzzyQuery t2("content", "caessar");
 	FuzzyQuery t3("content", "calpturniag");
 	AndQuery aq(t1, t2);
 	aq.add(t3);
 	cout << aq.toString() << endl;
+	*/
 
-	vector<ScoreDoc> res = is.search(aq);
+	vector<ScoreDoc> res = is.search(t3);
 	for (size_t i = 0; i < res.size(); i ++) {
+		printf("%4ld. #%-4ld ", i + 1, res[i].id());
 		cout << is.doc(res[i].id()).toString() << endl;
 	}
 

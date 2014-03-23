@@ -26,7 +26,7 @@ static vector<vector<string>> tests = {
 using namespace tinyxml2;
 void index(IndexWriter &iw, const Analyzer &analyzer,
 		const string &docDirPath, const string &indexPath) {
-	static size_t num = 0;
+	static size_t count = 0;
 	DIR *dir;
 	struct dirent *ent;
 	if ( (dir = opendir(docDirPath.c_str())) == NULL ) {
@@ -49,19 +49,24 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 					fileName.length() ) continue;
 
 			XMLDocument xmlDoc;  
-			xmlDoc.LoadFile("test.xml");  
+			xmlDoc.LoadFile(fullPath.c_str());  
 			XMLElement *newsitem = xmlDoc.RootElement();
 			XMLElement *xmlText = newsitem->FirstChildElement("text");  
 			XMLElement *p = xmlText->FirstChildElement("p");
 			string text;
 			while ( p ) {
-				text += p->GetText();
-				text += "\n";
+				if ( p->GetText() ) {
+					text += p->GetText();
+					text += "\n";
+				}
 				p = p->NextSiblingElement();
 			}
 			string title = newsitem->FirstChildElement("title")->GetText();
 
-//			cout << fileName << endl;
+			count ++;
+			cerr << count << "\t";
+			cerr << fullPath << endl;
+			
 			Document doc;
 
 //			ifstream in(fullPath);
@@ -69,17 +74,22 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 //			StringField f2("fileName", fileName);
 
 			TextField f1("title", title, analyzer);
+//			cout << title << endl;
 			TextField f2("text", text, analyzer);
+//			cout << text << endl;
 			StringField f3("filePath", fullPath);
+//			cout << fullPath << endl;
 
 			doc.addField(f1);
 			doc.addField(f2);
 			doc.addField(f3);
 
 			iw.write(doc);
+			
 //			in.close();
 
-			if ( ++ num % 1000 == 0 ) cerr << ".";
+//			if ( count % 1000 == 0 ) cerr << ".";
+//			cout << count << endl;
 
 		} else if ( util::isDir(fullPath) ) {
 			index(iw, analyzer, fullPath, indexPath);
@@ -94,7 +104,7 @@ void index(const string &docDirPath, const string &indexPath) {
 	IndexWriter iw(indexPath);
 	Analyzer analyzer;
 	index(iw, analyzer, docDirPath, indexPath);
-	cout << endl << "merging ..." << endl;
+	cerr << endl << "merging ..." << endl;
 	iw.close();
 	cerr << "Finish." << endl;
 }

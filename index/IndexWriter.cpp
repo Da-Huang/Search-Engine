@@ -1,6 +1,7 @@
 #include <util.h>
 #include <iostream>
 #include <cstdlib>
+#include <cassert>
 #include <fstream>
 #include <StringField.h>
 #include <IndexWriter.h>
@@ -18,10 +19,12 @@ void IndexWriter::addFieldName(const string &fieldName) {
 IndexWriter::IndexWriter(const string &dirPath) 
 	: dirPath(dirPath), currentDocID(1), currentSegID(1), 
 		MAX_SIZE(util::MBtoB(128)) {
+//		MAX_SIZE(util::MBtoB(1024)) {
 
 	string cmd = "mkdir -p ";
 	cmd += dirPath;
-	system(cmd.c_str());
+	int status = system(cmd.c_str());
+	assert (status == 0);
 
 	string docPath = dirPath;
 	docPath += "/_.doc";
@@ -62,6 +65,7 @@ void IndexWriter::write(Document &doc) {
 
 void IndexWriter::saveSegment() {
 	if ( mmIndex.size() == 0 ) return;
+//	cout << mmIndex.toString() << endl;
 
 	string idxPath = dirPath;
 	idxPath += "/__";
@@ -122,10 +126,12 @@ void IndexWriter::close() {
 	indexMerger.merge();
 	indexMerger.close();
 
+	/*
 	string cmd = "rm -f ";
 	cmd += dirPath;
 	cmd += "/__*";
 	system(cmd.c_str());
+	*/
 }
 
 string IndexWriter::toString() const {

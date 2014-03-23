@@ -52,6 +52,8 @@ IndexMerger::IndexMerger(const string &path) {
 }
 
 void IndexMerger::merge() {
+	size_t count = 0;
+
 	vector<size_t> termIndex(fileIndexes.size(), 1);
 	GreaterFileIndex gfi(fileIndexes, termIndex);
 	priority_queue<size_t, vector<size_t>, GreaterFileIndex> pq(gfi);
@@ -66,6 +68,7 @@ void IndexMerger::merge() {
 		size_t termBegin = trmOut.tellp();
 		idxOut.write((char*)&termBegin, sizeof(termBegin));
 		trmOut.write(term.c_str(), term.length() + 1);
+//		cerr << term << endl;
 
 		while ( !pq.empty() ) {
 			i = pq.top();
@@ -101,8 +104,10 @@ void IndexMerger::merge() {
 			termIndex[i] ++;
 			if ( termIndex[i] <= fileIndexes[i]->TERM_NUM ) pq.push(i);
 		}
+		
+		if ( ++ count % 10000 == 0 ) cerr << ".";
 	}
-	
+	cerr << endl;
 }
 
 void IndexMerger::close() {
