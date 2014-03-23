@@ -80,13 +80,13 @@ void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy) {
 		fprintf(stdout, "%4ld. #%-4ld ", i + 1, scoreDocs[i].id());
 		Document doc = is.doc(scoreDocs[i].id());
 		cout << doc.get("filePath") << endl;
-
+/*
 		XMLDocument xmlDoc;
 		xmlDoc.LoadFile(doc.get("filePath").c_str());
 		XMLElement *newsitem = xmlDoc.RootElement();
 		XMLElement *title = newsitem->FirstChildElement("title");
 		cout << "\t" << title->GetText() << endl;
-
+*/
 //		cout << is.doc(scoreDocs[i].id()).toString() << endl;
 	}
 	delete query;

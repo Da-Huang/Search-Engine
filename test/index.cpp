@@ -65,7 +65,8 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 			}
 			XMLElement *xmlTitle = newsitem ? 
 				newsitem->FirstChildElement("title") : NULL;
-			string title = xmlTitle->GetText() ? xmlTitle->GetText() : "";
+			string title = xmlTitle && xmlTitle->GetText() ? 
+				xmlTitle->GetText() : "";
 
 			count ++;
 			cerr << count << "\t";

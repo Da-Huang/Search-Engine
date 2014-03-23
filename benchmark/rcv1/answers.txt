@@ -1,0 +1,181 @@
+the a more
+Inner Query:  (p<text:"the" \3 text:"a" \3 text:"more"> | p<title:"the" \3 title:"a" \3 title:"more">)
+Hit Numbers:  3649
+Hit Documents:
+   1. #6    /media/DISK_E/disk/disk1/19960820/2291newsML.xml
+	USA: Hog prices tumble as supplies increase, cocoa gains.
+   2. #105  /media/DISK_E/disk/disk1/19960820/2407newsML.xml
+	POLAND: Polish shares extend rally, may lose steam.
+   3. #147  /media/DISK_E/disk/disk1/19960820/2465newsML.xml
+	IRAN: Iran says signs $1.2bln Pakistan oil refinery deal.
+   4. #154  /media/DISK_E/disk/disk1/19960820/2479newsML.xml
+	DUBAI: Iran pins hope on Petronas deal to ease isolation.
+   5. #580  /media/DISK_E/disk/disk1/19960820/2958newsML.xml
+	USA: Box Energy not considering sale of company.
+   6. #875  /media/DISK_E/disk/disk1/19960820/3253newsML.xml
+	RUSSIA: Russian bank seen winning Sidanko tender.
+   7. #890  /media/DISK_E/disk/disk1/19960820/3269newsML.xml
+	RUSSIA: Grozny people flee, rebel-Russian showdown looms.
+   8. #1026 /media/DISK_E/disk/disk1/19960820/3396newsML.xml
+	ARGENTINA: Dry winter may cut Argentine wheat sowing.
+   9. #1163 /media/DISK_E/disk/disk1/19960820/3541newsML.xml
+	CHINA: China president urged to save relics from dam.
+  10. #1369 /media/DISK_E/disk/disk1/19960820/3735newsML.xml
+	USA: CME nearby hogs and pork bellies close limit down.
+  11. #2105 /media/DISK_E/disk/disk1/19960820/4480newsML.xml
+	UK: INTERVIEW - Halifax cautious on loan rates.
+  12. #2475 /media/DISK_E/disk/disk1/19960820/4831newsML.xml
+	JAPAN: Dollar rise not bad for Japan -- Sakakibara quoted.
+  13. #2573 /media/DISK_E/disk/disk1/19960820/4934newsML.xml
+	FRANCE: FEATURE - French law seen doing little to cut unemployment.
+  14. #2673 /media/DISK_E/disk/disk1/19960821/5029newsML.xml
+	UK: Top UK union sees Labour phasing in minimum wage.
+  15. #2876 /media/DISK_E/disk/disk1/19960821/5311newsML.xml
+	NORWAY: Norway Bergesen sees mixed outlook for rest of 1996.
+(There are more hit documents...)
+current increase
+Inner Query:  (p<text:"current" \3 text:"increas"> | p<title:"current" \3 title:"increas">)
+Hit Numbers:  478
+Hit Documents:
+   1. #1267 /media/DISK_E/disk/disk1/19960820/3627newsML.xml
+	USA: U.S. municipal bond and tax ballot proposals.
+   2. #1706 /media/DISK_E/disk/disk1/19960820/4075newsML.xml
+	USA: U.S. municipal bond and tax ballot proposals.
+   3. #3951 /media/DISK_E/disk/disk1/19960821/6399newsML.xml
+	USA: Educ. Dept. says 6,000 new schools needed by 2006.
+   4. #4537 /media/DISK_E/disk/disk1/19960821/6985newsML.xml
+	USA: U.S. municipal bond and tax ballot proposals.
+   5. #5776 /media/DISK_E/disk/disk1/19960822/8125newsML.xml
+	USA: U.S. municipal bond and tax ballot proposals.
+   6. #6306 /media/DISK_E/disk/disk1/19960822/8670newsML.xml
+	USA: RESEARCH ALERT - Fannie Mae raised to buy.
+   7. #6912 /media/DISK_E/disk/disk1/19960822/9271newsML.xml
+	CUBA: Cuban party urges members to win "war of ideas".
+   8. #8715 /media/DISK_E/disk/disk1/19960823/11352newsML.xml
+	USA: U.S. municipal bond and tax ballot proposals.
+   9. #9096 /media/DISK_E/disk/disk1/19960823/11732newsML.xml
+	USA: U.S. municipal bond and tax ballot proposals.
+  10. #10246 /media/DISK_E/disk/disk1/19960825/12889newsML.xml
+	UK: Whitbread says Bass referral likely.
+  11. #11804 /media/DISK_E/disk/disk1/19960826/14554newsML.xml
+	USA: U.S. municipal bond and tax ballot proposals.
+  12. #16449 /media/DISK_E/disk/disk1/19960828/19285newsML.xml
+	Australia: RTRS-PRESS DIGEST-Australian General News -Aug 29.
+  13. #16699 /media/DISK_E/disk/disk1/19960828/19526newsML.xml
+	USA: Calif Assembly panel backs $2 bln school bond plan.
+  14. #17090 /media/DISK_E/disk/disk1/19960828/19930newsML.xml
+	USA: U.S. municipal bond and tax ballot proposals.
+  15. #18840 /media/DISK_E/disk/disk1/19960829/21688newsML.xml
+	USA: U.S. municipal bond and tax ballot proposals.
+(There are more hit documents...)
+gdp growth
+Inner Query:  (p<text:"gdp" \3 text:"growth"> | p<title:"gdp" \3 title:"growth">)
+Hit Numbers:  4698
+Hit Documents:
+   1. #1    /media/DISK_E/disk/disk1/19960820/2286newsML.xml
+	MEXICO: Recovery excitement brings Mexican markets to life.
+   2. #267  /media/DISK_E/disk/disk1/19960820/2622newsML.xml
+	SWITZERLAND: Swiss BAK revises down '96 GDP forecast to 0.4 pct.
+   3. #572  /media/DISK_E/disk/disk1/19960820/2949newsML.xml
+	USA: Steady rates show no Fed concern over jobless rate.
+   4. #1041 /media/DISK_E/disk/disk1/19960820/3412newsML.xml
+	BRAZIL: Brazil GDP to grow 5-6 pct in second half - Ipea. [CORRECTED 15:55 GMT]
+   5. #1082 /media/DISK_E/disk/disk1/19960820/3455newsML.xml
+	AUSTRALIA: RTRS-3.5 pct Australia GDP rise not enough - Howard.
+   6. #1119 /media/DISK_E/disk/disk1/19960820/3494newsML.xml
+	AUSTRALIA: INSTANT VIEW - Australian 1996/97 budget.
+   7. #1501 /media/DISK_E/disk/disk1/19960820/3875newsML.xml
+	SRI LANKA: * Sri Lanka key economic indicators.
+   8. #1503 /media/DISK_E/disk/disk1/19960820/3877newsML.xml
+	INDIA: INDICATORS - Key Indian economic data.
+   9. #1506 /media/DISK_E/disk/disk1/19960820/3880newsML.xml
+	PAKISTAN: *Pakistan key economic indicators.
+  10. #1650 /media/DISK_E/disk/disk1/19960820/4015newsML.xml
+	EGYPT: INDICATORS - Egypt - updated Aug 20.
+  11. #3028 /media/DISK_E/disk/disk1/19960821/5480newsML.xml
+	FRANCE: PRESS DIGEST - FRANCE - AUG 21.
+  12. #3858 /media/DISK_E/disk/disk1/19960821/6300newsML.xml
+	EGYPT: INDICATORS - Egypt - updated Aug 21.
+  13. #4110 /media/DISK_E/disk/disk1/19960821/6567newsML.xml
+	INDIA: INDICATORS - Key Indian economic data.
+  14. #4112 /media/DISK_E/disk/disk1/19960821/6569newsML.xml
+	PAKISTAN: *Pakistan key economic indicators.
+  15. #4116 /media/DISK_E/disk/disk1/19960821/6573newsML.xml
+	SRI LANKA: Sri Lanka key economic indicators.
+(There are more hit documents...)
+german marks
+Inner Query:  (p<text:"german" \3 text:"mark"> | p<title:"german" \3 title:"mark">)
+Hit Numbers:  6673
+Hit Documents:
+   1. #7    /media/DISK_E/disk/disk1/19960820/2292newsML.xml
+	USA: Blue chips end up as Fed keeps interest rates steady.
+   2. #64   /media/DISK_E/disk/disk1/19960820/2356newsML.xml
+	UK: Key stock and currency market movements at 1600 GMT.
+   3. #68   /media/DISK_E/disk/disk1/19960820/2362newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+   4. #159  /media/DISK_E/disk/disk1/19960820/2484newsML.xml
+	USA: Dollar rises vs. yen after trade report.
+   5. #160  /media/DISK_E/disk/disk1/19960820/2485newsML.xml
+	USA: Dollar rises vs. yen after trade report.
+   6. #219  /media/DISK_E/disk/disk1/19960820/2556newsML.xml
+	GERMANY: Viag sees 1996 net at 1995 levels despite H1 fall.
+   7. #220  /media/DISK_E/disk/disk1/19960820/2557newsML.xml
+	GERMANY: German company failures up 15 pct in 96-Hermes.
+   8. #225  /media/DISK_E/disk/disk1/19960820/2565newsML.xml
+	GERMANY: Holzmann says aims for break-even in 1996.
+   9. #244  /media/DISK_E/disk/disk1/19960820/2594newsML.xml
+	GERMANY: Ex-Mannesmann chief to seek legal advice.
+  10. #249  /media/DISK_E/disk/disk1/19960820/2602newsML.xml
+	BELGIUM: Rexrodt and Van Miert to talk about VW aid.
+  11. #335  /media/DISK_E/disk/disk1/19960820/2698newsML.xml
+	USA: U.S. STOCKS MIXED IN VERY SLOW TRADING.
+  12. #362  /media/DISK_E/disk/disk1/19960820/2727newsML.xml
+	UK: FOCUS - FX market alert on rates ahead of Buba, Fed.
+  13. #871  /media/DISK_E/disk/disk1/19960820/3249newsML.xml
+	CROATIA: Croatian lending rate rises to 9.3 from 8.9 pct.
+  14. #937  /media/DISK_E/disk/disk1/19960820/3302newsML.xml
+	RUSSIA: Rouble falls to 3,578 per mark in Moscow.
+  15. #2112 /media/DISK_E/disk/disk1/19960820/4488newsML.xml
+	UK: Key stock and currency market movements, Aug 19.
+(There are more hit documents...)
+6.6427/47
+Inner Query:  (p<text:"6" \3 text:"6427" \3 text:"47"> | p<title:"6" \3 title:"6427" \3 title:"47">)
+Hit Numbers:  1
+Hit Documents:
+   1. #559773 /media/DISK_E/disk/disk2/19970702/703944newsML.xml
+	
+reuter london follow buy
+Inner Query:  (p<text:"reuter" \3 text:"london" \3 text:"follow" \3 text:"bui"> | p<title:"reuter" \3 title:"london" \3 title:"follow" \3 title:"bui">)
+Hit Numbers:  661
+Hit Documents:
+   1. #68   /media/DISK_E/disk/disk1/19960820/2362newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+   2. #2575 /media/DISK_E/disk/disk1/19960820/4936newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+   3. #2653 /media/DISK_E/disk/disk1/19960821/5023newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+   4. #7669 /media/DISK_E/disk/disk1/19960823/10199newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+   5. #7674 /media/DISK_E/disk/disk1/19960823/10205newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+   6. #7708 /media/DISK_E/disk/disk1/19960823/10241newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+   7. #12820 /media/DISK_E/disk/disk1/19960827/15558newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+   8. #12829 /media/DISK_E/disk/disk1/19960827/15568newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+   9. #12832 /media/DISK_E/disk/disk1/19960827/15571newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+  10. #15306 /media/DISK_E/disk/disk1/19960828/18109newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+  11. #15313 /media/DISK_E/disk/disk1/19960828/18116newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+  12. #15320 /media/DISK_E/disk/disk1/19960828/18124newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+  13. #18004 /media/DISK_E/disk/disk1/19960829/20836newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+  14. #18026 /media/DISK_E/disk/disk1/19960829/20843newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+  15. #20621 /media/DISK_E/disk/disk1/19960830/23459newsML.xml
+	UK: LONDON CURRENCY AND GOLD BULLION RATES.
+(There are more hit documents...)

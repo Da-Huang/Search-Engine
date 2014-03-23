@@ -2,6 +2,7 @@
 #include <test.h>
 #include <vector>
 #include <fstream>
+#include <cassert>
 #include <Analyzer.h>
 #include <string.h>
 #include <unistd.h>
@@ -19,91 +20,78 @@ static const vector<string> usages = {
 	"usage: -search-phrase-f \"index diectory\" \"query string\"",
 	"usage: -search-phrase-batch \"index directory\" \"query file\"",
 	"usage: -search-phrase-f-batch \"index directory\" \"query file\"",
+	"usage: -search \"index directory\" \"query string\"",
+	"usage: -search-f \"index directory\" \"query file\"",
 };
 
 int run(int argc, char* argv[]) {
 	int i = 1;
 	for (i = 1; i < argc; i ++) {
 		if ( string(argv[i]) == "-index" ) {
-			if ( i + 2 >= argc ) {
-				cerr << usages[0] << endl;
-				return -1;
-			}
+			assert (i + 2 < argc);
 			test::index(string(argv[i + 1]), string(argv[i + 2]));
 			cout << "Finish Indexing. You can search now." << endl;
 			return 0;
 
 		} else if ( string(argv[i]) == "-search-bool" ) {
-			if ( i + 2 >= argc ) {
-				cerr << usages[1] << endl;
-				return -1;
-			}
+			assert (i + 2 < argc);
 			test::searchBool(string(argv[i + 1]), string(argv[i + 2]));
 			return 0;
 
 		} else if ( string(argv[i]) == "-search-bool-f" ) {
-			if ( i + 2 >= argc ) {
-				cerr << usages[1] << endl;
-				return -1;
-			}
+			assert (i + 2 < argc);
 			test::searchBool(
 					string(argv[i + 1]), string(argv[i + 2]), true);
 			return 0;
 
 		} else if ( string(argv[i]) == "-search-bool-batch" ) {
-			if ( i + 2 >= argc ) {
-				cerr << usages[2] << endl;
-				return -1;
-			}
+			assert (i + 2 < argc);
 			ifstream in(argv[i + 2]);
 			test::searchBool(string(argv[i + 1]), in);
 			in.close();
 			return 0;
 
 		} else if ( string(argv[i]) == "-search-bool-f-batch" ) {
-			if ( i + 2 >= argc ) {
-				cerr << usages[2] << endl;
-				return -1;
-			}
+			assert (i + 2 < argc);
 			ifstream in(argv[i + 2]);
 			test::searchBool(string(argv[i + 1]), in, true);
 			in.close();
 			return 0;
 
 		} else if ( string(argv[i]) == "-search-phrase" ) {
-			if ( i + 2 >= argc ) {
-				cerr << usages[3] << endl;
-				return -1;
-			}
+			assert (i + 2 < argc);
 			test::searchPhrase(string(argv[i + 1]), string(argv[i + 2]));
 			return 0;
 
 		} else if ( string(argv[i]) == "-search-phrase-f" ) {
-			if ( i + 2 >= argc ) {
-				cerr << usages[3] << endl;
-				return -1;
-			}
+			assert (i + 2 < argc);
 			test::searchPhrase(
 					string(argv[i + 1]), string(argv[i + 2]), true);
 			return 0;
 
 		} else if ( string(argv[i]) == "-search-phrase-batch" ) {
-			if ( i + 2 >= argc ) {
-				cerr << usages[4] << endl;
-				return -1;
-			}
+			assert (i + 2 < argc);
 			ifstream in(argv[i + 2]);
 			test::searchPhrase(string(argv[i + 1]), in);
 			in.close();
 			return 0;
 
 		} else if ( string(argv[i]) == "-search-phrase-f-batch" ) {
-			if ( i + 2 >= argc ) {
-				cerr << usages[4] << endl;
-				return -1;
-			}
+			assert (i + 2 < argc);
 			ifstream in(argv[i + 2]);
 			test::searchPhrase(string(argv[i + 1]), in, true);
+			in.close();
+			return 0;
+
+		} else if ( string(argv[i]) == "-search" ) {
+			assert (i + 2 < argc);
+			test::search(string(argv[i + 1]), string(argv[i + 2]));
+			return 0;
+
+		} else if ( string(argv[i]) == "-search-batch" ) {
+			assert (i + 2 < argc);
+			ifstream in(argv[i + 2]);
+			test::search(string(argv[i + 1]), in);
 			in.close();
 			return 0;
 		}
