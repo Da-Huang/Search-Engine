@@ -12,7 +12,8 @@ public:
 	static const Query* optimize(const Query *query);
 
 	static const Query *parse(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer);
+			const string &fieldName, const Analyzer &analyzer,
+			bool fuzzy=false);
 
 	static const Query *parseBool(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer, 

@@ -55,10 +55,22 @@ const Query* QueryParser::optimize(const Query *query) {
 	return NULL;
 }
 
-
 const Query* QueryParser::parse(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer) {
-	return parseBool(keywords, fieldName, analyzer);
+			const string &fieldName, const Analyzer &analyzer, 
+			bool fuzzy) {
+	vector<string> terms;
+	vector<size_t> slops;
+	istringstream istr(keywords);
+	TokenStream &ts = analyzer.tokenStream(istr);
+	while ( ts.hasNext() ) {
+		Token token = ts.next();
+//		cout << token.toString() << endl;
+		terms.push_back(token.value);
+	}
+	if ( terms.size() > 2 ) 
+		slops.insert(slops.end(), terms.size() - 1, 3);
+	
+	return new PhraseQuery(fieldName, terms, slops, fuzzy);
 }
 
 const Query* QueryParser::parseBool(const string &keywords, 

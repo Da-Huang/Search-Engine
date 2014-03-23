@@ -126,12 +126,11 @@ void IndexWriter::close() {
 	indexMerger.merge();
 	indexMerger.close();
 
-	/*
 	string cmd = "rm -f ";
 	cmd += dirPath;
 	cmd += "/__*";
-	system(cmd.c_str());
-	*/
+	size_t status = system(cmd.c_str());
+	assert (status == 0);
 }
 
 string IndexWriter::toString() const {

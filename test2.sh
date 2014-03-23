@@ -3,3 +3,4 @@
 ./main -search-phrase ../index "19 4" | tee 1.log
 ./main -search-phrase ../index "current \1 increase" | tee 1.log
 ./main -search-phrase ../index "gdp growth" | tee 1.log
+./main -search-phrase ../index "german marks" | tee 1.log

@@ -11,6 +11,9 @@ namespace test {
 void index(const string &docDirPath, const string &indexPath);
 void littleIndex();
 
+void search(const string &indexPath, const string &qStr, bool fuzzy=false);
+void search(const string &indexPath, istream &in, bool fuzzy=false);
+
 void searchBool(const string &indexPath, const string &qStr, 
 		bool fuzzy=false);
 void searchBool(const string &indexPath, istream &in, bool fuzzy=false);

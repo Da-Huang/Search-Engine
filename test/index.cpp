@@ -51,8 +51,10 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 			XMLDocument xmlDoc;  
 			xmlDoc.LoadFile(fullPath.c_str());  
 			XMLElement *newsitem = xmlDoc.RootElement();
-			XMLElement *xmlText = newsitem->FirstChildElement("text");  
-			XMLElement *p = xmlText->FirstChildElement("p");
+			XMLElement *xmlText = newsitem ? 
+				newsitem->FirstChildElement("text") : NULL;  
+			XMLElement *p = xmlText ? 
+				xmlText->FirstChildElement("p") : NULL;
 			string text;
 			while ( p ) {
 				if ( p->GetText() ) {
@@ -61,7 +63,9 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 				}
 				p = p->NextSiblingElement();
 			}
-			string title = newsitem->FirstChildElement("title")->GetText();
+			XMLElement *xmlTitle = newsitem ? 
+				newsitem->FirstChildElement("title") : NULL;
+			string title = xmlTitle->GetText() ? xmlTitle->GetText() : "";
 
 			count ++;
 			cerr << count << "\t";
