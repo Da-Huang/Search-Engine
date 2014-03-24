@@ -8,6 +8,7 @@ size_t Posting::merge(const Posting &posting) {
 
 void Posting::writeTo(ostream &out) const {
 	out.write((char*)&docID, sizeof(docID));
+//	encode(out, docID);
 	size_t posListSize = posList.size();
 	out.write((char*)&posListSize, sizeof(posListSize));
 	for (auto posIt = posList.begin(); 
