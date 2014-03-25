@@ -32,10 +32,12 @@ public:
 	virtual pair<size_t, size_t> getPostingListInfo(
 			size_t termID, size_t fieldID);
 	virtual vector<ScoreDoc> search(size_t fieldID, const string &term);
+
 	virtual PostingStream* fetchPostingStream(
 			size_t fieldID, const string &term);
 	virtual PostingStream* fetchPostingStream(
 			size_t fieldID, size_t termID);
+
 	virtual string fetchTerm(size_t termID);
 	virtual string toString();
 	virtual ~FileIndex();

@@ -1,5 +1,6 @@
 #include <queue>
 #include <fstream>
+#include <util.h>
 #include <IndexMerger.h>
 #include <GreaterFileIndex.h>
 
@@ -58,7 +59,7 @@ void IndexMerger::merge() {
 	GreaterFileIndex gfi(fileIndexes, termIndex);
 	priority_queue<size_t, vector<size_t>, GreaterFileIndex> pq(gfi);
 	for (size_t i = 0; i < termIndex.size(); i ++) pq.push(i);
-	
+
 	while ( !pq.empty() ) {
 		vector<size_t> indexSet;
 		size_t i = pq.top();

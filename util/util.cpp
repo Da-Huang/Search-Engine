@@ -4,8 +4,14 @@
 #include <unistd.h>
 #include <util.h>
 #include <string.h>
+#include <VBCodec.h>
 extern int stemk(char *p, int i, int j);
 namespace util {
+
+
+Codec   ncodec(false);
+VBCodec vbcodec(true);
+const Codec &codec = vbcodec;
 
 
 size_t MBtoB(size_t value) {

@@ -2,8 +2,11 @@
 #define _UTIL_H_
 
 #include <string>
+#include <Codec.h>
 namespace util {
 using namespace std;
+
+extern const Codec &codec;
 
 template <typename T>
 T delta(T a, T b) {

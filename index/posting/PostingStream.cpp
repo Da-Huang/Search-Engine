@@ -1,18 +1,17 @@
 #include <queue>
+#include <util.h>
 #include <PostingStream.h>
 #include <GreaterPos.h>
 #include <GreaterPostingStream.h>
 
 
-PostingStream::PostingStream(istream &in, size_t begin, size_t end, 
-		const Codec &codec)
+PostingStream::PostingStream(istream &in, size_t begin, size_t end)
 	: in(in), out(cout), begin(begin), end(end), current(begin), 
-		codec(codec), baseDocID(0) {
+		baseDocID(0) {
 
 	in.seekg(end);
-	size_t skipsNum = codec.decode(in);
-//	in.read((char*)&skipsNum, sizeof(skipsNum));
-	// TODO: Skipping list may need codec.
+	size_t skipsNum = util::codec.decode(in);
+	// TODO: Skipping list may need delta codec.
 	for (size_t i = 0; i < skipsNum; i ++) {
 		skips.push_back(SkipEntry(in));
 	}
@@ -20,48 +19,22 @@ PostingStream::PostingStream(istream &in, size_t begin, size_t end,
 
 Posting	PostingStream::next() {
 	in.seekg(current);
-//	size_t docID = codec.decode(in) + (codec.isDelta() ? baseDocID : 0);
-//	baseDocID = docID;
-//	in.read((char*)&docID, sizeof(docID));
-	Posting res(in, codec, baseDocID);
+	Posting res(in, baseDocID);
 	baseDocID = res.getDocID();
-/*
-	Posting res(docID);
-
-	size_t posListSize = codec.decode(in);
-//	in.read((char*)&posListSize, sizeof(posListSize));
-
-	size_t basePos = 0;
-	for (size_t i = 0; i < posListSize; i ++) {
-		size_t pos = codec.decode(in) + (codec.isDelta() ? basePos : 0);
-		basePos = pos;
-//		in.read((char*)&pos, sizeof(pos));
-		res.addPos(pos);
-	}
-*/
 	current = in.tellg();
 	return res;
 }
 
 Posting PostingStream::peek() {
-	return Posting(in, codec, baseDocID);
-	/*
-	size_t current = this->current;
-	size_t baseDocID = this->baseDocID;
-	Posting posting = next();
-	this->current = current;
-	this->baseDocID = baseDocID;
-	return posting;
-	*/
+	return Posting(in, baseDocID);
 }
 
 size_t PostingStream::nextDocID() {
 	in.seekg(current);
-	size_t docID = codec.decode(in) + (codec.isDelta() ? baseDocID : 0);
+	size_t docID = util::codec.decode(in) + 
+			(util::codec.isDelta() ? baseDocID : 0);
 	baseDocID = docID;
-//	in.read((char*)&docID, sizeof(docID));
-	size_t posListSize = codec.decode(in);
-//	in.read((char*)&posListSize, sizeof(posListSize));
+	size_t posListSize = util::codec.decode(in);
 	in.seekg(posListSize * sizeof(size_t), ios::cur);
 	current = in.tellg();
 	return docID;
@@ -69,8 +42,8 @@ size_t PostingStream::nextDocID() {
 
 size_t PostingStream::peekDocID() {
 	in.seekg(current);
-	size_t docID = codec.decode(in) + (codec.isDelta() ? baseDocID : 0);
-//	in.read((char*)&docID, sizeof(docID));
+	size_t docID = util::codec.decode(in) + 
+			(util::codec.isDelta() ? baseDocID : 0);
 	return docID;
 }
 
@@ -113,15 +86,14 @@ string PostingStream::info() {
 }
 
 void PostingStream::write(const Posting &posting) {
-	posting.writeTo(out, codec, baseDocID);
+	posting.writeTo(out, baseDocID);
 	baseDocID = posting.getDocID();
 	end = out.tellp();
 }
 
 void PostingStream::writeSkips() {
 	size_t size = skips.size();
-//	out.write((char*)&size, sizeof(size));
-	codec.encode(out, size);
+	util::codec.encode(out, size);
 	for (size_t i = 0; i < skips.size(); i ++) skips[i].writeTo(out);
 }
 
@@ -167,13 +139,9 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv) {
 		// This is a polymorphic write.
 		write(mergedPosting);
 	}
-//	end = out.tellg();
 //	cout << info() << endl;
 }
 
-PostingStream::~PostingStream() {
-	size_t i;
-	if ( size_t(&i) > size_t(&codec) ) delete &codec;
-}
+PostingStream::~PostingStream() {}
 
 

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <ScoreDoc.h>
+#include <Codec.h>
 #include <IndexSearcher.h>
 
 using namespace std;
