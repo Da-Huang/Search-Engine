@@ -9,7 +9,8 @@ class TmpPostingStream : public PostingStream {
 protected:
 	FILE *fp;
 public:
-	TmpPostingStream() : fp(tmpfile()) {}
+	TmpPostingStream(const Codec &codec=*new Codec)
+		: PostingStream(codec), fp(tmpfile()) {}
 //	virtual void rewind();
 	virtual void write(const Posting &posting);
 	virtual Posting next();

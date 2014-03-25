@@ -4,11 +4,15 @@
 #include <GreaterPostingStream.h>
 
 
-PostingStream::PostingStream(istream &in, size_t begin, size_t end)
-	: in(in), out(cout), begin(begin), end(end), current(begin) {
+PostingStream::PostingStream(istream &in, size_t begin, size_t end, 
+		const Codec &codec)
+	: in(in), out(cout), begin(begin), end(end), current(begin), 
+		codec(codec), baseDocID(0) {
+
 	in.seekg(end);
-	size_t skipsNum;
-	in.read((char*)&skipsNum, sizeof(skipsNum));
+	size_t skipsNum = codec.decode(in);
+//	in.read((char*)&skipsNum, sizeof(skipsNum));
+	// TODO: Skipping list may need codec.
 	for (size_t i = 0; i < skipsNum; i ++) {
 		skips.push_back(SkipEntry(in));
 	}
@@ -16,34 +20,48 @@ PostingStream::PostingStream(istream &in, size_t begin, size_t end)
 
 Posting	PostingStream::next() {
 	in.seekg(current);
-	size_t docID;
-	in.read((char*)&docID, sizeof(docID));
+//	size_t docID = codec.decode(in) + (codec.isDelta() ? baseDocID : 0);
+//	baseDocID = docID;
+//	in.read((char*)&docID, sizeof(docID));
+	Posting res(in, codec, baseDocID);
+	baseDocID = res.getDocID();
+/*
 	Posting res(docID);
 
-	size_t posListSize;
-	in.read((char*)&posListSize, sizeof(posListSize));
+	size_t posListSize = codec.decode(in);
+//	in.read((char*)&posListSize, sizeof(posListSize));
+
+	size_t basePos = 0;
 	for (size_t i = 0; i < posListSize; i ++) {
-		size_t pos;
-		in.read((char*)&pos, sizeof(pos));
+		size_t pos = codec.decode(in) + (codec.isDelta() ? basePos : 0);
+		basePos = pos;
+//		in.read((char*)&pos, sizeof(pos));
 		res.addPos(pos);
 	}
+*/
 	current = in.tellg();
 	return res;
 }
 
 Posting PostingStream::peek() {
+	return Posting(in, codec, baseDocID);
+	/*
 	size_t current = this->current;
+	size_t baseDocID = this->baseDocID;
 	Posting posting = next();
 	this->current = current;
+	this->baseDocID = baseDocID;
 	return posting;
+	*/
 }
 
 size_t PostingStream::nextDocID() {
 	in.seekg(current);
-	size_t docID;
-	in.read((char*)&docID, sizeof(docID));
-	size_t posListSize;
-	in.read((char*)&posListSize, sizeof(posListSize));
+	size_t docID = codec.decode(in) + (codec.isDelta() ? baseDocID : 0);
+	baseDocID = docID;
+//	in.read((char*)&docID, sizeof(docID));
+	size_t posListSize = codec.decode(in);
+//	in.read((char*)&posListSize, sizeof(posListSize));
 	in.seekg(posListSize * sizeof(size_t), ios::cur);
 	current = in.tellg();
 	return docID;
@@ -51,29 +69,34 @@ size_t PostingStream::nextDocID() {
 
 size_t PostingStream::peekDocID() {
 	in.seekg(current);
-	size_t docID;
-	in.read((char*)&docID, sizeof(docID));
+	size_t docID = codec.decode(in) + (codec.isDelta() ? baseDocID : 0);
+//	in.read((char*)&docID, sizeof(docID));
 	return docID;
 }
 
 string PostingStream::toString() {
-	size_t oldCurrent = current;
-	current = begin;
+	size_t current = this->current;
+	size_t baseDocID = this->baseDocID;
+	this->current = begin;
+	this->baseDocID = 0;
 	string res = "[";
 	while ( hasNext() ) {
 		res += next().toString();
 //		res += to_string(nextDocID());
 		res += ";";
 	}
-	current = oldCurrent;
+	this->current = current;
+	this->baseDocID = baseDocID;
 	if ( res[res.length() - 1] == ';' ) res.erase(res.length() - 1);
 	res += "]";
 	return res;
 }	
 
 string PostingStream::info() {
-	size_t oldCurrent = current;
-	current = begin;
+	size_t current = this->current;
+	size_t baseDocID = this->baseDocID;
+	this->current = begin;
+	this->baseDocID = 0;
 	string res = "[";
 	while ( hasNext() ) {
 		Posting posting = next();
@@ -82,20 +105,23 @@ string PostingStream::info() {
 		res += to_string(posting.size() - sizeof(posting.getDocID()));
 		res += ";";
 	}
-	current = oldCurrent;
+	this->current = current;
+	this->baseDocID = baseDocID;
 	if ( res[res.length() - 1] == ';' ) res.erase(res.length() - 1);
 	res += "]";
 	return res;
 }
 
 void PostingStream::write(const Posting &posting) {
-	posting.writeTo(out);
+	posting.writeTo(out, codec, baseDocID);
+	baseDocID = posting.getDocID();
 	end = out.tellp();
 }
 
 void PostingStream::writeSkips() {
 	size_t size = skips.size();
-	out.write((char*)&size, sizeof(size));
+//	out.write((char*)&size, sizeof(size));
+	codec.encode(out, size);
 	for (size_t i = 0; i < skips.size(); i ++) skips[i].writeTo(out);
 }
 
@@ -143,6 +169,11 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv) {
 	}
 //	end = out.tellg();
 //	cout << info() << endl;
+}
+
+PostingStream::~PostingStream() {
+	size_t i;
+	if ( size_t(&i) > size_t(&codec) ) delete &codec;
 }
 
 

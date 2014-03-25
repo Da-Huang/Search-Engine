@@ -4,6 +4,7 @@
 #include <iostream>
 #include <Posting.h>
 #include <SkipEntry.h>
+#include <Codec.h>
 
 using namespace std;
 
@@ -18,10 +19,21 @@ protected:
 	
 	vector<SkipEntry> skips;
 
+	const Codec &codec;
+	size_t baseDocID;
+
+	PostingStream(const Codec &codec=*new Codec)
+		: in(cin), out(cout), begin(0), end(0), current(begin),
+			codec(codec), baseDocID(0) {}
 public:
-	PostingStream(ostream &out=cout, size_t begin=0, size_t end=0)
-		: in(cin), out(out), begin(begin), end(end), current(begin) {}
-	PostingStream(istream &in, size_t begin, size_t end);
+	PostingStream(ostream &out=cout, size_t begin=0, size_t end=0, 
+			const Codec &codec=*new Codec)
+		: in(cin), out(out), begin(begin), end(end), current(begin),
+			codec(codec), baseDocID(0) {}
+
+	PostingStream(istream &in, size_t begin, size_t end, 
+			const Codec &codec=*new Codec);
+
 	void writeMerge(vector<PostingStream*> &psv);
 	virtual void write(const Posting &posting);
 	virtual void writeSkips();
@@ -33,7 +45,7 @@ public:
 	virtual size_t peekDocID();
 	virtual inline bool hasNext() const { return current < end; }
 	virtual string toString();
-	virtual ~PostingStream() {}
+	virtual ~PostingStream();
 	virtual string info();
 };
 
