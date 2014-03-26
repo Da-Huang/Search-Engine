@@ -1,5 +1,6 @@
 #include <queue>
 #include <fstream>
+#include <cassert>
 #include <util.h>
 #include <IndexMerger.h>
 #include <GreaterFileIndex.h>
@@ -32,6 +33,8 @@ IndexMerger::IndexMerger(const string &path) {
 	metaIn.close();
 
 //	cout << segNum << endl;
+	// TODO: There're fatal problem if segNum > 200
+	assert (segNum <= 200);
 	for (size_t i = 1; i <= segNum; i ++) {
 		string prefix = path;
 		prefix += "/__";
