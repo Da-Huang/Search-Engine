@@ -32,8 +32,9 @@ size_t TmpPostingStream::nextDocID() {
 	size_t docID = util::codec.decode(fp) + 
 			(util::codec.isDelta() ? baseDocID : 0);
 	baseDocID = docID;
-	size_t posListSize = util::codec.decode(fp);
-	fseek(fp, posListSize * sizeof(size_t), SEEK_CUR);
+	/*size_t posListSize =*/ util::codec.decode(fp);
+	size_t plBytes = util::codec.decode(in);
+	fseek(fp, plBytes, SEEK_CUR);
 	current = ftell(fp);
 	return docID;
 }

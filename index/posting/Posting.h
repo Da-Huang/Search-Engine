@@ -13,14 +13,16 @@ class Posting {
 private:
 	size_t docID;
 	vector<size_t> posList;	
+	size_t plBytes;
+
 public:
 	Posting(istream &in, size_t baseDocID=0);
 	Posting(FILE *fp, size_t baseDocID=0);
-	Posting(size_t docID) : docID(docID) {}
-	Posting(size_t docID, size_t pos) : docID(docID), posList(1, pos) {}
+	Posting(size_t docID) : docID(docID), plBytes(0) {}
+	Posting(size_t docID, size_t pos);
 
-	virtual void addPos(size_t pos) { posList.push_back(pos); }
 	virtual inline size_t getDocID() const { return docID; }
+	virtual void addPos(size_t pos);
 
 	virtual void writeTo(ostream &out, size_t baseDocID=0) const;
 	virtual void writeTo(FILE *fp, size_t baseDocID=0) const;

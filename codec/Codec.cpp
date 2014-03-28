@@ -13,6 +13,10 @@ size_t Codec::decode(istream &in) const {
 	return val;
 }
 
+size_t Codec::bytes(size_t val) const {
+	return sizeof(val);
+}
+
 void Codec::encode(FILE *fp, size_t val) const {
 	fwrite(&val, sizeof(val), 1, fp);
 }

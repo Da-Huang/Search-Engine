@@ -24,6 +24,17 @@ size_t VBCodec::decode(istream &in) const {
 	return val;
 }
 
+size_t VBCodec::bytes(size_t val) const {
+	size_t res = 0;
+	do {
+		char c = val & 0x7F;
+		val >>= 7;
+		if ( val == 0 ) c |= 0x80;
+		res ++;
+	} while ( val );
+	return res;
+}
+
 void VBCodec::encode(FILE *fp, size_t val) const {
 	do {
 		char c = val & 0x7F;

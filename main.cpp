@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 	return 0;
 	*/
 	
-//	return run(argc, argv);
+	return run(argc, argv);
 //	test::littleIndex();
 //	return 0;
 

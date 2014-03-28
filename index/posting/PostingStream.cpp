@@ -34,8 +34,9 @@ size_t PostingStream::nextDocID() {
 	size_t docID = util::codec.decode(in) + 
 			(util::codec.isDelta() ? baseDocID : 0);
 	baseDocID = docID;
-	size_t posListSize = util::codec.decode(in);
-	in.seekg(posListSize * sizeof(size_t), ios::cur);
+	/*size_t posListSize =*/ util::codec.decode(in);
+	size_t plBytes = util::codec.decode(in);
+	in.seekg(plBytes, ios::cur);
 	current = in.tellg();
 	return docID;
 }
