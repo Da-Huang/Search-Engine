@@ -10,8 +10,8 @@ namespace util {
 
 
 Codec   ncodec(false);
-VBCodec vbcodec(true);
-const Codec &codec = ncodec;
+VBCodec vbcodec(false);
+const Codec &codec = vbcodec;
 
 
 size_t MBtoB(size_t value) {

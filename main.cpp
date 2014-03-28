@@ -9,113 +9,45 @@
 
 using namespace std;
 
-
-static const vector<string> usages = {
-	"usage: -index \"data directory\" \"index directory\"",
-	"usage: -search-bool \"index directory\" \"query string\"",
-	"usage: -search-bool-f \"index directory\" \"query string\"",
-	"usage: -search-bool-batch \"index directory\" \"query file\"",
-	"usage: -search-bool-f-batch \"index directory\" \"query file\"",
-	"usage: -search-phrase \"index diectory\" \"query string\"",
-	"usage: -search-phrase-f \"index diectory\" \"query string\"",
-	"usage: -search-phrase-batch \"index directory\" \"query file\"",
-	"usage: -search-phrase-f-batch \"index directory\" \"query file\"",
-	"usage: -search \"index directory\" \"query string\"",
-	"usage: -search-f \"index directory\" \"query file\"",
-};
-
-int run(int argc, char* argv[]) {
-	int i = 1;
-	for (i = 1; i < argc; i ++) {
-		if ( string(argv[i]) == "-index" ) {
-			assert (i + 2 < argc);
-			test::index(string(argv[i + 1]), string(argv[i + 2]));
-			cout << "Finish Indexing. You can search now." << endl;
-			return 0;
-
-		} else if ( string(argv[i]) == "-search-bool" ) {
-			assert (i + 2 < argc);
-			test::searchBool(string(argv[i + 1]), string(argv[i + 2]));
-			return 0;
-
-		} else if ( string(argv[i]) == "-search-bool-f" ) {
-			assert (i + 2 < argc);
-			test::searchBool(
-					string(argv[i + 1]), string(argv[i + 2]), true);
-			return 0;
-
-		} else if ( string(argv[i]) == "-search-bool-batch" ) {
-			assert (i + 2 < argc);
-			ifstream in(argv[i + 2]);
-			test::searchBool(string(argv[i + 1]), in);
-			in.close();
-			return 0;
-
-		} else if ( string(argv[i]) == "-search-bool-f-batch" ) {
-			assert (i + 2 < argc);
-			ifstream in(argv[i + 2]);
-			test::searchBool(string(argv[i + 1]), in, true);
-			in.close();
-			return 0;
-
-		} else if ( string(argv[i]) == "-search-phrase" ) {
-			assert (i + 2 < argc);
-			test::searchPhrase(string(argv[i + 1]), string(argv[i + 2]));
-			return 0;
-
-		} else if ( string(argv[i]) == "-search-phrase-f" ) {
-			assert (i + 2 < argc);
-			test::searchPhrase(
-					string(argv[i + 1]), string(argv[i + 2]), true);
-			return 0;
-
-		} else if ( string(argv[i]) == "-search-phrase-batch" ) {
-			assert (i + 2 < argc);
-			ifstream in(argv[i + 2]);
-			test::searchPhrase(string(argv[i + 1]), in);
-			in.close();
-			return 0;
-
-		} else if ( string(argv[i]) == "-search-phrase-f-batch" ) {
-			assert (i + 2 < argc);
-			ifstream in(argv[i + 2]);
-			test::searchPhrase(string(argv[i + 1]), in, true);
-			in.close();
-			return 0;
-
-		} else if ( string(argv[i]) == "-search" ) {
-			assert (i + 2 < argc);
-			test::search(string(argv[i + 1]), string(argv[i + 2]));
-			return 0;
-
-		} else if ( string(argv[i]) == "-search-batch" ) {
-			assert (i + 2 < argc);
-			ifstream in(argv[i + 2]);
-			test::search(string(argv[i + 1]), in);
-			in.close();
-			return 0;
-		}
-	}
-
-	for (size_t i = 0; i < usages.size(); i ++)
-		cerr << usages[i] << endl;
-	return -1;
-}
+int run(int argc, char* argv[]);
 
 #include <util.h>
-#include <FuzzyQuery.h>
+#include <TermQuery.h>
 #include <ScoreDoc.h>
 #include <IndexSearcher.h>
 #include <AndQuery.h>
 #include <tinyxml2.h>
 using namespace tinyxml2;
 int main(int argc, char* argv[]) {
+	/*
+//	ofstream out("encode-test.log");
+	FILE *fp;
+	fp = fopen("encode-test.log", "w");
+	for (size_t i = 0; i < 257; i ++) {
+		util::codec.encode(fp, i);
+	}
+	fclose(fp);
+//	out.close();
+//	ifstream in("encode-test.log");
+//	FILE *fp("encode-test.log");
+	fp = fopen("encode-test.log", "r");
+	for (size_t i = 0; i < 257; i ++) {
+		cout << util::codec.decode(fp) << " ";
+//		cout << util::codec.decode(in) << " ";
+	}
+	fclose(fp);
+//	cout << endl;
+//	in.close();
+	return 0;
+	*/
 	
-	return run(argc, argv);
+//	return run(argc, argv);
 //	test::littleIndex();
 //	return 0;
 
-	IndexSearcher is("../index/_");
+	IndexSearcher is("../index2/_");
+	cout << is.toString() << endl;
+	return 0;
 //	FuzzyQuery fq("content", util::stem("caeassr"));
 //	cout << fq.toString() << endl;
 
@@ -139,10 +71,6 @@ int main(int argc, char* argv[]) {
 		cout << is.doc(res[i].id()).toString() << endl;
 	}
 
-
-	
-//	return run(argc, argv);
-	
 //	test::index("/media/DISK_D/input", "/home/dhuang/index");
 
 //	test::searchPhrase("/home/dhuang/index", "brutus ~4~ caesar");
