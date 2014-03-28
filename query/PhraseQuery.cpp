@@ -32,6 +32,7 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 
 	PostingStream *ps = terms[0]->fetchPostingStream(is);
 	if ( ps == NULL ) return res;
+//	cout << terms[0]->toString() << endl;
 //	cout << ps->toString() << endl;
 
 	for (size_t i = 1; i < terms.size(); i ++) {
@@ -42,18 +43,22 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 		}
 //		cout << ps1->toString() << endl;
 		PostingStream *ps2 = terms[i]->fetchPostingStream(is);
+//		cout << terms[i]->toString() << endl;
 //		cout << ps2->toString() << endl;
 		if ( ps2 == NULL ) {
 			delete ps;
 			return res;
 		}
 		ps = intersect(ps1, ps2, slops[i - 1]);
+//		cout << ps->toString() << endl;
 		delete ps1;
 		delete ps2;
 	}
 
+//	cout << ps->toString() << endl;
 	while ( ps->hasNext() ) {
 		res.push_back(ScoreDoc(ps->nextDocID()));
+//		res.push_back(ScoreDoc(ps->next().getDocID()));
 	}
 	delete ps;
 	
@@ -105,9 +110,11 @@ PostingStream* PhraseQuery::intersect(
 			// No need to do more as it's PhraseQuery
 			
 			if ( posting.posList.size() > 0 )
-				((TmpPostingStream*)ps)->write(posting);
+				ps->write(posting);
 		}
 	}
+//	cout << ps->toString() << endl;
+//	cout << "end" << endl;
 	return ps;
 }
 

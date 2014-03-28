@@ -10,7 +10,7 @@ Posting::Posting(FILE *fp, size_t baseDocID) : plBytes(0) {
 	readFrom(fp, baseDocID);
 }
 
-Posting::Posting(size_t docID, size_t pos) : docID(docID) {
+Posting::Posting(size_t docID, size_t pos) : docID(docID), plBytes(0) {
 	addPos(pos);
 }
 
@@ -61,6 +61,7 @@ void Posting::readFrom(FILE *fp, size_t baseDocID) {
 			(util::codec.isDelta() ? baseDocID : 0);
 	size_t posListSize = util::codec.decode(fp);
 	plBytes = util::codec.decode(fp);
+//	cout << "plbs:" << plBytes << endl;
 
 	size_t basePos = 0;
 	for (size_t i = 0; i < posListSize; i ++) {
