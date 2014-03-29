@@ -18,9 +18,16 @@ int run(int argc, char* argv[]);
 #include <AndQuery.h>
 #include <tinyxml2.h>
 #include <TmpPostingStream.h>
+#include <MMIndex.h>
 using namespace tinyxml2;
 int main(int argc, char* argv[]) {
-	
+//	map<string, map<size_t, vector<Posting>>> m;
+//	vector<Posting> &pl = m["go"][0];
+//	MMIndex mm;
+//	mm.add("go", 1, 2, 3);
+//	cout << mm.toString() << endl;
+
+//	return 0;
 	return run(argc, argv);
 //	test::littleIndex();
 //	return 0;

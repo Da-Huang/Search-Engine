@@ -32,7 +32,8 @@ string stem(const string &str) {
 	int j = stemk(p, 0, (int) str.length() - 1);
 	p[j + 1] = 0;
 	string res(p);
-	delete p;
+//	delete p;
+	free(p);
 	return res;
 }
 
