@@ -41,6 +41,7 @@ PostingStream* FuzzyQuery::fetchPostingStream(IndexSearcher &is) const {
 	vector<PostingStream*> psv = fetchPostingStreams(is);
 	PostingStream *res = new TmpPostingStream();
 	res->writeMerge(psv);
+	res->rewind();
 //	cout << res->toString() << endl;
 	return res;
 }

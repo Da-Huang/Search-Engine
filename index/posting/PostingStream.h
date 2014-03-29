@@ -26,6 +26,7 @@ public:
 		baseDocID(0) {}
 
 	PostingStream(istream &in, size_t begin, size_t end);
+	virtual void rewind();
 
 	void writeMerge(vector<PostingStream*> &psv);
 	virtual void write(const Posting &posting);

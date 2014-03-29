@@ -17,31 +17,11 @@ int run(int argc, char* argv[]);
 #include <IndexSearcher.h>
 #include <AndQuery.h>
 #include <tinyxml2.h>
+#include <TmpPostingStream.h>
 using namespace tinyxml2;
 int main(int argc, char* argv[]) {
-	/*
-//	ofstream out("encode-test.log");
-	FILE *fp;
-	fp = fopen("encode-test.log", "w");
-	for (size_t i = 0; i < 257; i ++) {
-		util::codec.encode(fp, i);
-	}
-	fclose(fp);
-//	out.close();
-//	ifstream in("encode-test.log");
-//	FILE *fp("encode-test.log");
-	fp = fopen("encode-test.log", "r");
-	for (size_t i = 0; i < 257; i ++) {
-		cout << util::codec.decode(fp) << " ";
-//		cout << util::codec.decode(in) << " ";
-	}
-	fclose(fp);
-//	cout << endl;
-//	in.close();
-	return 0;
-	*/
-
-//	return run(argc, argv);
+	
+	return run(argc, argv);
 //	test::littleIndex();
 //	return 0;
 

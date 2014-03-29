@@ -4,16 +4,11 @@
 
 
 void TmpPostingStream::write(const Posting &posting) {
+//	cout << "tmp: " << baseDocID << endl;
 	posting.writeTo(fp, baseDocID);
 	baseDocID = posting.getDocID();
 	end = ftell(fp);
 }
-
-/*
-void TmpPostingStream::rewind() {
-	current = 0;
-}
-*/
 
 Posting TmpPostingStream::next() {
 	fseek(fp, current, SEEK_SET);

@@ -17,6 +17,11 @@ PostingStream::PostingStream(istream &in, size_t begin, size_t end)
 	}
 }
 
+void PostingStream::rewind() {
+	current = begin;
+	baseDocID = 0;
+}
+
 Posting	PostingStream::next() {
 	in.seekg(current);
 	Posting res(in, baseDocID);

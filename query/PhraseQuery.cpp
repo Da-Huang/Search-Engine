@@ -115,6 +115,7 @@ PostingStream* PhraseQuery::intersect(
 	}
 //	cout << ps->toString() << endl;
 //	cout << "end" << endl;
+	ps->rewind();
 	return ps;
 }
 

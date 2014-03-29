@@ -10,7 +10,7 @@ namespace util {
 
 
 Codec   ncodec(false);
-VBCodec vbcodec(false);
+VBCodec vbcodec(true);
 const Codec &codec = vbcodec;
 
 

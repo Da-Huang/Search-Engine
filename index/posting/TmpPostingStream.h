@@ -10,7 +10,6 @@ protected:
 	FILE *fp;
 public:
 	TmpPostingStream() : fp(tmpfile()) {}
-//	virtual void rewind();
 	virtual void write(const Posting &posting);
 	virtual Posting next();
 	virtual Posting peek();
