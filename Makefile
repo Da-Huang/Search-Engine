@@ -1,6 +1,6 @@
 INCLUDES = -I. $(foreach dir,$(SOURCE_DIR),-I$(dir))
-CXXFLAGS = -std=c++0x -g -Wall -O3 $(INCLUDES)
-LDFLAGS  = -pg -g -Wall -O3
+CXXFLAGS = -std=c++0x -g -Wall -O2 $(INCLUDES)
+LDFLAGS  = -pg -g -Wall -O2
 #LDFLAGS = -lrt -lpthread -lboost_regex -L/path/to/boost/lib -pg -g -Wall
 LD = g++
 CXX = g++

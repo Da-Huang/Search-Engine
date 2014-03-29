@@ -2,21 +2,24 @@
 #include <Posting.h>
 
 
-Posting::Posting(istream &in, size_t baseDocID) : plBytes(0) {
+Posting::Posting(istream &in, size_t baseDocID) : plBytes(0), basePos(0) {
 	readFrom(in, baseDocID);
 }
 
-Posting::Posting(FILE *fp, size_t baseDocID) : plBytes(0) {
+Posting::Posting(FILE *fp, size_t baseDocID) : plBytes(0), basePos(0) {
 	readFrom(fp, baseDocID);
 }
 
-Posting::Posting(size_t docID, size_t pos) : docID(docID), plBytes(0) {
+Posting::Posting(size_t docID, size_t pos) 
+	: docID(docID), plBytes(0), basePos(0) {
 	addPos(pos);
 }
 
 void Posting::addPos(size_t pos) {
 	posList.push_back(pos); 
-	plBytes += util::codec.bytes(pos);
+	plBytes += util::codec.bytes(
+			util::codec.isDelta() ? pos - basePos : pos);
+	basePos = pos;
 }
 
 size_t Posting::merge(const Posting &posting) {

@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 //	test::littleIndex();
 //	return 0;
 
-	IndexSearcher is("../index2/_");
+	IndexSearcher is("../index1/_");
 	cout << is.toString() << endl;
 	return 0;
 //	FuzzyQuery fq("content", util::stem("caeassr"));
