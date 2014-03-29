@@ -14,3 +14,5 @@ void Analyzer::refine(string &str) const {
 TokenStream& Analyzer::tokenStream(istream &in) const {
 	return *new TokenStream(in, *this);
 }
+
+

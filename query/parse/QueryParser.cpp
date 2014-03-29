@@ -67,6 +67,7 @@ const Query* QueryParser::parse(const string &keywords,
 //		cout << token.toString() << endl;
 		terms.push_back(token.value);
 	}
+	delete &ts;
 	if ( terms.size() > 1 ) 
 		slops.insert(slops.end(), terms.size() - 1, 3);
 	
@@ -180,6 +181,7 @@ const Query* QueryParser::parsePhrase(const string &keywords,
 			terms.push_back(token.value);
 		}
 	}
+	delete &ts;
 	
 	return new PhraseQuery(fieldName, terms, slops, fuzzy);
 }
