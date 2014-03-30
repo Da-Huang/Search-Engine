@@ -35,6 +35,7 @@ public:
 	virtual inline size_t getEnd() const { return end; }
 	virtual Posting next();
 	virtual Posting peek();
+	virtual inline size_t size() const { return end - begin; }
 	virtual size_t nextDocID();
 	virtual size_t peekDocID();
 	virtual inline bool hasNext() const { return current < end; }
