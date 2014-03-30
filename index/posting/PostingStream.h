@@ -19,19 +19,21 @@ protected:
 	vector<SkipEntry> skips;
 
 	size_t baseDocID;
+	size_t df;
 
 public:
 	PostingStream(ostream &out=cout, size_t begin=0, size_t end=0)
 		: in(cin), out(out), begin(begin), end(end), current(begin), 
-		baseDocID(0) {}
+			baseDocID(0), df(0) {}
 
-	PostingStream(istream &in, size_t begin, size_t end);
+	PostingStream(istream &in, size_t begin, size_t df, size_t end);
 	virtual void rewind();
 
-	void writeMerge(vector<PostingStream*> &psv);
+	virtual void writeMerge(vector<PostingStream*> &psv);
 	virtual void write(const Posting &posting);
 	virtual void writeSkips();
 	virtual inline size_t getBegin() const { return begin; }
+	virtual inline size_t getDF() const { return df; }
 	virtual inline size_t getEnd() const { return end; }
 	virtual Posting next();
 	virtual Posting peek();

@@ -5,9 +5,10 @@
 #include <GreaterPostingStream.h>
 
 
-PostingStream::PostingStream(istream &in, size_t begin, size_t end)
+PostingStream::PostingStream(
+		istream &in, size_t begin, size_t df, size_t end)
 	: in(in), out(cout), begin(begin), end(end), current(begin), 
-		baseDocID(0) {
+		baseDocID(0), df(df) {
 
 	in.seekg(end);
 	size_t skipsNum = util::codec.decode(in);
@@ -96,6 +97,7 @@ void PostingStream::write(const Posting &posting) {
 	posting.writeTo(out, baseDocID);
 	baseDocID = posting.getDocID();
 	end = out.tellp();
+	df ++;
 }
 
 void PostingStream::writeSkips() {

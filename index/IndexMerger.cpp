@@ -86,9 +86,11 @@ void IndexMerger::merge() {
 			}
 
 			size_t pstListBegin = ps.getBegin();
+			size_t df = ps.getDF();
 			size_t pstListEnd = ps.getEnd();
 //			cout << "merge:" <<  pstListBegin << " " << pstListEnd << endl;
 			idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
+			idxOut.write((char*)&df, sizeof(df));
 			idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
 
 			count += ps.size();
@@ -99,7 +101,7 @@ void IndexMerger::merge() {
 			if ( termIndex[i] <= fileIndexes[i]->TERM_NUM ) pq.push(i);
 		}
 		
-		static const size_t THRESHOLD = util::MBtoB(10);
+		static const size_t THRESHOLD = util::MBtoB(5);
 		if ( count > THRESHOLD ) {
 			cerr << ".";
 			count = 0;

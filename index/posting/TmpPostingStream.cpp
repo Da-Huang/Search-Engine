@@ -8,6 +8,7 @@ void TmpPostingStream::write(const Posting &posting) {
 	posting.writeTo(fp, baseDocID);
 	baseDocID = posting.getDocID();
 	end = ftell(fp);
+	df ++;
 }
 
 Posting TmpPostingStream::next() {

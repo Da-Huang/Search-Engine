@@ -44,8 +44,10 @@ void MMIndex::writeTo(ostream &idxOut, ostream &fldOut,
 			auto pstListIt = termIt->second.find(fieldIt);
 			if ( pstListIt == termIt->second.end() ) {
 				size_t pstListBegin = pstOut.tellp();
+				size_t df = 0;
 				size_t pstListEnd = pstListBegin;
 				idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
+				idxOut.write((char*)&df, sizeof(df));
 				idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
 				continue;
 			}
@@ -63,9 +65,11 @@ void MMIndex::writeTo(ostream &idxOut, ostream &fldOut,
 			ps.writeSkips();
 
 			size_t pstListBegin = ps.getBegin();
+			size_t df = ps.getDF();
 			size_t pstListEnd = ps.getEnd();
 //			cout << pstListBegin << " " << pstListEnd << endl;
 			idxOut.write((char*)&pstListBegin, sizeof(pstListBegin));
+			idxOut.write((char*)&df, sizeof(df));
 			idxOut.write((char*)&pstListEnd, sizeof(pstListEnd));
 		}
 	}

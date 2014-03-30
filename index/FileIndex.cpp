@@ -65,14 +65,15 @@ string FileIndex::fetchTerm(size_t termID) {
 	return res;
 }
 
-pair<size_t, size_t> FileIndex::getPostingListInfo(
+tuple<size_t, size_t, size_t> FileIndex::getPostingListInfo(
 		size_t termID, size_t fieldID) {
 	const size_t BASE = (termID - 1) * RECORD_SIZE + TERM_DATA_SIZE;
 	idxIn.seekg(BASE + (fieldID - 1) * FIELD_DATA_SIZE);
-	size_t pstListBegin, pstListEnd;
+	size_t pstListBegin, df, pstListEnd;
 	idxIn.read((char*)&pstListBegin, sizeof(pstListBegin));
+	idxIn.read((char*)&df, sizeof(df));
 	idxIn.read((char*)&pstListEnd, sizeof(pstListEnd));
-	return make_pair(pstListBegin, pstListEnd);
+	return make_tuple(pstListBegin, df, pstListEnd);
 }
 
 string FileIndex::toString() {
@@ -108,11 +109,11 @@ string FileIndex::toString() {
 PostingStream* FileIndex::fetchPostingStream(
 		size_t fieldID, size_t termID) {
 	if ( termID == 0 || fieldID == 0 || termID > TERM_NUM ) return NULL;
-	pair<size_t, size_t> pstListInfo = getPostingListInfo(termID, fieldID);
-	size_t pstListBegin = pstListInfo.first;
-	size_t pstListEnd = pstListInfo.second;
+	size_t pstListBegin, df, pstListEnd;
+	tie(pstListBegin, df, pstListEnd) = 
+			getPostingListInfo(termID, fieldID);
 	if ( pstListBegin >= pstListEnd ) return NULL;
-	return new PostingStream(pstIn, pstListBegin, pstListEnd);
+	return new PostingStream(pstIn, pstListBegin, df, pstListEnd);
 }
 
 /** the result need to be deleted. **/
