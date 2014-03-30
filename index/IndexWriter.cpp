@@ -21,18 +21,11 @@ IndexWriter::IndexWriter(const string &dirPath)
 		MAX_SIZE(util::MBtoB(128)) {
 //		MAX_SIZE(util::MBtoB(1024)) {
 
-	string cmd = "mkdir -p ";
-	cmd += dirPath;
-	int status = system(cmd.c_str());
+	int status = system(util::join("", {"mkdir -p ", dirPath}).c_str());
 	assert (status == 0);
 
-	string docPath = dirPath;
-	docPath += "/_.doc";
-	string cntPath = dirPath;
-	cntPath += "/_.cnt";
-
-	docOut.open(docPath);
-	cntOut.open(cntPath);
+	docOut.open(util::join("", {dirPath, "/_.doc"}));
+	cntOut.open(util::join("", {dirPath, "/_.cnt"}));
 }
 
 void IndexWriter::write(Document &doc) {
@@ -67,27 +60,14 @@ void IndexWriter::saveSegment() {
 	if ( mmIndex.size() == 0 ) return;
 //	cout << mmIndex.toString() << endl;
 
-	string idxPath = dirPath;
-	idxPath += "/__";
-	idxPath += to_string(currentSegID);
-	idxPath += ".idx";
-	string fldPath = dirPath;
-	fldPath += "/__";
-	fldPath += to_string(currentSegID);
-	fldPath += ".fld";
-	string trmPath = dirPath;
-	trmPath += "/__";
-	trmPath += to_string(currentSegID);
-	trmPath += ".trm";
-	string pstPath = dirPath;
-	pstPath += "/__";
-	pstPath += to_string(currentSegID);
-	pstPath += ".pst";
-
-	ofstream idxOut(idxPath);
-	ofstream fldOut(fldPath);
-	ofstream trmOut(trmPath);
-	ofstream pstOut(pstPath);
+	ofstream idxOut(util::join("", 
+				{dirPath, "/__", to_string(currentSegID), ".idx"}));
+	ofstream fldOut(util::join("",
+				{dirPath, "/__", to_string(currentSegID), ".fld"}));
+	ofstream trmOut(util::join("",
+				{dirPath, "/__", to_string(currentSegID), ".trm"}));
+	ofstream pstOut(util::join("",
+				{dirPath, "/__", to_string(currentSegID), ".pst"}));
 
 	mmIndex.writeTo(idxOut, fldOut, trmOut, pstOut, fieldNameMap.size());
 	fieldNameMap.save(fldOut);
@@ -106,18 +86,14 @@ void IndexWriter::close() {
 	docOut.close();
 	cntOut.close();
 
-	string fldPath = dirPath;
-	fldPath += "/_.fld";
-	ofstream fldOut(fldPath);
+	ofstream fldOut(util::join("", {dirPath, "/_.fld"}));
 
 	size_t fieldNum = fieldNameMap.size();
 	fldOut.write((char*)&fieldNum, sizeof(fieldNum));
 	fieldNameMap.save(fldOut);
 	fldOut.close();
 
-	string metaPath = dirPath;
-	metaPath += "/__.meta";
-	ofstream metaOut(metaPath);
+	ofstream metaOut(util::join("", {dirPath, "/__.meta"}));
 	size_t segNum = currentSegID - 1;
 	metaOut.write((char*)&segNum, sizeof(segNum));
 	metaOut.close();
@@ -126,10 +102,8 @@ void IndexWriter::close() {
 	indexMerger.merge();
 	indexMerger.close();
 
-	string cmd = "rm -f ";
-	cmd += dirPath;
-	cmd += "/__*";
-	size_t status = system(cmd.c_str());
+	size_t status = system(util::join("", 
+				{"rm -f ", dirPath, "/__*"}).c_str());
 	assert (status == 0);
 }
 

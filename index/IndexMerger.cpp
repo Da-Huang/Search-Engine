@@ -7,27 +7,15 @@
 
 
 IndexMerger::IndexMerger(const string &path) {
-	string fldPath = path;
-	fldPath += "/_.fld";
-	ifstream fldIn(fldPath);
-
+	ifstream fldIn(util::join("", {path, "/_.fld"}));
 	fieldNameMap.load(fldIn);
 	fldIn.close();
 
-	string trmPath = path;
-	trmPath += "/_.trm";
-	string idxPath = path;
-	idxPath += "/_.idx";
-	string pstPath = path;
-	pstPath += "/_.pst";
+	trmOut.open(util::join("", {path, "/_.trm"}));
+	idxOut.open(util::join("", {path, "/_.idx"}));
+	pstOut.open(util::join("", {path, "/_.pst"}));
 
-	trmOut.open(trmPath);
-	idxOut.open(idxPath);
-	pstOut.open(pstPath);
-
-	string metaPath = path;
-	metaPath += "/__.meta";
-	ifstream metaIn(metaPath);
+	ifstream metaIn(util::join("", {path, "/__.meta"}));
 	size_t segNum;
 	metaIn.read((char*)&segNum, sizeof(segNum));
 	metaIn.close();

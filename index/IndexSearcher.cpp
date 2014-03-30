@@ -1,12 +1,11 @@
 #include <fstream>
+#include <util.h>
 #include <IndexSearcher.h>
 #include <Query.h>
 
 
 IndexSearcher::IndexSearcher(const string &prefix) {
-	string fldPath = prefix;
-	fldPath += ".fld";
-	ifstream fldIn(fldPath);
+	ifstream fldIn(util::join("", {prefix, ".fld"}));
 
 	fieldNameMap = new FieldNameMap;
 	fieldNameMap->load(fldIn);

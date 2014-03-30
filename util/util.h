@@ -22,6 +22,8 @@ size_t editDistance(const string &str1, const string &str2);
 bool isDir(const string &path);
 bool isFile(const string &path);
 
+string join(const string &split, const initializer_list<string> &strs);
+
 
 }
 #endif

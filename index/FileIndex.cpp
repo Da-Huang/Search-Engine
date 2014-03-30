@@ -1,24 +1,16 @@
 #include <iostream>
+#include <util.h>
 #include <FileIndex.h>
 #include <PostingStream.h>
 
 
-size_t FileIndex::recordSize() const {
-	return (FIELD_NUM * 2 + 1) * sizeof(size_t);
-}
-
 FileIndex::FileIndex(const string &prefix, size_t fieldNum)
-	: FIELD_NUM(fieldNum), RECORD_SIZE(recordSize()) {
-	string idxPath = prefix;
-	idxPath += ".idx";
-	string trmPath = prefix;
-	trmPath += ".trm";
-	string pstPath = prefix;
-	pstPath += ".pst";
+	: FIELD_NUM(fieldNum), 
+		RECORD_SIZE(FIELD_NUM * FIELD_DATA_SIZE + TERM_DATA_SIZE) {
 
-	idxIn.open(idxPath);
-	trmIn.open(trmPath);
-	pstIn.open(pstPath);
+	idxIn.open(util::join("", {prefix, ".idx"}));
+	trmIn.open(util::join("", {prefix, ".trm"}));
+	pstIn.open(util::join("", {prefix, ".pst"}));
 
 	idxIn.seekg(0, ios::end);
 	TERM_NUM = idxIn.tellg() / RECORD_SIZE;
@@ -75,9 +67,8 @@ string FileIndex::fetchTerm(size_t termID) {
 
 pair<size_t, size_t> FileIndex::getPostingListInfo(
 		size_t termID, size_t fieldID) {
-	size_t BASE = (termID - 1) * RECORD_SIZE + 
-					RECORD_SIZE - FIELD_NUM * 2 * sizeof(size_t);
-	idxIn.seekg(BASE + (fieldID - 1) * 2 * sizeof(size_t));
+	const size_t BASE = (termID - 1) * RECORD_SIZE + TERM_DATA_SIZE;
+	idxIn.seekg(BASE + (fieldID - 1) * FIELD_DATA_SIZE);
 	size_t pstListBegin, pstListEnd;
 	idxIn.read((char*)&pstListBegin, sizeof(pstListBegin));
 	idxIn.read((char*)&pstListEnd, sizeof(pstListEnd));

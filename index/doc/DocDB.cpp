@@ -1,17 +1,14 @@
 #include <DocDB.h>
+#include <util.h>
 #include <FieldNameMap.h>
 #include <StringField.h>
 
 
 DocDB::DocDB(const string &prefix, const FieldNameMap &fieldNameMap) 
 	: RECORD_SIZE(sizeof(size_t) * 2), fieldNameMap(fieldNameMap) {
-	string docPath = prefix;
-	docPath += ".doc";
-	string cntPath = prefix;
-	cntPath += ".cnt";
 
-	docIn.open(docPath);
-	cntIn.open(cntPath);
+	docIn.open(util::join(".", {prefix, "doc"}));
+	cntIn.open(util::join(".", {prefix, "cnt"}));
 
 	docIn.seekg(0, ios::end);
 	DOC_NUM = docIn.tellg() / RECORD_SIZE;

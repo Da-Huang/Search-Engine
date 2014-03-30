@@ -1,3 +1,4 @@
+#include <initializer_list>
 #include <algorithm>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -65,6 +66,19 @@ bool isFile(const string &path) {
 	struct stat st;
 	int ret = lstat(path.c_str(), &st);
 	return ret == 0 && S_ISREG(st.st_mode);
+}
+
+string join(const string &split, const initializer_list<string> &strs) {
+	string res;
+	auto it = strs.begin();
+	if ( it != strs.end() ) res += *it;
+	it ++;
+	while ( it != strs.end() ) {
+		res += split;
+		res += *it;
+		it ++;
+	}
+	return res;
 }
 
 

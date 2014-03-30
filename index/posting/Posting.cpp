@@ -46,11 +46,11 @@ void Posting::readFrom(istream &in, size_t baseDocID) {
 
 	docID = util::codec.decode(in) + 
 			(util::codec.isDelta() ? baseDocID : 0);
-	size_t posListSize = util::codec.decode(in);
+	size_t tf = util::codec.decode(in);
 	plBytes = util::codec.decode(in);
 
 	size_t basePos = 0;
-	for (size_t i = 0; i < posListSize; i ++) {
+	for (size_t i = 0; i < tf; i ++) {
 		size_t pos = util::codec.decode(in) + 
 				(util::codec.isDelta() ? basePos : 0);
 		basePos = pos;
@@ -62,12 +62,12 @@ void Posting::readFrom(FILE *fp, size_t baseDocID) {
 
 	docID = util::codec.decode(fp) + 
 			(util::codec.isDelta() ? baseDocID : 0);
-	size_t posListSize = util::codec.decode(fp);
+	size_t tf = util::codec.decode(fp);
 	plBytes = util::codec.decode(fp);
 //	cout << "plbs:" << plBytes << endl;
 
 	size_t basePos = 0;
-	for (size_t i = 0; i < posListSize; i ++) {
+	for (size_t i = 0; i < tf; i ++) {
 		size_t pos = util::codec.decode(fp) + 
 				(util::codec.isDelta() ? basePos : 0);
 		basePos = pos;

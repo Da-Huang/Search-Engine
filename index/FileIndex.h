@@ -20,8 +20,9 @@ private:
 	const size_t RECORD_SIZE;
 	size_t TERM_NUM;
 
-protected:
-	virtual size_t recordSize() const;
+	static const size_t FIELD_DATA_SIZE = 2 * sizeof(size_t);
+	static const size_t TERM_DATA_SIZE = 1 * sizeof(size_t);
+
 public:
 	FileIndex(const string &prefix, size_t fieldNum);
 	virtual size_t findTermID(const string &term);
