@@ -15,7 +15,7 @@ private:
 	DocDB *docDB;
 	FieldNameMap *fieldNameMap;
 public:
-	IndexSearcher(const string &prefix);
+	IndexSearcher(const string &dirPath);
 	virtual vector<ScoreDoc> search(const Query &query);
 	virtual Document doc(const ScoreDoc &scoreDoc);
 	virtual string toString();

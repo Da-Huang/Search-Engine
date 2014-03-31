@@ -22,3 +22,4 @@ PostingStream* TermQuery::fetchPostingStream(IndexSearcher &is) const {
 	return is.fileIndex->fetchPostingStream(fieldID, term);
 }
 
+

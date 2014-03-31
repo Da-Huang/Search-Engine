@@ -4,7 +4,8 @@
 #include <Query.h>
 
 
-IndexSearcher::IndexSearcher(const string &prefix) {
+IndexSearcher::IndexSearcher(const string &dirPath) {
+	string prefix = util::join("", {dirPath, "/_"});
 	ifstream fldIn(util::join("", {prefix, ".fld"}));
 
 	fieldNameMap = new FieldNameMap;

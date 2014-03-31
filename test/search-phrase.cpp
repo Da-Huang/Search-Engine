@@ -13,9 +13,7 @@ namespace test {
 static void searchPhrase(IndexSearcher &is, const string &qStr, bool fuzzy);
 
 void searchPhrase(const string &indexPath, istream &in, bool fuzzy) {
-	string indexPrefix = indexPath;
-	indexPrefix += "/_";
-	IndexSearcher is(indexPrefix);
+	IndexSearcher is(indexPath);
 
 	string line;
 	while ( getline(in, line) ) {
@@ -27,10 +25,7 @@ void searchPhrase(const string &indexPath, istream &in, bool fuzzy) {
 }	
 
 void searchPhrase(const string &indexPath, const string &qStr, bool fuzzy) {
-
-	string indexPrefix = indexPath;
-	indexPrefix += "/_";
-	IndexSearcher is(indexPrefix);
+	IndexSearcher is(indexPath);
 /*
 	static bool isOut = true;
 	if ( isOut )

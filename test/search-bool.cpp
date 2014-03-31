@@ -15,9 +15,7 @@ using namespace tinyxml2;
 static void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy);
 
 void searchBool(const string &indexPath, istream &in, bool fuzzy) {
-	string indexPrefix = indexPath;
-	indexPrefix += "/_";
-	IndexSearcher is(indexPrefix);
+	IndexSearcher is(indexPath);
 
 	string line;
 	while ( getline(in, line, '\n') ) {
@@ -29,9 +27,7 @@ void searchBool(const string &indexPath, istream &in, bool fuzzy) {
 }	
 
 void searchBool(const string &indexPath, const string &qStr, bool fuzzy) {
-	string indexPrefix = indexPath;
-	indexPrefix += "/_";
-	IndexSearcher is(indexPrefix);
+	IndexSearcher is(indexPath);
 /*
 	static bool isOut = true;
 	if ( isOut )

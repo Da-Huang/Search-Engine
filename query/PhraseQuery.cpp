@@ -134,7 +134,6 @@ string PhraseQuery::toString() const {
 	return res;
 }
 
-
 PhraseQuery::~PhraseQuery() {
 	for (size_t i = 0; i < terms.size(); i ++)
 		if ( i > (size_t) terms[i] ) delete terms[i];
