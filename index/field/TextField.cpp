@@ -6,7 +6,7 @@
 
 
 void TextField::writeTo(MMIndex &mmIndex, 
-		const FieldNameMap &fieldNameMap, size_t docID) const {
+		const FieldNameMap &fieldNameMap, size_t docID) {
 	size_t fieldID = fieldNameMap.getFieldID(fieldName);
 	if ( fieldID == 0 ) return;
 
@@ -15,6 +15,7 @@ void TextField::writeTo(MMIndex &mmIndex,
 		Token token = ts.next();
 //		cerr << token.toString() << endl;
 		mmIndex.add(token.value, fieldID, docID, token.pos);
+		dl = token.pos;
 	}
 	delete &ts;
 }

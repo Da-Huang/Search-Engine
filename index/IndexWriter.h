@@ -12,7 +12,7 @@ using namespace std;
 
 class IndexWriter {
 private:
-	const string dirPath;
+	const string &dirPath;
 	MMIndex mmIndex;
 	size_t currentDocID;
 	size_t currentSegID;
@@ -24,6 +24,7 @@ private:
 	size_t MAX_SIZE;
 	
 protected:
+	virtual void merge();
 	virtual void saveSegment();
 public:
 	IndexWriter(const string &dirPath);

@@ -6,6 +6,7 @@
 #include <StringField.h>
 #include <IndexWriter.h>
 #include <IndexMerger.h>
+#include <DocDBSorter.h>
 
 
 void IndexWriter::setMaxMBSize(size_t maxMBSize) {
@@ -40,13 +41,8 @@ void IndexWriter::write(Document &doc) {
 		field.writeTo(mmIndex, fieldNameMap, currentDocID);
 
 		size_t fieldID = fieldNameMap.getFieldID(fieldName);
-
-		if ( dynamic_cast<StringField*>(&field) ) {
-			cntOut.write((char*)&fieldID, sizeof(fieldID));
-			string fieldValue = field.get();
-			cntOut.write(fieldValue.c_str(), fieldValue.length() + 1);
-			cntSize ++;
-		}
+		field.save(cntOut, fieldID);
+		cntSize ++;
 	}
 	docOut.write((char*)&cntSize, sizeof(cntSize));
 	currentDocID ++;
@@ -81,11 +77,7 @@ void IndexWriter::saveSegment() {
 	currentSegID ++;
 }
 
-void IndexWriter::close() {
-	saveSegment();
-	docOut.close();
-	cntOut.close();
-
+void IndexWriter::merge() {
 	ofstream fldOut(util::join("", {dirPath, "/_.fld"}));
 
 	size_t fieldNum = fieldNameMap.size();
@@ -102,7 +94,24 @@ void IndexWriter::close() {
 	indexMerger.merge();
 	indexMerger.close();
 
-	size_t status = system(util::join("", 
+	cerr << "Arranging the document DB ..." << endl;
+	DocDBSorter docDBSorter(dirPath, fieldNameMap);
+	docDBSorter.sort();
+	docDBSorter.close();
+}
+
+void IndexWriter::close() {
+	saveSegment();
+	docOut.close();
+	cntOut.close();
+
+	merge();
+
+	size_t status;
+	status = system(util::join("", 
+				{"mv ", dirPath, "/__.doc ", dirPath, "/_.doc"}).c_str());
+	assert (status == 0);
+	status = system(util::join("", 
 				{"rm -f ", dirPath, "/__*"}).c_str());
 	assert (status == 0);
 }
