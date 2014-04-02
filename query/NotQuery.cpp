@@ -31,7 +31,7 @@ vector<ScoreDoc> NotQuery::search(IndexSearcher &is) const {
 
 NotQuery::~NotQuery() {
 	size_t i;
-	if ( (size_t)&i > (size_t)&query ) delete &query;
+	if ( size_t(&i) > size_t(&query) ) delete &query;
 }
 
 

@@ -17,6 +17,7 @@ vector<ScoreDoc> TermQuery::search(IndexSearcher &is) const {
 
 	PostingStream *ps = is.fileIndex->fetchPostingStream(fieldID, term);
 	if ( ps == NULL ) return res;
+	size_t df = ps->getDF();
 	while ( ps->hasNext() ) {
 		size_t docID, tf;
 		tie(docID, tf) = ps->nextDocIDTF();

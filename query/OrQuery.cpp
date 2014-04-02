@@ -60,7 +60,7 @@ string OrQuery::toString() const {
 
 OrQuery::~OrQuery() {
 	for (size_t i = 0; i < queries.size(); i ++)
-		if ( (size_t)&i > (size_t)queries[i] ) delete queries[i];
+		if ( size_t(&i) > size_t(queries[i]) ) delete queries[i];
 }
 
 

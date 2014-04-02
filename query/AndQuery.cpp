@@ -55,7 +55,7 @@ string AndQuery::toString() const {
 
 AndQuery::~AndQuery() {
 	for (size_t i = 0; i < queries.size(); i ++)
-		if ( (size_t)&i > (size_t)queries[i] ) delete queries[i];
+		if ( size_t(&i) > size_t(queries[i]) ) delete queries[i];
 }
 
 
