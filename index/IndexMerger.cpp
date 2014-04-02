@@ -99,7 +99,7 @@ void IndexMerger::merge() {
 			if ( termIndex[i] <= fileIndexes[i]->TERM_NUM ) pq.push(i);
 		}
 		
-		static const size_t THRESHOLD = util::MBtoB(5);
+		static const size_t THRESHOLD = util::MBtoB(3);
 		if ( count > THRESHOLD ) {
 			cerr << ".";
 			count = 0;

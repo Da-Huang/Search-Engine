@@ -23,7 +23,7 @@ public:
 	virtual void initSumdls();
 	virtual void addToSumdl(size_t fieldID, size_t dl);
 	virtual void genAvgdls(size_t DOC_NUM);
-	virtual size_t getAvgdl(size_t fieldID) const;
+	virtual double getAvgdl(size_t fieldID) const;
 
 	virtual string toString() const;
 	virtual void load(istream &in);

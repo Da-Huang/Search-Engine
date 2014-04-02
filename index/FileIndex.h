@@ -32,7 +32,6 @@ public:
 	virtual inline size_t getFieldNum() const { return FIELD_NUM; }
 	tuple<size_t, size_t, size_t> getPostingListInfo(
 			size_t termID, size_t fieldID);
-	virtual vector<ScoreDoc> search(size_t fieldID, const string &term);
 
 	virtual PostingStream* fetchPostingStream(
 			size_t fieldID, const string &term);

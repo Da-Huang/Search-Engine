@@ -27,7 +27,11 @@ Document IndexSearcher::doc(const ScoreDoc &scoreDoc) {
 		<< docDB->getDocFieldDL(scoreDoc.id(), 2) << "\t" 
 		<< docDB->getDocFieldDL(scoreDoc.id(), 3) << endl;
 		*/
-//	cerr << docDB->fetchDocument(scoreDoc.id()).toString() << endl;
+	/*
+	cerr << fieldNameMap->getAvgdl(1) << "\t"
+		<< fieldNameMap->getAvgdl(2) << "\t"
+		<< fieldNameMap->getAvgdl(3) << endl;
+		*/
 	return docDB->fetchDocument(scoreDoc.id());
 }
 

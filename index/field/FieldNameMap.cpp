@@ -21,7 +21,7 @@ void FieldNameMap::genAvgdls(size_t DOC_NUM) {
 		avgdls.push_back(double(sumdls[i]) / DOC_NUM);
 }
 
-size_t FieldNameMap::getAvgdl(size_t fieldID) const {
+double FieldNameMap::getAvgdl(size_t fieldID) const {
 	return avgdls[fieldID - 1];
 }
 

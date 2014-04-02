@@ -123,19 +123,6 @@ PostingStream* FileIndex::fetchPostingStream(
 	return fetchPostingStream(fieldID, termID);
 }
 
-vector<ScoreDoc> FileIndex::search(size_t fieldID, const string &term) {
-	vector<ScoreDoc> res;
-	PostingStream* ps = fetchPostingStream(fieldID, term);
-	if ( ps == NULL ) return res;
-
-	while ( ps->hasNext() ) {
-		res.push_back(ScoreDoc(ps->nextDocID()));
-	}
-	delete ps;
-
-	return res;
-}
-
 FileIndex::~FileIndex() {
 	idxIn.close();
 	trmIn.close();
