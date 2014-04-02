@@ -36,6 +36,18 @@ size_t TmpPostingStream::nextDocID() {
 	return docID;
 }
 
+tuple<size_t, size_t> TmpPostingStream::nextDocIDTF() {
+	fseek(fp, current, SEEK_SET);
+	size_t docID = util::codec.decode(fp) + 
+			(util::codec.isDelta() ? baseDocID : 0);
+	baseDocID = docID;
+	size_t tf = util::codec.decode(fp);
+	size_t plBytes = util::codec.decode(fp);
+	fseek(fp, plBytes, SEEK_CUR);
+	current = ftell(fp);
+	return make_tuple(docID, tf);
+}
+
 size_t TmpPostingStream::peekDocID() {
 	fseek(fp, current, SEEK_SET);
 	size_t docID = util::codec.decode(fp) + 

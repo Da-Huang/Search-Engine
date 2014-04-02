@@ -48,6 +48,18 @@ size_t PostingStream::nextDocID() {
 	return docID;
 }
 
+tuple<size_t, size_t> PostingStream::nextDocIDTF() {
+	in.seekg(current);
+	size_t docID = util::codec.decode(in) + 
+			(util::codec.isDelta() ? baseDocID : 0);
+	baseDocID = docID;
+	size_t tf = util::codec.decode(in);
+	size_t plBytes = util::codec.decode(in);
+	in.seekg(plBytes, ios::cur);
+	current = in.tellg();
+	return make_tuple(docID, tf);
+}
+
 size_t PostingStream::peekDocID() {
 	in.seekg(current);
 	size_t docID = util::codec.decode(in) + 

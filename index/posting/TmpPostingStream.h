@@ -13,6 +13,7 @@ public:
 	virtual void write(const Posting &posting);
 	virtual Posting next();
 	virtual Posting peek();
+	virtual tuple<size_t, size_t> nextDocIDTF();
 	virtual size_t nextDocID();
 	virtual size_t peekDocID();
 	virtual ~TmpPostingStream();

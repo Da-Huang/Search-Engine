@@ -2,6 +2,7 @@
 #define _POSTING_STREAM_H_
 
 #include <iostream>
+#include <tuple>
 #include <Posting.h>
 #include <SkipEntry.h>
 
@@ -38,6 +39,7 @@ public:
 	virtual Posting next();
 	virtual Posting peek();
 	virtual inline size_t size() const { return end - begin; }
+	virtual tuple<size_t, size_t> nextDocIDTF();
 	virtual size_t nextDocID();
 	virtual size_t peekDocID();
 	virtual inline bool hasNext() const { return current < end; }

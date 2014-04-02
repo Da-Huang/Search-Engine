@@ -80,7 +80,7 @@ void Posting::writeTo(FILE *fp, size_t baseDocID) const {
 
 	util::codec.encode(fp, 
 			util::codec.isDelta() ? docID - baseDocID : docID);
-	util::codec.encode(fp, posList.size());
+	util::codec.encode(fp, posList.size()); // tf
 	util::codec.encode(fp, plBytes);
 
 	size_t basePos = 0;
