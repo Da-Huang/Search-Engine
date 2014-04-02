@@ -10,6 +10,7 @@ void TextField::writeTo(MMIndex &mmIndex,
 	size_t fieldID = fieldNameMap.getFieldID(fieldName);
 	if ( fieldID == 0 ) return;
 
+	dlValid = true;
 	TokenStream &ts = analyzer.tokenStream(in);
 	while ( ts.hasNext() ) {
 		Token token = ts.next();

@@ -15,15 +15,17 @@ private:
 	const Analyzer &analyzer;
 
 	size_t dl;
+	bool dlValid;
 public:
 	TextField(const string &fieldName, 
 			istream &in, const Analyzer &analyzer) 
-		: Field(fieldName), in(in), analyzer(analyzer), dl(SIZE_MAX) {}
+		: Field(fieldName), in(in), analyzer(analyzer), dl(0),
+			dlValid(false) {}
 
 	TextField(const string &fieldName,
 			const string &str, const Analyzer &analyzer) 
 		: Field(fieldName), in(*new istringstream(str)), 
-		analyzer(analyzer), dl(SIZE_MAX) {}
+			analyzer(analyzer), dl(0), dlValid(false) {}
 
 	virtual void writeTo(MMIndex &mmIndex, 
 			const FieldNameMap &fieldNameMap, size_t docID);
@@ -31,7 +33,7 @@ public:
 		throw string("Method 'get' is not supported in TextField."); 
 	}
 	virtual inline size_t getDL() const { 
-		assert (dl != SIZE_MAX); 
+		assert (dlValid); 
 		return dl;
 	};
 	virtual ~TextField();

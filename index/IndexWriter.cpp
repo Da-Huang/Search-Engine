@@ -19,8 +19,8 @@ void IndexWriter::addFieldName(const string &fieldName) {
 
 IndexWriter::IndexWriter(const string &dirPath) 
 	: dirPath(dirPath), currentDocID(1), currentSegID(1), 
-		MAX_SIZE(util::MBtoB(1)) {
-//		MAX_SIZE(util::MBtoB(1024)) {
+//		MAX_SIZE(util::MBtoB(1)) {
+		MAX_SIZE(util::MBtoB(512)) {
 
 	int status = system(util::join("", {"mkdir -p ", dirPath}).c_str());
 	assert (status == 0);
