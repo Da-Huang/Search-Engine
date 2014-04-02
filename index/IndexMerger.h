@@ -12,13 +12,13 @@ using namespace std;
 class IndexMerger {
 private:
 	vector<FileIndex*> fileIndexes;
-	FieldNameMap fieldNameMap;
+	const FieldNameMap &fieldNameMap;
 	ofstream trmOut;
 	ofstream idxOut;
 	ofstream pstOut;
 
 public:
-	IndexMerger(const string &path);
+	IndexMerger(const string &path, const FieldNameMap &fieldNameMap);
 	virtual void merge();
 	virtual void close();
 	virtual ~IndexMerger();

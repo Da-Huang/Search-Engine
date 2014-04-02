@@ -4,7 +4,7 @@
 
 
 DocDBSorter::DocDBSorter(const string &dirPath, 
-		const FieldNameMap &fieldNameMap) {
+		FieldNameMap &fieldNameMap) : fieldNameMap(fieldNameMap) {
 
 	docDB = new DocDB(util::join("", {dirPath, "/_"}), fieldNameMap);
 	docOut.open(util::join("", {dirPath, "/__.doc"}));
@@ -12,6 +12,7 @@ DocDBSorter::DocDBSorter(const string &dirPath,
 
 void DocDBSorter::sort() {
 	static const size_t zeroDL = 0;
+	fieldNameMap.initSumdls();
 
 	for (size_t docID = 1; docID <= docDB->DOC_NUM; docID ++) {
 		size_t cntBegin, cntSize;
@@ -34,14 +35,16 @@ void DocDBSorter::sort() {
 			docDB->cntIn.seekg(length, ios::cur);
 			docOut.write((char*)&dl, sizeof(dl));
 
+			fieldNameMap.addToSumdl(fieldID, dl);
 			lastFieldID = fieldID;
 		}
-		const size_t FIELD_NUM = docDB->fieldNameMap.size();
+		const size_t FIELD_NUM = fieldNameMap.size();
 		for (size_t j = lastFieldID + 1; j <= FIELD_NUM; j ++)
 			docOut.write((char*)&zeroDL, sizeof(zeroDL));
 
 		if ( docID % 10000 == 0 ) cerr << ".";
 	}
+	fieldNameMap.genAvgdls(docDB->getDocNum());
 	cerr << endl;
 }
 

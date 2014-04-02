@@ -11,7 +11,7 @@ IndexSearcher::IndexSearcher(const string &dirPath) {
 	fieldNameMap = new FieldNameMap;
 	fieldNameMap->load(fldIn);
 	fldIn.close();
-//	size_t recordSize = (fieldNameMap->size() * 2 + 1) * sizeof(size_t);
+//	cerr << fieldNameMap->toString() << endl;
 
 	fileIndex = new FileIndex(prefix, fieldNameMap->size());
 	docDB = new DocDB(prefix, *fieldNameMap, fieldNameMap->size());
@@ -22,6 +22,12 @@ vector<ScoreDoc> IndexSearcher::search(const Query &query) {
 }
 
 Document IndexSearcher::doc(const ScoreDoc &scoreDoc) {
+	/*
+	cerr << docDB->getDocFieldDL(scoreDoc.id(), 1) << "\t"
+		<< docDB->getDocFieldDL(scoreDoc.id(), 2) << "\t" 
+		<< docDB->getDocFieldDL(scoreDoc.id(), 3) << endl;
+		*/
+//	cerr << docDB->fetchDocument(scoreDoc.id()).toString() << endl;
 	return docDB->fetchDocument(scoreDoc.id());
 }
 

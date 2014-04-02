@@ -6,10 +6,8 @@
 #include <GreaterFileIndex.h>
 
 
-IndexMerger::IndexMerger(const string &path) {
-	ifstream fldIn(util::join("", {path, "/_.fld"}));
-	fieldNameMap.load(fldIn);
-	fldIn.close();
+IndexMerger::IndexMerger(const string &path, 
+		const FieldNameMap &fieldNameMap) : fieldNameMap(fieldNameMap) {
 
 	trmOut.open(util::join("", {path, "/_.trm"}));
 	idxOut.open(util::join("", {path, "/_.idx"}));

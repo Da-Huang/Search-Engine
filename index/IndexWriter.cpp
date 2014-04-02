@@ -66,7 +66,7 @@ void IndexWriter::saveSegment() {
 				{dirPath, "/__", to_string(currentSegID), ".pst"}));
 
 	mmIndex.writeTo(idxOut, fldOut, trmOut, pstOut, fieldNameMap.size());
-	fieldNameMap.save(fldOut);
+//	fieldNameMap.save(fldOut);
 	mmIndex.reset();
 
 	idxOut.close();
@@ -78,19 +78,13 @@ void IndexWriter::saveSegment() {
 }
 
 void IndexWriter::merge() {
-	ofstream fldOut(util::join("", {dirPath, "/_.fld"}));
-
-	size_t fieldNum = fieldNameMap.size();
-	fldOut.write((char*)&fieldNum, sizeof(fieldNum));
-	fieldNameMap.save(fldOut);
-	fldOut.close();
 
 	ofstream metaOut(util::join("", {dirPath, "/__.meta"}));
 	size_t segNum = currentSegID - 1;
 	metaOut.write((char*)&segNum, sizeof(segNum));
 	metaOut.close();
 
-	IndexMerger indexMerger(dirPath);
+	IndexMerger indexMerger(dirPath, fieldNameMap);
 	indexMerger.merge();
 	indexMerger.close();
 
@@ -98,6 +92,12 @@ void IndexWriter::merge() {
 	DocDBSorter docDBSorter(dirPath, fieldNameMap);
 	docDBSorter.sort();
 	docDBSorter.close();
+
+	ofstream fldOut(util::join("", {dirPath, "/_.fld"}));
+	size_t FIELD_NUM = fieldNameMap.size();
+	fldOut.write((char*)&FIELD_NUM, sizeof(FIELD_NUM));
+	fieldNameMap.save(fldOut);
+	fldOut.close();
 }
 
 void IndexWriter::close() {
