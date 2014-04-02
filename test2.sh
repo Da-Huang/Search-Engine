@@ -8,4 +8,3 @@
 
 #./main -search-batch ../index1 test.queries.log 2>&1 | tee small-test1.log
 ./main -search-batch ../index2 test.queries.log 2>&1 | tee small-test2.log
-

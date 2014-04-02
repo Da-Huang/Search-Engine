@@ -14,7 +14,7 @@ IndexSearcher::IndexSearcher(const string &dirPath) {
 //	size_t recordSize = (fieldNameMap->size() * 2 + 1) * sizeof(size_t);
 
 	fileIndex = new FileIndex(prefix, fieldNameMap->size());
-	docDB = new DocDB(prefix, *fieldNameMap);
+	docDB = new DocDB(prefix, *fieldNameMap, fieldNameMap->size());
 }
 
 vector<ScoreDoc> IndexSearcher::search(const Query &query) {
