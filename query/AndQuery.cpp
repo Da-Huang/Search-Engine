@@ -16,7 +16,10 @@ vector<ScoreDoc> AndQuery::merge(
 		if ( docs1[i].id() < docs2[j].id() ) i ++;
 		else if ( docs1[i].id() > docs2[j].id() ) j ++;
 		else {
-			res.push_back(docs1[i]);
+//			res.push_back(docs1[i]);
+			size_t docID = docs1[i].id();
+			double score = docs1[i].score() + docs2[i].score();
+			res.push_back(ScoreDoc(docID, score));
 			i ++; j ++;
 		}
 	}
@@ -38,7 +41,8 @@ vector<ScoreDoc> AndQuery::search(IndexSearcher &is) const {
 	vector<ScoreDoc> res = allRes[querySeq[0].second];
 	for (size_t i = 1; i < querySeq.size(); i ++)
 		res = merge(res, allRes[querySeq[i].second]);
-	
+
+	for (size_t i = 1; i < res.size(); i ++) res[i] *= boost;
 	return res;
 }
 

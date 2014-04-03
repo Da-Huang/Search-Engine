@@ -13,16 +13,11 @@ string TermQuery::toString() const {
 
 vector<ScoreDoc> TermQuery::search(IndexSearcher &is) const {
 	size_t fieldID = is.fieldNameMap->getFieldID(field);
-	vector<ScoreDoc> res;
 
 	PostingStream *ps = is.fileIndex->fetchPostingStream(fieldID, term);
-	if ( ps == NULL ) return res;
-	size_t df = ps->getDF();
-	while ( ps->hasNext() ) {
-		size_t docID, tf;
-		tie(docID, tf) = ps->nextDocIDTF();
-		res.push_back(ScoreDoc(docID));
-	}
+	if ( ps == NULL ) return vector<ScoreDoc>();
+
+	vector<ScoreDoc> res = ps->getScoreDocs(is);
 	delete ps;
 
 	return res;

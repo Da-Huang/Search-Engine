@@ -4,10 +4,12 @@
 #include <iostream>
 #include <tuple>
 #include <Posting.h>
+#include <ScoreDoc.h>
 #include <SkipEntry.h>
 
 using namespace std;
 
+class IndexSearcher;
 
 class PostingStream {
 protected:
@@ -46,6 +48,8 @@ public:
 	virtual string toString();
 	virtual ~PostingStream();
 	virtual string info();
+
+	virtual vector<ScoreDoc> getScoreDocs(IndexSearcher &is);
 };
 
 #endif

@@ -23,6 +23,7 @@ vector<ScoreDoc> OrQuery::search(IndexSearcher &is) const {
 	for (size_t i = 1; i < querySeq.size(); i ++)
 		res = merge(res, allRes[querySeq[i].second]);
 	
+	for (size_t i = 1; i < res.size(); i ++) res[i] *= boost;
 	return res;
 }
 
@@ -38,7 +39,10 @@ vector<ScoreDoc> OrQuery::merge(
 			res.push_back(docs2[j ++]);
 
 		} else {
-			res.push_back(docs1[i]);
+//			res.push_back(docs1[i]);
+			size_t docID = docs1[i].id();
+			double score = docs1[i].score();
+			res.push_back(ScoreDoc(docID, score));
 			i ++; j ++;
 		}
 	}

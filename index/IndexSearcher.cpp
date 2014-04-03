@@ -1,7 +1,8 @@
 #include <fstream>
 #include <util.h>
-#include <IndexSearcher.h>
 #include <Query.h>
+#include <algorithm>
+#include <IndexSearcher.h>
 
 
 IndexSearcher::IndexSearcher(const string &dirPath) {
@@ -18,7 +19,9 @@ IndexSearcher::IndexSearcher(const string &dirPath) {
 }
 
 vector<ScoreDoc> IndexSearcher::search(const Query &query) {
-	return query.search(*this);
+	vector<ScoreDoc> res = query.search(*this);
+//	sort(res.begin(), res.end());
+	return res;
 }
 
 Document IndexSearcher::doc(const ScoreDoc &scoreDoc) {

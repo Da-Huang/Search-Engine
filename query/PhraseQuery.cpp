@@ -55,13 +55,9 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 		delete ps2;
 	}
 
-//	cout << ps->toString() << endl;
-	while ( ps->hasNext() ) {
-		res.push_back(ScoreDoc(ps->nextDocID()));
-//		res.push_back(ScoreDoc(ps->next().getDocID()));
-	}
+	res = ps->getScoreDocs(is);
 	delete ps;
-	
+
 	return res;
 }
 

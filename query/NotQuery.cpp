@@ -17,13 +17,13 @@ vector<ScoreDoc> NotQuery::search(IndexSearcher &is) const {
 			j ++;
 
 		} else if ( i < notRes[j].id() ) {
-			res.push_back(ScoreDoc(i));
+			res.push_back(ScoreDoc(i, boost));
 			i ++;
 
 		} else j ++;
 	}
 	while ( i <= is.docDB->getDocNum() ) {
-		res.push_back(ScoreDoc(i));
+		res.push_back(ScoreDoc(i, boost));
 		i ++;
 	}
 	return res;

@@ -1,5 +1,6 @@
 #include <queue>
 #include <util.h>
+#include <IndexSearcher.h>
 #include <PostingStream.h>
 #include <GreaterPos.h>
 #include <GreaterPostingStream.h>
@@ -164,5 +165,24 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv) {
 }
 
 PostingStream::~PostingStream() {}
+
+vector<ScoreDoc> PostingStream::getScoreDocs(IndexSearcher &is) {
+	size_t current = this->current;
+	size_t baseDocID = this->baseDocID;
+	this->current = begin;
+	this->baseDocID = 0;
+
+	vector<ScoreDoc> res;
+	while ( hasNext() ) {
+		size_t docID, tf;
+		tie(docID, tf) = nextDocIDTF();
+		double score = tf;
+		res.push_back(ScoreDoc(docID, tf));
+	}
+
+	this->current = current;
+	this->baseDocID = baseDocID;
+	return res;
+}
 
 
