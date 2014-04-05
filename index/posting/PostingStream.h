@@ -32,8 +32,9 @@ public:
 	PostingStream(istream &in, size_t begin, size_t df, size_t end);
 	virtual void rewind();
 
-	virtual void writeMerge(vector<PostingStream*> &psv);
-	virtual void write(const Posting &posting);
+	virtual void writeMerge(vector<PostingStream*> &psv, 
+			IndexSearcher *is=NULL, size_t fieldID=0);
+	virtual void write(const Posting &posting, double score=0);
 	virtual void writeSkips();
 	virtual inline size_t getBegin() const { return begin; }
 	virtual inline size_t getDF() const { return df; }
@@ -49,8 +50,9 @@ public:
 	virtual ~PostingStream();
 	virtual string info();
 
-	virtual vector<ScoreDoc> getScoreDocs(IndexSearcher &is);
+	double peekScore(IndexSearcher &is, size_t fieldID);
+	virtual vector<ScoreDoc> getScoreDocs(
+			IndexSearcher &is, size_t fieldID);
 };
 
 #endif
-

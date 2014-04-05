@@ -19,14 +19,15 @@ private:
 public:
 	Posting(istream &in, size_t baseDocID=0);
 	Posting(FILE *fp, size_t baseDocID=0);
-	Posting(size_t docID) : docID(docID), plBytes(0), basePos(0) {}
+	Posting(size_t docID) 
+		: docID(docID), plBytes(0), basePos(0) {}
 	Posting(size_t docID, size_t pos);
 
 	virtual inline size_t getDocID() const { return docID; }
 	virtual void addPos(size_t pos);
 
 	virtual void writeTo(ostream &out, size_t baseDocID=0) const;
-	virtual void writeTo(FILE *fp, size_t baseDocID=0) const;
+	virtual void writeTo(FILE *fp, double score, size_t baseDocID=0) const;
 
 	virtual void readFrom(istream &in, size_t baseDocID=0);
 	virtual void readFrom(FILE *fp, size_t baseDocID=0);

@@ -1,3 +1,4 @@
+#include <cmath>
 #include <util.h>
 #include <FuzzyQuery.h>
 #include <PhraseQuery.h>
@@ -29,8 +30,9 @@ void PhraseQuery::fillSlops() {
 vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 	vector<ScoreDoc> res;
 	if ( terms.size() == 0 ) return res;
+	size_t fieldID = is.fieldNameMap->getFieldID(terms[0]->field);
 
-	PostingStream *ps = terms[0]->fetchPostingStream(is);
+	PostingStream *ps = terms[0]->fetchPostingStream(is, fieldID);
 	if ( ps == NULL ) return res;
 //	cout << terms[0]->toString() << endl;
 //	cout << ps->toString() << endl;
@@ -42,20 +44,22 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 			return res;
 		}
 //		cout << ps1->toString() << endl;
-		PostingStream *ps2 = terms[i]->fetchPostingStream(is);
+		PostingStream *ps2 = terms[i]->fetchPostingStream(is, fieldID);
 //		cout << terms[i]->toString() << endl;
 //		cout << ps2->toString() << endl;
 		if ( ps2 == NULL ) {
 			delete ps;
 			return res;
 		}
-		ps = intersect(ps1, ps2, slops[i - 1]);
+		double score = ps1->peekScore(is, fieldID) + 
+						ps2->peekScore(is, fieldID);
+		ps = intersect(ps1, ps2, slops[i - 1], score);
 //		cout << ps->toString() << endl;
 		delete ps1;
 		delete ps2;
 	}
 
-	res = ps->getScoreDocs(is);
+	res = ps->getScoreDocs(is, fieldID);
 	delete ps;
 
 	return res;
@@ -63,7 +67,8 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 
 /** ps1 and ps2 must *not* be NULL **/
 PostingStream* PhraseQuery::intersect(
-		PostingStream *ps1, PostingStream *ps2, size_t slop) {
+		PostingStream *ps1, PostingStream *ps2, size_t slop, 
+		double score) {
 //	cout << "=============" << endl;
 //	cout << ps1->toString() << endl;
 //	cout << ps2->toString() << endl;
@@ -106,7 +111,7 @@ PostingStream* PhraseQuery::intersect(
 			// No need to do more as it's PhraseQuery
 			
 			if ( posting.posList.size() > 0 )
-				ps->write(posting);
+				ps->write(posting, score); // TODO
 		}
 	}
 //	cout << ps->toString() << endl;

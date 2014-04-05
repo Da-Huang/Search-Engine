@@ -1,5 +1,6 @@
 #include <queue>
 #include <util.h>
+#include <BM25.h>
 #include <IndexSearcher.h>
 #include <PostingStream.h>
 #include <GreaterPos.h>
@@ -61,6 +62,17 @@ tuple<size_t, size_t> PostingStream::nextDocIDTF() {
 	return make_tuple(docID, tf);
 }
 
+double PostingStream::peekScore(IndexSearcher &is, size_t fieldID) {
+	in.seekg(current);
+	size_t docID = util::codec.decode(in) + 
+			(util::codec.isDelta() ? baseDocID : 0);
+	size_t DOC_NUM = is.docDB->getDocNum();
+	size_t tf = util::codec.decode(in);
+	size_t dl = is.docDB->getDocFieldDL(docID, fieldID);
+	double avgdl = is.fieldNameMap->getAvgdl(fieldID);
+	return BM25::score(df, DOC_NUM, tf, dl , avgdl);
+}
+
 size_t PostingStream::peekDocID() {
 	in.seekg(current);
 	size_t docID = util::codec.decode(in) + 
@@ -106,7 +118,8 @@ string PostingStream::info() {
 	return res;
 }
 
-void PostingStream::write(const Posting &posting) {
+void PostingStream::write(const Posting &posting, double score) {
+	assert (score == 0);
 	posting.writeTo(out, baseDocID);
 	baseDocID = posting.getDocID();
 	end = out.tellp();
@@ -120,7 +133,9 @@ void PostingStream::writeSkips() {
 }
 
 /** elements in psv would be deleted **/
-void PostingStream::writeMerge(vector<PostingStream*> &psv) {
+void PostingStream::writeMerge(vector<PostingStream*> &psv, 
+		IndexSearcher *is, size_t fieldID) {
+
 	priority_queue<PostingStream*, vector<PostingStream*>, 
 		GreaterPostingStream> pq;
 	for (size_t i = 0; i < psv.size(); i ++) pq.push(psv[i]);
@@ -129,7 +144,9 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv) {
 		PostingStream *ps = pq.top();
 		pq.pop();
 
+		double score = 0;
 		vector<Posting> pv;
+		if ( is ) score += ps->peekScore(*is, fieldID);
 		pv.push_back(ps->next());
 		size_t docID = pv[0].docID;
 		if ( ps->hasNext() ) pq.push(ps);
@@ -138,6 +155,7 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv) {
 		while ( !pq.empty() && pq.top()->peekDocID() == docID ) {
 			ps = pq.top();
 			pq.pop();
+			if ( is ) score += ps->peekScore(*is, fieldID);
 			pv.push_back(ps->next());
 			if ( ps->hasNext() ) pq.push(ps);
 			else delete ps;
@@ -159,14 +177,16 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv) {
 			if ( index[i] < pv[i].posList.size() ) pqPos.push(i);
 		}
 		// This is a polymorphic write.
-		write(mergedPosting);
+		write(mergedPosting, score);
 	}
 //	cout << info() << endl;
 }
 
 PostingStream::~PostingStream() {}
 
-vector<ScoreDoc> PostingStream::getScoreDocs(IndexSearcher &is) {
+vector<ScoreDoc> PostingStream::getScoreDocs(
+		IndexSearcher &is, size_t fieldID) {
+
 	size_t current = this->current;
 	size_t baseDocID = this->baseDocID;
 	this->current = begin;
@@ -174,10 +194,10 @@ vector<ScoreDoc> PostingStream::getScoreDocs(IndexSearcher &is) {
 
 	vector<ScoreDoc> res;
 	while ( hasNext() ) {
-		size_t docID, tf;
-		tie(docID, tf) = nextDocIDTF();
-		double score = tf;
-		res.push_back(ScoreDoc(docID, tf));
+		size_t docID = peekDocID();
+		double score = peekScore(is, fieldID);
+		res.push_back(ScoreDoc(docID, score));
+		nextDocID();
 	}
 
 	this->current = current;

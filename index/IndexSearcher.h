@@ -25,6 +25,7 @@ public:
 	friend class FuzzyQuery;
 	friend class NotQuery;
 	friend class PhraseQuery;
+	friend class PostingStream;
 };
 
 #endif

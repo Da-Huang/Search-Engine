@@ -13,6 +13,8 @@ public:
 		: field(field), term(term) {}
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
 	virtual PostingStream* fetchPostingStream(IndexSearcher &is) const;
+	virtual PostingStream* fetchPostingStream(
+			IndexSearcher &is, size_t fieldID) const;
 	virtual string toString() const;
 	virtual ~TermQuery() {}
 

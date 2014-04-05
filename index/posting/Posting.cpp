@@ -1,4 +1,5 @@
 #include <util.h>
+#include <cassert>
 #include <Posting.h>
 
 
@@ -63,6 +64,7 @@ void Posting::readFrom(FILE *fp, size_t baseDocID) {
 	docID = util::codec.decode(fp) + 
 			(util::codec.isDelta() ? baseDocID : 0);
 	size_t tf = util::codec.decode(fp);
+	fseek(fp, sizeof(double), ios::cur);
 	plBytes = util::codec.decode(fp);
 //	cout << "plbs:" << plBytes << endl;
 
@@ -76,11 +78,12 @@ void Posting::readFrom(FILE *fp, size_t baseDocID) {
 }
 
 /** delta is for delta pos **/
-void Posting::writeTo(FILE *fp, size_t baseDocID) const {
+void Posting::writeTo(FILE *fp, double score, size_t baseDocID) const {
 
 	util::codec.encode(fp, 
 			util::codec.isDelta() ? docID - baseDocID : docID);
 	util::codec.encode(fp, posList.size()); // tf
+	fwrite(&score, sizeof(score), 1, fp);
 	util::codec.encode(fp, plBytes);
 
 	size_t basePos = 0;

@@ -16,8 +16,10 @@ public:
 		: TermQuery(field, term), dis(dis) {}
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
 	virtual PostingStream* fetchPostingStream(IndexSearcher &is) const;
+	virtual PostingStream* fetchPostingStream(IndexSearcher &is, 
+			size_t fieldID) const;
 	virtual vector<PostingStream*> fetchPostingStreams(
-			IndexSearcher &is) const;
+			IndexSearcher &is, size_t fieldID) const;
 	virtual string toString() const;
 	virtual ~FuzzyQuery() {}
 };

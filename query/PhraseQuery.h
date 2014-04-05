@@ -24,7 +24,8 @@ public:
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
 	virtual string toString() const;
 	static PostingStream* intersect(
-			PostingStream *ps1, PostingStream *ps2, size_t slop);
+			PostingStream *ps1, PostingStream *ps2, size_t slop,
+			double score);
 	virtual ~PhraseQuery();
 };
 

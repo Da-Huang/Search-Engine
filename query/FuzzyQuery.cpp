@@ -10,7 +10,8 @@
 vector<ScoreDoc> FuzzyQuery::search(IndexSearcher &is) const {
 	vector<ScoreDoc> res;
 
-	vector<PostingStream*> psv = fetchPostingStreams(is);
+	size_t fieldID = is.fieldNameMap->getFieldID(field);
+	vector<PostingStream*> psv = fetchPostingStreams(is, fieldID);
 	priority_queue<PostingStream*, vector<PostingStream*>, 
 		GreaterPostingStream> pq;
 	for (size_t i = 0; i < psv.size(); i ++) pq.push(psv[i]);
@@ -38,7 +39,13 @@ vector<ScoreDoc> FuzzyQuery::search(IndexSearcher &is) const {
 }
 
 PostingStream* FuzzyQuery::fetchPostingStream(IndexSearcher &is) const {
-	vector<PostingStream*> psv = fetchPostingStreams(is);
+	size_t fieldID = is.fieldNameMap->getFieldID(field);
+	return fetchPostingStream(is, fieldID);
+}
+
+PostingStream* FuzzyQuery::fetchPostingStream(
+		IndexSearcher &is, size_t fieldID) const {
+	vector<PostingStream*> psv = fetchPostingStreams(is, fieldID);
 	PostingStream *res = new TmpPostingStream();
 	res->writeMerge(psv);
 	res->rewind();
@@ -47,7 +54,7 @@ PostingStream* FuzzyQuery::fetchPostingStream(IndexSearcher &is) const {
 }
 
 vector<PostingStream*> FuzzyQuery::fetchPostingStreams(
-		IndexSearcher &is) const {
+		IndexSearcher &is, size_t fieldID) const {
 
 	vector<PostingStream*> res;
 
@@ -59,7 +66,6 @@ vector<PostingStream*> FuzzyQuery::fetchPostingStreams(
 //	cout << "l:" << lastTerm << endl;
 	size_t last = is.fileIndex->findLTTermID(lastTerm);
 
-	size_t fieldID = is.fieldNameMap->getFieldID(field);
 	for (size_t i = first; i <= last; i ++) {
 		string term = is.fileIndex->fetchTerm(i);
 //		cout << term << endl;
@@ -72,7 +78,6 @@ vector<PostingStream*> FuzzyQuery::fetchPostingStreams(
 	}
 	return res;
 }
-
 
 string FuzzyQuery::toString() const {
 	string res;

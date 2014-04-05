@@ -1,11 +1,11 @@
-#include <cassert>
 #include <util.h>
+#include <IndexSearcher.h>
 #include <TmpPostingStream.h>
 
 
-void TmpPostingStream::write(const Posting &posting) {
+void TmpPostingStream::write(const Posting &posting, double score) {
 //	cout << "tmp: " << baseDocID << endl;
-	posting.writeTo(fp, baseDocID);
+	posting.writeTo(fp, score, baseDocID);
 	baseDocID = posting.getDocID();
 	end = ftell(fp);
 	df ++;
@@ -53,6 +53,18 @@ size_t TmpPostingStream::peekDocID() {
 	size_t docID = util::codec.decode(fp) + 
 			(util::codec.isDelta() ? baseDocID : 0);
 	return docID;
+}
+
+double TmpPostingStream::peekScore(IndexSearcher &is, size_t fieldID) {
+	// is and fieldID are useless
+	fseek(fp, current, SEEK_SET);
+	/*size_t docID =*/ util::codec.decode(fp) /*+ 
+			(util::codec.isDelta() ? baseDocID : 0)*/;
+	/*size_t tf =*/ util::codec.decode(fp);
+	double score;
+	size_t status = fread(&score, sizeof(score), 1, fp);
+	assert (status == 1);
+	return score;
 }
 
 TmpPostingStream::~TmpPostingStream() {
