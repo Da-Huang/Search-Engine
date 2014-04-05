@@ -50,7 +50,7 @@ public:
 	virtual ~PostingStream();
 	virtual string info();
 
-	double peekScore(IndexSearcher &is, size_t fieldID);
+	virtual double peekScore(IndexSearcher &is, size_t fieldID);
 	virtual vector<ScoreDoc> getScoreDocs(
 			IndexSearcher &is, size_t fieldID);
 };

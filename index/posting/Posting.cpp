@@ -64,7 +64,7 @@ void Posting::readFrom(FILE *fp, size_t baseDocID) {
 	docID = util::codec.decode(fp) + 
 			(util::codec.isDelta() ? baseDocID : 0);
 	size_t tf = util::codec.decode(fp);
-	fseek(fp, sizeof(double), ios::cur);
+	fseek(fp, sizeof(double), ios::cur); // score
 	plBytes = util::codec.decode(fp);
 //	cout << "plbs:" << plBytes << endl;
 

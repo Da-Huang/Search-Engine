@@ -1,8 +1,10 @@
 #ifndef _SCORE_DOC_H_
 #define _SCORE_DOC_H_
 
-#include <cassert>
-#include <Document.h>
+#include <string>
+
+using namespace std;
+
 
 class ScoreDoc {
 private:
@@ -14,6 +16,14 @@ public:
 	virtual inline size_t id() const { return docID; }
 	virtual inline double score() const { return docScore; }
 	virtual inline void operator *= (double boost) { docScore *= boost; }
+	virtual inline string toString() const {
+		string res = "<";
+		res += to_string(docID);
+		res += ",";
+		res += to_string(docScore);
+		res += ">";
+		return res;
+	}
 	virtual ~ScoreDoc() {}
 };
 

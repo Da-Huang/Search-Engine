@@ -1,6 +1,7 @@
 #include <queue>
 #include <util.h>
 #include <BM25.h>
+#include <cassert>
 #include <IndexSearcher.h>
 #include <PostingStream.h>
 #include <GreaterPos.h>
@@ -194,10 +195,9 @@ vector<ScoreDoc> PostingStream::getScoreDocs(
 
 	vector<ScoreDoc> res;
 	while ( hasNext() ) {
-		size_t docID = peekDocID();
 		double score = peekScore(is, fieldID);
+		size_t docID = nextDocID();
 		res.push_back(ScoreDoc(docID, score));
-		nextDocID();
 	}
 
 	this->current = current;

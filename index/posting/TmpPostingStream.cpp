@@ -1,4 +1,5 @@
 #include <util.h>
+#include <cassert>
 #include <IndexSearcher.h>
 #include <TmpPostingStream.h>
 
@@ -29,6 +30,7 @@ size_t TmpPostingStream::nextDocID() {
 			(util::codec.isDelta() ? baseDocID : 0);
 	baseDocID = docID;
 	/*size_t tf =*/ util::codec.decode(fp);
+	fseek(fp, sizeof(double), SEEK_CUR); // score
 	size_t plBytes = util::codec.decode(fp);
 //	cerr << "ps: pl= " << plBytes << endl;
 	fseek(fp, plBytes, SEEK_CUR);
