@@ -18,7 +18,6 @@ vector<ScoreDoc> TermQuery::search(IndexSearcher &is) const {
 
 	vector<ScoreDoc> res = ps->getScoreDocs(is, fieldID);
 	delete ps;
-
 	return res;
 }
 

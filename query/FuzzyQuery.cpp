@@ -12,6 +12,7 @@ vector<ScoreDoc> FuzzyQuery::search(IndexSearcher &is) const {
 	const size_t fieldID = is.fieldNameMap->getFieldID(field);
 	PostingStream *ps = fetchPostingStream(is, fieldID);
 	vector<ScoreDoc> res = ps->getScoreDocs(is, fieldID);
+	for (size_t i = 0; i < res.size(); i ++) res[i] *= boost;
 	delete ps;
 	return res;
 }

@@ -60,7 +60,7 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 
 	res = ps->getScoreDocs(is, fieldID);
 	delete ps;
-
+	for (size_t i = 0; i < res.size(); i ++) res[i] *= boost;
 	return res;
 }
 

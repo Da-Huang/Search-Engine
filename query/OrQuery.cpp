@@ -40,8 +40,8 @@ vector<ScoreDoc> OrQuery::merge(
 
 		} else {
 //			res.push_back(docs1[i]);
-			size_t docID = docs1[i].id();
-			double score = docs1[i].score();
+			const size_t docID = docs1[i].id();
+			double score = docs1[i].score() + docs2[i].score();
 			res.push_back(ScoreDoc(docID, score));
 			i ++; j ++;
 		}

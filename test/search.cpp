@@ -74,6 +74,7 @@ void search(IndexSearcher &is, const string &qStr, bool fuzzy) {
 		string title = xmlTitle && xmlTitle->GetText() ? 
 			xmlTitle->GetText() : "";
 		cout << "\t" << title << endl;
+//		cout << "\t\t" << scoreDocs[i].score() << endl;
 	}
 	if ( scoreDocs.size() > SHOW_NUM )
 		cout << "(There are more hit documents...)" << endl;
