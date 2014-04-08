@@ -17,8 +17,8 @@ vector<ScoreDoc> AndQuery::merge(
 		else if ( docs1[i].id() > docs2[j].id() ) j ++;
 		else {
 //			res.push_back(docs1[i]);
-			size_t docID = docs1[i].id();
-			double score = docs1[i].score() + docs2[i].score();
+			const size_t docID = docs1[i].id();
+			const double score = docs1[i].score() + docs2[j].score();
 			res.push_back(ScoreDoc(docID, score));
 			i ++; j ++;
 		}

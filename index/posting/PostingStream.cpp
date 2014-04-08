@@ -69,6 +69,7 @@ double PostingStream::peekScore(IndexSearcher &is, size_t fieldID) {
 			(util::codec.isDelta() ? baseDocID : 0);
 	size_t DOC_NUM = is.docDB->getDocNum();
 	size_t tf = util::codec.decode(in);
+//	cout << docID << ": " << tf << endl;
 	size_t dl = is.docDB->getDocFieldDL(docID, fieldID);
 	double avgdl = is.fieldNameMap->getAvgdl(fieldID);
 	return BM25::score(df, DOC_NUM, tf, dl , avgdl);

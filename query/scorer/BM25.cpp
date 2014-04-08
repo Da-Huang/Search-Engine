@@ -8,7 +8,7 @@ double BM25::R(size_t tf, size_t dl, double avgdl) {
 }
 
 double BM25::idf(size_t df, size_t DOC_NUM) {
-	return log(
+	return log(1 +
 			(DOC_NUM - df + double(0.5)) / 
 			(df + double(0.5))
 	);
