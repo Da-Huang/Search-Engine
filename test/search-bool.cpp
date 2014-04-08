@@ -53,10 +53,11 @@ void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy) {
 			queryString,
 			"text", 
 			BoolAnalyzer(), fuzzy);
-	const Query *bQuery2 = QueryParser::parseBool(
+	Query *bQuery2 = QueryParser::parseBool(
 			queryString,
 			"title", 
 			BoolAnalyzer(), fuzzy);
+	bQuery2->setBoost(10);
 	/*
 	const Query *tQuery = fuzzy ? 
 		new FuzzyQuery("fileName", qStr) : 

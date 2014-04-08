@@ -24,8 +24,16 @@ size_t DocDB::getDocFieldDL(size_t docID, size_t fieldID) {
 	return dl;
 }
 
-tuple<size_t, size_t> DocDB::getDocCntInfo(size_t docID) {
+double DocDB::getDocStaticScore(size_t docID) {
 	const size_t BASE = (docID - 1) * RECORD_SIZE;
+	docIn.seekg(BASE);
+	double score;
+	docIn.read((char*)&score, sizeof(score));
+	return score;
+}
+
+tuple<size_t, size_t> DocDB::getDocCntInfo(size_t docID) {
+	const size_t BASE = (docID - 1) * RECORD_SIZE + sizeof(double);
 	docIn.seekg(BASE);
 	size_t cntBegin, cntSize;
 	docIn.read((char*)&cntBegin, sizeof(cntBegin));

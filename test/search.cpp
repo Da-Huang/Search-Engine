@@ -4,6 +4,7 @@
 #include <QueryParser.h>
 #include <FuzzyQuery.h>
 #include <ScoreDoc.h>
+#include <AndQuery.h>
 #include <OrQuery.h>
 #include <BoolAnalyzer.h>
 #include <util.h>
@@ -47,12 +48,20 @@ void search(IndexSearcher &is, const string &qStr, bool fuzzy) {
 			queryString,
 			"text", 
 			analyzer, fuzzy);
-	const Query *pQuery2 = QueryParser::parse(
+	Query *pQuery2 = QueryParser::parse(
 			queryString,
 			"title",
 			analyzer, fuzzy);
+	Query *boostQuery = QueryParser::parseOr(
+			queryString,
+			"title",
+			analyzer, fuzzy);
+	pQuery2->setBoost(10);
+	boostQuery->setBoost(5);
 
-	const Query *query = new OrQuery(*pQuery1, *pQuery2);
+	const Query *query = new AndQuery(
+			*new OrQuery(*pQuery1, *pQuery2),
+			*boostQuery);
 
 	cout << "Inner Query:  " << query->toString() << endl;
 	

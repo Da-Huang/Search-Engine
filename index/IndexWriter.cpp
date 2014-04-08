@@ -30,6 +30,8 @@ IndexWriter::IndexWriter(const string &dirPath)
 }
 
 void IndexWriter::write(Document &doc) {
+	double staticScore = doc.getStaticScore();
+	docOut.write((char*)&staticScore, sizeof(staticScore));
 	size_t cntBegin = cntOut.tellp();
 	docOut.write((char*)&cntBegin, sizeof(cntBegin));
 	

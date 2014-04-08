@@ -17,7 +17,7 @@ double BM25::idf(size_t df, size_t DOC_NUM) {
 
 double BM25::score(size_t df, size_t DOC_NUM, 
 		size_t tf, size_t dl, double avgdl) {
-	return tf;
+//	return tf;
 	return idf(df, DOC_NUM) * R(tf, dl, avgdl);
 }
 

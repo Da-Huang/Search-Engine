@@ -45,10 +45,11 @@ void searchPhrase(IndexSearcher &is, const string &qStr, bool fuzzy) {
 			queryString,
 			"text", 
 			analyzer, fuzzy);
-	const Query *pQuery2 = QueryParser::parsePhrase(
+	Query *pQuery2 = QueryParser::parsePhrase(
 			queryString,
 			"title",
 			analyzer, fuzzy);
+	pQuery2->setBoost(10);
 
 	/*
 	const Query *tQuery = fuzzy ? 

@@ -9,17 +9,21 @@
 class QueryParser {
 public:
 	/** The original query would deleted in this method. **/
-	static const Query* optimize(const Query *query);
+	static Query* optimize(const Query *query);
 
-	static const Query *parse(const string &keywords, 
+	static Query *parse(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer,
 			bool fuzzy=false);
 
-	static const Query *parseBool(const string &keywords, 
+	static Query *parseBool(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer, 
 			bool fuzzy=false);
 
-	static const Query *parsePhrase(const string &keywords, 
+	static Query *parsePhrase(const string &keywords, 
+			const string &fieldName, const Analyzer &analyzer,
+			bool fuzzy=false);
+
+	static Query *parseOr(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer,
 			bool fuzzy=false);
 };

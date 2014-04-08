@@ -73,6 +73,7 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 			cerr << fullPath << endl;
 			
 			Document doc;
+//			doc.setStaticScore(double(count));
 
 //			ifstream in(fullPath);
 //			TextField f1("content", in, analyzer);

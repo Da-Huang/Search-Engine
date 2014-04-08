@@ -15,6 +15,8 @@ void DocDBSorter::sort() {
 	fieldNameMap.initSumdls();
 
 	for (size_t docID = 1; docID <= docDB->DOC_NUM; docID ++) {
+		double staticScore = docDB->getDocStaticScore(docID);
+		docOut.write((char*)&staticScore, sizeof(staticScore));
 		size_t cntBegin, cntSize;
 		tie(cntBegin, cntSize) = docDB->getDocCntInfo(docID);
 		docOut.write((char*)&cntBegin, sizeof(cntBegin));

@@ -11,7 +11,7 @@
 #include <PhraseQuery.h>
 
 
-const Query* QueryParser::optimize(const Query *query) {
+Query* QueryParser::optimize(const Query *query) {
 	if ( dynamic_cast<const PhraseQuery*>(query) )
 		return new PhraseQuery((const PhraseQuery&)*query);
 	if ( dynamic_cast<const FuzzyQuery*>(query) )
@@ -24,7 +24,7 @@ const Query* QueryParser::optimize(const Query *query) {
 		const AndQuery *caq = (const AndQuery*)query;
 		AndQuery *aq = new AndQuery();
 		for (size_t i = 0; i < caq->queries.size(); i ++) {
-			const Query *subQuery = optimize(caq->queries[i]);
+			Query *subQuery = optimize(caq->queries[i]);
 			if ( dynamic_cast<const AndQuery*>(subQuery) ) {
 				const AndQuery *subAndQuery = (const AndQuery*)subQuery;
 				aq->queries.insert(aq->queries.end(),
@@ -40,7 +40,7 @@ const Query* QueryParser::optimize(const Query *query) {
 		const OrQuery *coq = (const OrQuery*)query;
 		OrQuery *oq = new OrQuery();
 		for (size_t i = 0; i < coq->queries.size(); i ++) {
-			const Query *subQuery = optimize(coq->queries[i]);
+			Query *subQuery = optimize(coq->queries[i]);
 			if ( dynamic_cast<const OrQuery*>(subQuery) ) {
 				const OrQuery *subOrQuery = (const OrQuery*)subQuery;
 				oq->queries.insert(oq->queries.end(),
@@ -55,7 +55,7 @@ const Query* QueryParser::optimize(const Query *query) {
 	return NULL;
 }
 
-const Query* QueryParser::parse(const string &keywords, 
+Query* QueryParser::parse(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer, 
 			bool fuzzy) {
 	vector<string> terms;
@@ -74,7 +74,7 @@ const Query* QueryParser::parse(const string &keywords,
 	return new PhraseQuery(fieldName, terms, slops, fuzzy);
 }
 
-const Query* QueryParser::parseBool(const string &keywords, 
+Query* QueryParser::parseBool(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer,
 			bool fuzzy) {
 //	cerr << keywords << endl;
@@ -85,7 +85,7 @@ const Query* QueryParser::parseBool(const string &keywords,
 	priority["|"] = 3;
 	priority["&"] = 4;
 	priority["!"] = 5;
-	stack<const Query*> s1;
+	stack<Query*> s1;
 	stack<string> s2;
 
 	istringstream istr(keywords);
@@ -114,7 +114,7 @@ const Query* QueryParser::parseBool(const string &keywords,
 				s2.pop();
 				if ( s1.empty() ) continue;
 				if ( op == "!" ) {
-					const Query *q = new NotQuery(*s1.top());
+					Query *q = new NotQuery(*s1.top());
 					s1.pop();
 					s1.push(q);
 
@@ -123,20 +123,20 @@ const Query* QueryParser::parseBool(const string &keywords,
 
 				} else if ( s1.size() <= 1 ) continue;
 				else if ( op == "&" ) {
-					const Query *q1 = s1.top();
+					Query *q1 = s1.top();
 					s1.pop();
-					const Query *q2 = s1.top();
+					Query *q2 = s1.top();
 					s1.pop();
-					const Query *q = new AndQuery(*q2, *q1);
+					Query *q = new AndQuery(*q2, *q1);
 					s1.push(q);
 //					cerr << "push: " << q->toString() << endl;
 
 				} else if ( op == "|" ) {
-					const Query *q1 = s1.top();
+					Query *q1 = s1.top();
 					s1.pop();
-					const Query *q2 = s1.top();
+					Query *q2 = s1.top();
 					s1.pop();
-					const Query *q = new OrQuery(*q2, *q1);
+					Query *q = new OrQuery(*q2, *q1);
 					s1.push(q);
 //					cerr << "push: " << q->toString() << endl;
 
@@ -149,7 +149,7 @@ const Query* QueryParser::parseBool(const string &keywords,
 	delete &ts;
 
 	if ( s1.empty() ) return NULL;
-	const Query *res = optimize(s1.top());
+	Query *res = optimize(s1.top());
 	while ( !s1.empty() ) {
 		delete s1.top();
 		s1.pop();
@@ -158,7 +158,7 @@ const Query* QueryParser::parseBool(const string &keywords,
 }
 
 
-const Query* QueryParser::parsePhrase(const string &keywords, 
+Query* QueryParser::parsePhrase(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer, 
 			bool fuzzy) {
 	vector<string> terms;
@@ -184,6 +184,23 @@ const Query* QueryParser::parsePhrase(const string &keywords,
 	delete &ts;
 	
 	return new PhraseQuery(fieldName, terms, slops, fuzzy);
+}
+
+
+Query* QueryParser::parseOr(const string &keywords, 
+			const string &fieldName, const Analyzer &analyzer, 
+			bool fuzzy) {
+	OrQuery* query = new OrQuery();
+	istringstream istr(keywords);
+	TokenStream &ts = analyzer.tokenStream(istr);
+	while ( ts.hasNext() ) {
+		Token token = ts.next();
+//		cout << token.toString() << endl;
+		query->add(*new TermQuery(fieldName, token.value));
+	}
+	delete &ts;
+	
+	return query;
 }
 
 
