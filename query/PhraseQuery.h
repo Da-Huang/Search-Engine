@@ -25,7 +25,7 @@ public:
 	virtual string toString() const;
 	static PostingStream* intersect(
 			PostingStream *ps1, PostingStream *ps2, size_t slop,
-			double score);
+			IndexSearcher &is, size_t fieldID);
 	virtual ~PhraseQuery();
 };
 

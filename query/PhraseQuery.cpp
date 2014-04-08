@@ -30,7 +30,7 @@ void PhraseQuery::fillSlops() {
 vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 	vector<ScoreDoc> res;
 	if ( terms.size() == 0 ) return res;
-	size_t fieldID = is.fieldNameMap->getFieldID(terms[0]->field);
+	const size_t fieldID = is.fieldNameMap->getFieldID(terms[0]->field);
 
 	PostingStream *ps = terms[0]->fetchPostingStream(is, fieldID);
 	if ( ps == NULL ) return res;
@@ -39,21 +39,20 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 
 	for (size_t i = 1; i < terms.size(); i ++) {
 		PostingStream *ps1 = ps;
+//		cout << "ps1:" << ps1->toString() << endl;
+//		cout << "ps1->hasNext:" << ps1->hasNext() << endl;
 		if ( terms[i]->field != terms[0]->field ) {
 			delete ps;
 			return res;
 		}
-//		cout << ps1->toString() << endl;
 		PostingStream *ps2 = terms[i]->fetchPostingStream(is, fieldID);
 //		cout << terms[i]->toString() << endl;
-//		cout << ps2->toString() << endl;
 		if ( ps2 == NULL ) {
 			delete ps;
 			return res;
 		}
-		double score = ps1->peekScore(is, fieldID) + 
-						ps2->peekScore(is, fieldID);
-		ps = intersect(ps1, ps2, slops[i - 1], score);
+//		cout << "ps2:" << ps2->toString() << endl;
+		ps = intersect(ps1, ps2, slops[i - 1], is, fieldID);
 //		cout << ps->toString() << endl;
 		delete ps1;
 		delete ps2;
@@ -68,15 +67,15 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 /** ps1 and ps2 must *not* be NULL **/
 PostingStream* PhraseQuery::intersect(
 		PostingStream *ps1, PostingStream *ps2, size_t slop, 
-		double score) {
+		IndexSearcher &is, size_t fieldID) {
 //	cout << "=============" << endl;
 //	cout << ps1->toString() << endl;
 //	cout << ps2->toString() << endl;
 //	cout << "=============" << endl;
 	PostingStream *ps = new TmpPostingStream();
 	while ( ps1->hasNext() && ps2->hasNext() ) {
-		size_t docID1 = ps1->peekDocID();
-		size_t docID2 = ps2->peekDocID();
+		const size_t docID1 = ps1->peekDocID();
+		const size_t docID2 = ps2->peekDocID();
 //		cout << docID1 << "," << docID2 << endl;
 		if ( docID1 < docID2 ) {
 			ps1->nextDocID();
@@ -86,6 +85,9 @@ PostingStream* PhraseQuery::intersect(
 
 		} else {
 			Posting posting(docID1);
+			const double score1 = ps1->peekScore(is, fieldID);
+			const double score2 = ps2->peekScore(is, fieldID);
+			const double score  = score1 + score2;
 			Posting p1 = ps1->next();
 			Posting p2 = ps2->next();
 //			cout << p1.toString() << "::" << p2.toString() << endl;
@@ -93,9 +95,9 @@ PostingStream* PhraseQuery::intersect(
 			vector<size_t> &posList2 = p2.posList;
 			size_t i = 0, j = 0;
 			while ( i < posList1.size() && j < posList2.size() ) {
-				size_t pos1 = posList1[i];
-				size_t pos2 = posList2[j];
-				size_t dpos = util::delta(pos1 + 1, pos2);
+				const size_t pos1 = posList1[i];
+				const size_t pos2 = posList2[j];
+				const size_t dpos = util::delta(pos1 + 1, pos2);
 //				cout << dpos << endl;
 				if ( dpos <= slop ) {
 //					cout << "pos: " << pos2 << endl;
@@ -111,7 +113,7 @@ PostingStream* PhraseQuery::intersect(
 			// No need to do more as it's PhraseQuery
 			
 			if ( posting.posList.size() > 0 )
-				ps->write(posting, score); // TODO
+				ps->write(posting, score);
 		}
 	}
 //	cout << ps->toString() << endl;
