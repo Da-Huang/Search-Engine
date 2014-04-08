@@ -2,8 +2,9 @@
 #define _FUZZY_QUERY_H_
 
 
-#include <TermQuery.h>
+#include <map>
 #include <vector>
+#include <TermQuery.h>
 
 using namespace std;
 
@@ -19,7 +20,8 @@ public:
 	virtual PostingStream* fetchPostingStream(IndexSearcher &is, 
 			size_t fieldID) const;
 	virtual vector<PostingStream*> fetchPostingStreams(
-			IndexSearcher &is, size_t fieldID) const;
+			IndexSearcher &is, size_t fieldID,
+			map<PostingStream*, double> &boosts) const;
 	virtual string toString() const;
 	virtual ~FuzzyQuery() {}
 };

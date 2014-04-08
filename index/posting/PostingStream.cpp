@@ -135,7 +135,10 @@ void PostingStream::writeSkips() {
 
 /** elements in psv would be deleted **/
 void PostingStream::writeMerge(vector<PostingStream*> &psv, 
-		IndexSearcher *is, size_t fieldID) {
+		IndexSearcher *is, size_t fieldID, 
+		map<PostingStream*, double> boosts) {
+
+	assert (is == NULL || psv.size() == boosts.size());
 
 	priority_queue<PostingStream*, vector<PostingStream*>, 
 		GreaterPostingStream> pq;
@@ -147,7 +150,7 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv,
 
 		double score = 0;
 		vector<Posting> pv;
-		if ( is ) score += ps->peekScore(*is, fieldID);
+		if ( is ) score += ps->peekScore(*is, fieldID) * boosts[ps];
 		pv.push_back(ps->next());
 		size_t docID = pv[0].docID;
 		if ( ps->hasNext() ) pq.push(ps);
@@ -156,7 +159,7 @@ void PostingStream::writeMerge(vector<PostingStream*> &psv,
 		while ( !pq.empty() && pq.top()->peekDocID() == docID ) {
 			ps = pq.top();
 			pq.pop();
-			if ( is ) score += ps->peekScore(*is, fieldID);
+			if ( is ) score += ps->peekScore(*is, fieldID) * boosts[ps];
 			pv.push_back(ps->next());
 			if ( ps->hasNext() ) pq.push(ps);
 			else delete ps;

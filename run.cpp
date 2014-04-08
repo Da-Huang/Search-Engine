@@ -18,7 +18,9 @@ static const vector<string> usages = {
 	"usage: -search-phrase-batch \"index directory\" \"query file\"",
 	"usage: -search-phrase-f-batch \"index directory\" \"query file\"",
 	"usage: -search \"index directory\" \"query string\"",
-	"usage: -search-f \"index directory\" \"query file\"",
+	"usage: -search-f \"index directory\" \"query string\"",
+	"usage: -search-batch \"index directory\" \"query file\"",
+	"usage: -search-f-batch \"index directory\" \"query file\"",
 };
 
 int run(int argc, char* argv[]) {
@@ -85,10 +87,22 @@ int run(int argc, char* argv[]) {
 			test::search(string(argv[i + 1]), string(argv[i + 2]));
 			return 0;
 
+		} else if ( string(argv[i]) == "-search-f" ) {
+			assert (i + 2 < argc);
+			test::search(string(argv[i + 1]), string(argv[i + 2]), true);
+			return 0;
+
 		} else if ( string(argv[i]) == "-search-batch" ) {
 			assert (i + 2 < argc);
 			ifstream in(argv[i + 2]);
 			test::search(string(argv[i + 1]), in);
+			in.close();
+			return 0;
+
+		} else if ( string(argv[i]) == "-search-f-batch" ) {
+			assert (i + 2 < argc);
+			ifstream in(argv[i + 2]);
+			test::search(string(argv[i + 1]), in, true);
 			in.close();
 			return 0;
 		}

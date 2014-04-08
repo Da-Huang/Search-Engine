@@ -1,60 +1,41 @@
+#include <queue>
+#include <cmath>
+#include <algorithm>
 #include <util.h>
 #include <FuzzyQuery.h>
-#include <algorithm>
-#include <queue>
 #include <TmpPostingStream.h>
-#include <GreaterPostingStream.h>
 #include <GreaterPos.h>
+#include <GreaterPostingStream.h>
 
 
 vector<ScoreDoc> FuzzyQuery::search(IndexSearcher &is) const {
-	vector<ScoreDoc> res;
-
-	size_t fieldID = is.fieldNameMap->getFieldID(field);
-	vector<PostingStream*> psv = fetchPostingStreams(is, fieldID);
-	priority_queue<PostingStream*, vector<PostingStream*>, 
-		GreaterPostingStream> pq;
-	for (size_t i = 0; i < psv.size(); i ++) pq.push(psv[i]);
-
-	while ( !pq.empty() ) {
-		PostingStream *ps = pq.top();
-		pq.pop();
-		size_t docID = ps->nextDocID();
-		if ( ps->hasNext() ) pq.push(ps);
-		else delete ps;
-
-//		cout << docID << endl;
-		while ( !pq.empty() && pq.top()->peekDocID() == docID ) {
-			ps = pq.top();
-			pq.pop();
-			ps->nextDocID();
-			if ( ps->hasNext() ) pq.push(ps);
-			else delete ps;
-		}
-
-		res.push_back(ScoreDoc(docID));
-	}
-//	cout << "------------" << endl;
+	const size_t fieldID = is.fieldNameMap->getFieldID(field);
+	PostingStream *ps = fetchPostingStream(is, fieldID);
+	vector<ScoreDoc> res = ps->getScoreDocs(is, fieldID);
+	delete ps;
 	return res;
 }
 
 PostingStream* FuzzyQuery::fetchPostingStream(IndexSearcher &is) const {
-	size_t fieldID = is.fieldNameMap->getFieldID(field);
+	const size_t fieldID = is.fieldNameMap->getFieldID(field);
 	return fetchPostingStream(is, fieldID);
 }
 
 PostingStream* FuzzyQuery::fetchPostingStream(
 		IndexSearcher &is, size_t fieldID) const {
-	vector<PostingStream*> psv = fetchPostingStreams(is, fieldID);
+
+	map<PostingStream*, double> boosts;
+	vector<PostingStream*> psv = fetchPostingStreams(is, fieldID, boosts);
+
 	PostingStream *res = new TmpPostingStream();
-	res->writeMerge(psv);
+	res->writeMerge(psv, &is, fieldID, boosts);
 	res->rewind();
-//	cout << res->toString() << endl;
 	return res;
 }
 
 vector<PostingStream*> FuzzyQuery::fetchPostingStreams(
-		IndexSearcher &is, size_t fieldID) const {
+		IndexSearcher &is, size_t fieldID, 
+		map<PostingStream*, double> &boosts) const {
 
 	vector<PostingStream*> res;
 
@@ -69,11 +50,15 @@ vector<PostingStream*> FuzzyQuery::fetchPostingStreams(
 	for (size_t i = first; i <= last; i ++) {
 		string term = is.fileIndex->fetchTerm(i);
 //		cout << term << endl;
+		size_t edis;
 		if ( util::delta(term.length(), this->term.length()) > dis ||
-			util::editDistance(this->term, term) > dis ) continue;
+			(edis = util::editDistance(this->term, term)) > dis ) continue;
 //		cout << term << endl;
 		PostingStream* ps = is.fileIndex->fetchPostingStream(fieldID, i);
-		if ( ps != NULL && ps->hasNext() ) res.push_back(ps);
+		if ( ps != NULL && ps->hasNext() ) {
+			res.push_back(ps);
+			boosts[ps] = 1 / exp(double(edis));
+		}
 //		cout << ps->info() << endl;
 	}
 	return res;

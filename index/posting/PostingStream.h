@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <tuple>
+#include <map>
 #include <Posting.h>
 #include <ScoreDoc.h>
 #include <SkipEntry.h>
@@ -33,7 +34,9 @@ public:
 	virtual void rewind();
 
 	virtual void writeMerge(vector<PostingStream*> &psv, 
-			IndexSearcher *is=NULL, size_t fieldID=0);
+			IndexSearcher *is=NULL, size_t fieldID=0,
+			map<PostingStream*, double> boosts
+			=map<PostingStream*, double>());
 	virtual void write(const Posting &posting, double score=0);
 	virtual void writeSkips();
 	virtual inline size_t getBegin() const { return begin; }
