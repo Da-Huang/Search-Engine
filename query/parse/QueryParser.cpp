@@ -187,20 +187,3 @@ Query* QueryParser::parsePhrase(const string &keywords,
 }
 
 
-Query* QueryParser::parseOr(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer, 
-			bool fuzzy) {
-	OrQuery* query = new OrQuery();
-	istringstream istr(keywords);
-	TokenStream &ts = analyzer.tokenStream(istr);
-	while ( ts.hasNext() ) {
-		Token token = ts.next();
-//		cout << token.toString() << endl;
-		query->add(*new TermQuery(fieldName, token.value));
-	}
-	delete &ts;
-	
-	return query;
-}
-
-

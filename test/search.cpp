@@ -52,17 +52,9 @@ void search(IndexSearcher &is, const string &qStr, bool fuzzy) {
 			queryString,
 			"title",
 			analyzer, fuzzy);
-	Query *boostQuery = QueryParser::parseOr(
-			queryString,
-			"title",
-			analyzer, fuzzy);
 	pQuery2->setBoost(10);
-	boostQuery->setBoost(5);
 
-	const Query *query = new AndQuery(
-			*new OrQuery(*pQuery1, *pQuery2),
-			*boostQuery);
-
+	const Query *query = new OrQuery(*pQuery1, *pQuery2);
 	cout << "Inner Query:  " << query->toString() << endl;
 	
 	vector<ScoreDoc> scoreDocs = is.search(*query);

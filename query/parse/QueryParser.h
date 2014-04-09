@@ -22,10 +22,6 @@ public:
 	static Query *parsePhrase(const string &keywords, 
 			const string &fieldName, const Analyzer &analyzer,
 			bool fuzzy=false);
-
-	static Query *parseOr(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer,
-			bool fuzzy=false);
 };
 
 

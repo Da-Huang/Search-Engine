@@ -142,7 +142,7 @@ Hit Documents:
 Inner Query:  (p<text:"6" \3 text:"6427" \3 text:"47"> | p<title:"6" \3 title:"6427" \3 title:"47">)
 Hit Numbers:  1
 Hit Documents:
-   1. #559773 /media/DISK_E/disk/disk2/19970702/703944newsML.xml
+   1. #557021 /media/DISK_E/disk/disk2/19970702/703944newsML.xml
 	
 reuter london follow buy
 Inner Query:  (p<text:"reuter" \3 text:"london" \3 text:"follow" \3 text:"bui"> | p<title:"reuter" \3 title:"london" \3 title:"follow" \3 title:"bui">)

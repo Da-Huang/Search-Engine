@@ -58,16 +58,8 @@ void searchBool(IndexSearcher &is, const string &qStr, bool fuzzy) {
 			"title", 
 			BoolAnalyzer(), fuzzy);
 	bQuery2->setBoost(10);
-	/*
-	const Query *tQuery = fuzzy ? 
-		new FuzzyQuery("fileName", qStr) : 
-		new TermQuery("fileName", qStr);
 
-	const Query *query = bQuery == NULL ? tQuery : 
-		new OrQuery(*bQuery, *tQuery);
-		*/
 	const Query *query = new OrQuery(*bQuery1, *bQuery2);
-
 	cout << "Inner Query:  " << query->toString() << endl;
 	
 	vector<ScoreDoc> scoreDocs = is.search(*query);
