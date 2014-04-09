@@ -12,15 +12,15 @@ public:
 	static Query* optimize(const Query *query);
 
 	static Query *parse(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer,
+			const string &fieldName, const Analyzer &analyzer=Analyzer(),
 			bool fuzzy=false);
 
 	static Query *parseBool(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer, 
+			const string &fieldName, const Analyzer &analyzer=Analyzer(), 
 			bool fuzzy=false);
 
 	static Query *parsePhrase(const string &keywords, 
-			const string &fieldName, const Analyzer &analyzer,
+			const string &fieldName, const Analyzer &analyzer=Analyzer(),
 			bool fuzzy=false);
 };
 
