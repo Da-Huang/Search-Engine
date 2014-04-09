@@ -22,7 +22,7 @@ vector<ScoreDoc> IndexSearcher::search(const Query &query) {
 	vector<ScoreDoc> res = query.search(*this);
 	for (size_t i = 0; i < res.size(); i ++)
 		res[i] += docDB->getDocStaticScore(res[i].id());
-//	sort(res.begin(), res.end());
+	sort(res.begin(), res.end());
 	return res;
 }
 
