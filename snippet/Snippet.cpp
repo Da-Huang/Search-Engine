@@ -4,7 +4,7 @@
 #include <Snippet.h>
 
 
-pair<size_t, size_t> Snippet::snippet(const map<string, double> &terms,
+pair<size_t, size_t> Snippet::snippet(
 		const vector<Token> &tokens, size_t WIDTH) {
 
 	map<string, size_t> termsCount;
@@ -67,8 +67,8 @@ pair<size_t, size_t> Snippet::snippet(const map<string, double> &terms,
 	return make_pair(bestBegin, bestEnd);
 }
 
-string Snippet::snippet(const map<string, double> &terms,
-		istream &in, size_t WIDTH, const Analyzer &analyzer) {
+string Snippet::snippet(istream &in, size_t WIDTH, 
+		const Analyzer &analyzer) {
 
 	vector<Token> tokens;
 	TokenStream &ts = analyzer.tokenStream(in);
@@ -78,7 +78,7 @@ string Snippet::snippet(const map<string, double> &terms,
 	}
 	delete &ts;
 
-	auto pos = snippet(terms, tokens, WIDTH);
+	auto pos = snippet(tokens, WIDTH);
 	size_t begin = pos.first, end = pos.second;
 	if ( begin == end ) return fetch(in, 0, WIDTH);
 	while ( begin > 0 && 

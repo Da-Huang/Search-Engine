@@ -12,12 +12,16 @@ using namespace std;
 
 class Snippet {
 private:
-	static pair<size_t, size_t> snippet(const map<string, double> &terms,
-			const vector<Token> &tokens, size_t WIDTH);
+	const map<string, double> &terms;
+
 	static string fetch(istream &in, size_t begin, size_t end);
+	pair<size_t, size_t> snippet(
+			const vector<Token> &tokens, size_t WIDTH);
 public:
-	static string snippet(const map<string, double> &terms, istream &in,
-			size_t WIDTH=100, const Analyzer &analyzer=Analyzer());
+	Snippet(const map<string, double> &terms) : terms(terms) {}
+	virtual string snippet(istream &in, size_t WIDTH=100, 
+			const Analyzer &analyzer=Analyzer());
+	virtual ~Snippet() {}
 };
 
 

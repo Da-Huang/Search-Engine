@@ -16,8 +16,9 @@ int main(int argc, char* argv[]) {
 
 	string str = "This is a good day, and my \nmind is clear today. The most happiest thing is that I'm   hello begining to \t test hello a great snippet algorithm.  That is  \n it. Thank you for attention. Ladies and gentlemen,\n I'm so graful today. Let's have big some fun today play.";
 	istringstream is(str);
-	string snippet = Snippet::snippet(terms, is, 30);
-	cout << snippet << endl;
+	Snippet snippet(terms);
+	string s = snippet.snippet(is);
+	cout << s << endl;
 
 	return 0;
 }
