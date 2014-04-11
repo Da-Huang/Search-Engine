@@ -17,7 +17,6 @@ protected:
 //	const Analyzer &analyzer;
 	const Analyzer &analyzer;
 
-	bool isSpecialAccept(char c, const char *accept) const;
 	bool isTokenChar(char c) const;
 	TokenStream(istream& in, const Analyzer &analyzer, void *null) 
 		: in(in), LEN(getLength()), pos(0), analyzer(analyzer) {}
@@ -27,6 +26,7 @@ protected:
 	};
 	TokenCharType getTokenCharType(char c) const;
 public:
+	static bool isSpecialAccept(char c, const char *accept);
 	TokenStream(istream& in, const Analyzer &analyzer);
 	virtual bool hasNext() const;
 	virtual size_t getLength() const;

@@ -1,67 +1,25 @@
 #include <iostream>
-#include <test.h>
-#include <vector>
-#include <fstream>
-#include <cassert>
-#include <Analyzer.h>
-#include <string.h>
-#include <unistd.h>
 
 using namespace std;
 
+
 int run(int argc, char* argv[]);
 
-#include <util.h>
-#include <TermQuery.h>
-#include <ScoreDoc.h>
-#include <IndexSearcher.h>
-#include <AndQuery.h>
-#include <tinyxml2.h>
-#include <TmpPostingStream.h>
-#include <MMIndex.h>
-using namespace tinyxml2;
+#include <sstream>
+#include <Snippet.h>
 int main(int argc, char* argv[]) {
-//	map<string, map<size_t, vector<Posting>>> m;
-//	vector<Posting> &pl = m["go"][0];
-//	MMIndex mm;
-//	mm.add("go", 1, 2, 3);
-//	cout << mm.toString() << endl;
+//	return run(argc, argv);
+	map<string, double> terms;
+	terms["big"] = 0.8;
+	terms["plai"] = 1;
+	terms["hello"] = 1.3;
 
-//	return 0;
-	return run(argc, argv);
-//	test::littleIndex();
-//	return 0;
+	string str = "This is a good day, and my \nmind is clear today. The most happiest thing is that I'm   hello begining to \t test hello a great snippet algorithm.  That is  \n it. Thank you for attention. Ladies and gentlemen,\n I'm so graful today. Let's have big some fun today play.";
+	istringstream is(str);
+	string snippet = Snippet::snippet(terms, is, 30);
+	cout << snippet << endl;
 
-	IndexSearcher is("../index2");
-	cout << is.toString() << endl;
 	return 0;
-//	FuzzyQuery fq("content", util::stem("caeassr"));
-//	cout << fq.toString() << endl;
-
-	/*
-	TermQuery t1("content", util::stem("brutus"));
-	TermQuery t2("content", util::stem("caesar"));
-	*/
-	TermQuery t3("text", util::stem("the"));
-/*
-	FuzzyQuery t1("content", "brutus");
-	FuzzyQuery t2("content", "caessar");
-	FuzzyQuery t3("content", "calpturniag");
-	AndQuery aq(t1, t2);
-	aq.add(t3);
-	cout << aq.toString() << endl;
-	*/
-
-	vector<ScoreDoc> res = is.search(t3);
-	for (size_t i = 0; i < res.size(); i ++) {
-		printf("%4ld. #%-4ld ", i + 1, res[i].id());
-		cout << is.doc(res[i].id()).toString() << endl;
-	}
-
-//	test::index("/media/DISK_D/input", "/home/dhuang/index");
-
-//	test::searchPhrase("/home/dhuang/index", "brutus ~4~ caesar");
-//	test::searchPhrase("/home/dhuang/index", argv[1]);
 }
 
 

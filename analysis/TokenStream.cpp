@@ -13,7 +13,7 @@ size_t TokenStream::getLength() const {
 	return res;
 }
 
-bool TokenStream::isSpecialAccept(char c, const char *accept) const {
+bool TokenStream::isSpecialAccept(char c, const char *accept) {
 	if ( accept == NULL ) return false;
 	size_t i = 0;
 	while ( accept[i] ) {
