@@ -15,6 +15,9 @@ public:
 	virtual PostingStream* fetchPostingStream(IndexSearcher &is) const;
 	virtual PostingStream* fetchPostingStream(
 			IndexSearcher &is, size_t fieldID) const;
+	virtual map<string, double> fetchScoreTerms(IndexSearcher &is) const;
+	virtual map<string, double> fetchScoreTerms(
+			IndexSearcher &is, size_t fieldID) const;
 	virtual string toString() const;
 	virtual ~TermQuery() {}
 

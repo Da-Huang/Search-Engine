@@ -54,6 +54,15 @@ vector<ScoreDoc> OrQuery::merge(
 	return res;
 }
 
+map<string, double> OrQuery::fetchScoreTerms(IndexSearcher &is) const {
+	map<string, double> res;
+	for (size_t i = 0; i < queries.size(); i ++) {
+		map<string, double> subRes = queries[i]->fetchScoreTerms(is);
+		res.insert(subRes.begin(), subRes.end());
+	}
+	return res;
+}
+
 string OrQuery::toString() const {
 	string res = "(";
 	for (auto it = queries.cbegin(); it != queries.cend(); it ++) {

@@ -46,6 +46,15 @@ vector<ScoreDoc> AndQuery::search(IndexSearcher &is) const {
 	return res;
 }
 
+map<string, double> AndQuery::fetchScoreTerms(IndexSearcher &is) const {
+	map<string, double> res;
+	for (size_t i = 0; i < queries.size(); i ++) {
+		map<string, double> subRes = queries[i]->fetchScoreTerms(is);
+		res.insert(subRes.begin(), subRes.end());
+	}
+	return res;
+}
+
 string AndQuery::toString() const {
 	string res = "(";
 	for (auto it = queries.cbegin(); it != queries.cend(); it ++) {

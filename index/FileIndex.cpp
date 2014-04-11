@@ -55,6 +55,7 @@ size_t FileIndex::findLTTermID(const string &term) {
 }
 
 string FileIndex::fetchTerm(size_t termID) {
+//	assert( termID > 0 && termID <= TERM_NUM );
 	if ( termID == 0 || termID > TERM_NUM ) return "";
 	idxIn.seekg((termID - 1) * RECORD_SIZE);
 	size_t trmBegin;

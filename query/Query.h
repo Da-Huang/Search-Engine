@@ -20,6 +20,8 @@ public:
 	virtual inline double getBoost() const { return boost; }
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const = 0;
 	virtual string toString() const = 0;
+	virtual map<string, double> fetchScoreTerms(
+			IndexSearcher &is) const = 0;
 	virtual ~Query() {}
 };
 

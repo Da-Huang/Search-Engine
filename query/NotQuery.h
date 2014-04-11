@@ -12,6 +12,7 @@ public:
 	NotQuery(const Query &query) : query(query) {}
 	NotQuery(const NotQuery &query) : query(query) {}
 	virtual vector<ScoreDoc> search(IndexSearcher &is) const;
+	virtual map<string, double> fetchScoreTerms(IndexSearcher &is) const;
 	virtual string toString() const;
 	virtual ~NotQuery();
 

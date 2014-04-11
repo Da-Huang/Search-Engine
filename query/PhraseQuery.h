@@ -26,6 +26,7 @@ public:
 	static PostingStream* intersect(
 			PostingStream *ps1, PostingStream *ps2, size_t slop,
 			IndexSearcher &is, size_t fieldID);
+	virtual map<string, double> fetchScoreTerms(IndexSearcher &is) const;
 	virtual ~PhraseQuery();
 };
 

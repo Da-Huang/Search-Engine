@@ -29,6 +29,10 @@ vector<ScoreDoc> NotQuery::search(IndexSearcher &is) const {
 	return res;
 }
 
+map<string, double> NotQuery::fetchScoreTerms(IndexSearcher &is) const {
+	return map<string, double>();
+}
+
 NotQuery::~NotQuery() {
 	size_t i;
 	if ( size_t(&i) > size_t(&query) ) delete &query;

@@ -41,10 +41,14 @@ vector<ScoreDoc> PhraseQuery::search(IndexSearcher &is) const {
 		PostingStream *ps1 = ps;
 //		cout << "ps1:" << ps1->toString() << endl;
 //		cout << "ps1->hasNext:" << ps1->hasNext() << endl;
+/*
+   		// Inorder to improve the seaching speed, 
+		// no need to check the field
 		if ( terms[i]->field != terms[0]->field ) {
 			delete ps;
 			return res;
 		}
+*/
 		PostingStream *ps2 = terms[i]->fetchPostingStream(is, fieldID);
 //		cout << terms[i]->toString() << endl;
 		if ( ps2 == NULL ) {
@@ -120,6 +124,19 @@ PostingStream* PhraseQuery::intersect(
 //	cout << "end" << endl;
 	ps->rewind();
 	return ps;
+}
+
+map<string, double> PhraseQuery::fetchScoreTerms(IndexSearcher &is) const {
+	map<string, double> res;
+	if ( terms.size() == 0 ) return res;
+	const size_t fieldID = is.fieldNameMap->getFieldID(terms[0]->field);
+	for (size_t i = 0; i < terms.size(); i ++) {
+		map<string, double> subRes = terms[i]->fetchScoreTerms(is, fieldID);
+   		// Inorder to improve the seaching speed, 
+		// no need to check the field
+		res.insert(subRes.begin(), subRes.end());
+	}
+	return res;
 }
 
 string PhraseQuery::toString() const {
