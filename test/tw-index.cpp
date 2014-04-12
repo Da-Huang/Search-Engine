@@ -1,10 +1,5 @@
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <cassert>
 #include <dirent.h>
-#include <cstdio>
-#include <cstdlib>
-#include <cerrno>
-
 #include <util.h>
 #include <IndexWriter.h>
 #include <StringField.h>
@@ -14,56 +9,25 @@
 #include <Analyzer.h>
 namespace test {
 
+static void twIndex(IndexWriter &iw, const Analyzer &analyzer,
+		const string &path);
+static map<string, string> twConvert(istream &in);
+
 
 void twIndex(IndexWriter &iw, const Analyzer &analyzer,
 		const string &docDirPath, const string &indexPath) {
-	static size_t count = 0;
-	DIR *dir;
-	struct dirent *ent;
-	if ( (dir = opendir(docDirPath.c_str())) == NULL ) {
-		cerr << "Can't open " << docDirPath << endl;
-		return;
-	}
+	DIR *dir = opendir(docDirPath.c_str());
+	assert (dir);
 
-	while ( (ent = readdir(dir)) != NULL ) {
-		string fullPath = docDirPath;
-		fullPath += "/";
-		fullPath += ent->d_name;
+	struct dirent *ent;
+	while ( (ent = readdir(dir)) ) {
 		string fileName = ent->d_name;
+		string fullPath = util::join("", {docDirPath, "/", fileName});
 		if ( fileName.length() == 0 || fileName[0] == '.' ) continue;
 
 		if ( util::isFile(fullPath) ) {
-			string postfix = "newsML.xml";
-//			string postfix = ".cpp";
-			if ( fileName.rfind(postfix) == string::npos ||
-					fileName.rfind(postfix) + postfix.length() != 
-					fileName.length() ) continue;
-
-			XMLDoc xmlDoc(fullPath);
-
-			count ++;
-			cerr << count << "\t";
 			cerr << fullPath << endl;
-			
-			Document doc;
-
-			TextField f1("title", xmlDoc.getTitle(), analyzer);
-//			cout << title << endl;
-			TextField f2("text", xmlDoc.getText(), analyzer);
-//			cout << text << endl;
-			StringField f3("filePath", fullPath);
-//			cout << fullPath << endl;
-
-			doc.addField(f1);
-			doc.addField(f2);
-			doc.addField(f3);
-
-			iw.write(doc);
-			
-//			in.close();
-
-//			if ( count % 1000 == 0 ) cerr << ".";
-//			cout << count << endl;
+			twIndex(iw, analyzer, fullPath);
 
 		} else if ( util::isDir(fullPath) ) {
 			twIndex(iw, analyzer, fullPath, indexPath);
@@ -71,7 +35,6 @@ void twIndex(IndexWriter &iw, const Analyzer &analyzer,
 	}
 
 	closedir(dir);
-//	cout << iw.toString() << "================" << endl;
 }
 
 void twIndex(const string &docDirPath, const string &indexPath) {
@@ -81,6 +44,125 @@ void twIndex(const string &docDirPath, const string &indexPath) {
 	cerr << endl << "merging ..." << endl;
 	iw.close();
 	cerr << "Finish." << endl;
+}
+
+void twIndex(IndexWriter &iw, const Analyzer &analyzer,
+		const string &path) {
+
+	ifstream in(path.c_str());
+	static size_t count = 0;
+	while ( !in.eof() ) {
+		cerr << ++ count << ". ";
+		map<string, string> record = twConvert(in);
+		cerr << record["title"] << endl;
+	}
+	in.close();
+}
+
+map<string, string> twConvert(istream &in) {
+	map<string, string> res;
+	string line;
+	string key, value;
+	size_t split;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "body");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "desc");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "keyword");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "norm_pagerank");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "pagerank");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "raw_anchor");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "rawid");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "scored_anchor");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "spamlevel");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "title");
+	res[key] = value;
+
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "trecid");
+	res[key] = value;
+	
+	util::getline(in, line, "\x1e\n");
+	split = line.find('=');
+	assert (split != string::npos);
+	key = line.substr(0, split);
+	value = line.substr(split + 1);
+	assert (key == "url");
+	res[key] = value;
+
+	util::getline(in, line, "\x1f\n");
+	return res;
 }
 
 

@@ -9,6 +9,7 @@ using namespace std;
 
 static const vector<string> usages = {
 	"usage: -index \"data directory\" \"index directory\"",
+	"usage: -index-tw \"data directory\" \"index directory\"",
 	"usage: -search-bool \"index directory\" \"query string\"",
 	"usage: -search-bool-f \"index directory\" \"query string\"",
 	"usage: -search-bool-batch \"index directory\" \"query file\"",
@@ -21,6 +22,8 @@ static const vector<string> usages = {
 	"usage: -search-f \"index directory\" \"query string\"",
 	"usage: -search-batch \"index directory\" \"query file\"",
 	"usage: -search-f-batch \"index directory\" \"query file\"",
+	"usage: -search-tw \"index directory\" \"query string\"",
+	"usage: -search-tw-batch \"index directory\" \"query file\"",
 };
 
 int run(int argc, char* argv[]) {
@@ -29,6 +32,12 @@ int run(int argc, char* argv[]) {
 		if ( string(argv[i]) == "-index" ) {
 			assert (i + 2 < argc);
 			test::index(string(argv[i + 1]), string(argv[i + 2]));
+			cout << "Finish Indexing. You can search now." << endl;
+			return 0;
+
+		} else if ( string(argv[i]) == "-index-tw" ) {
+			assert (i + 2 < argc);
+			test::twIndex(string(argv[i + 1]), string(argv[i + 2]));
 			cout << "Finish Indexing. You can search now." << endl;
 			return 0;
 
@@ -103,6 +112,18 @@ int run(int argc, char* argv[]) {
 			assert (i + 2 < argc);
 			ifstream in(argv[i + 2]);
 			test::search(string(argv[i + 1]), in, true);
+			in.close();
+			return 0;
+
+		} else if ( string(argv[i]) == "-search-tw" ) {
+			assert (i + 2 < argc);
+			test::twSearch(string(argv[i + 1]), string(argv[i + 2]));
+			return 0;
+
+		} else if ( string(argv[i]) == "-search-tw-batch" ) {
+			assert (i + 2 < argc);
+			ifstream in(argv[i + 2]);
+			test::twSearch(string(argv[i + 1]), in);
 			in.close();
 			return 0;
 		}
