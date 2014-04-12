@@ -8,7 +8,7 @@ int run(int argc, char* argv[]);
 #include <sstream>
 #include <Snippet.h>
 int main(int argc, char* argv[]) {
-//	return run(argc, argv);
+	return run(argc, argv);
 	map<string, double> terms;
 	terms["big"] = 0.8;
 	terms["plai"] = 1;

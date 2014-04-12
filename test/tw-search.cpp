@@ -15,9 +15,9 @@
 namespace test {
 
 
-static void search(IndexSearcher &is, const string &qStr, bool fuzzy);
+static void twSearch(IndexSearcher &is, const string &qStr, bool fuzzy);
 
-void search(const string &indexPath, istream &in, bool fuzzy) {
+void twSearch(const string &indexPath, istream &in, bool fuzzy) {
 	IndexSearcher is(indexPath);
 
 	string line;
@@ -25,11 +25,11 @@ void search(const string &indexPath, istream &in, bool fuzzy) {
 		line = util::trim(line);
 		if ( line.length() == 0 ) continue;
 		cout << line << endl;
-		search(is, line, fuzzy);
+		twSearch(is, line, fuzzy);
 	}
 }	
 
-void search(const string &indexPath, const string &qStr, bool fuzzy) {
+void twSearch(const string &indexPath, const string &qStr, bool fuzzy) {
 	IndexSearcher is(indexPath);
 /*
 	static bool isOut = true;
@@ -38,11 +38,11 @@ void search(const string &indexPath, const string &qStr, bool fuzzy) {
 			<< "=======================================" << endl;
 	isOut  = false;
 */
-	test::search(is, qStr, fuzzy);
+	twSearch(is, qStr, fuzzy);
 }
 
 
-void search(IndexSearcher &is, const string &qStr, bool fuzzy) {
+void twSearch(IndexSearcher &is, const string &qStr, bool fuzzy) {
 
 	string queryString = qStr;
 	Analyzer analyzer;

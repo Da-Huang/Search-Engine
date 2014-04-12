@@ -6,25 +6,16 @@
 #include <cerrno>
 
 #include <util.h>
-#include <XMLDoc.h>
-#include <tinyxml2.h>
 #include <IndexWriter.h>
 #include <StringField.h>
+#include <XMLDoc.h>
 #include <Document.h>
 #include <TextField.h>
 #include <Analyzer.h>
 namespace test {
 
 
-static vector<vector<string>> tests = {
-	{"This is a good day!", "", "It is a hot day", "Hot day Today."},
-	{"OK", "Today is a cold day.", "", "My day is a happy day"},
-	{"BAD", "", "This is a test.", ""},
-	{"USEFUL", "", "This goes right", "The day comes"},
-	{"SHIT", "", "", "It goes right this day."},
-};
-
-void index(IndexWriter &iw, const Analyzer &analyzer,
+void twIndex(IndexWriter &iw, const Analyzer &analyzer,
 		const string &docDirPath, const string &indexPath) {
 	static size_t count = 0;
 	DIR *dir;
@@ -55,11 +46,6 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 			cerr << fullPath << endl;
 			
 			Document doc;
-//			doc.setStaticScore(double(count));
-
-//			ifstream in(fullPath);
-//			TextField f1("content", in, analyzer);
-//			StringField f2("fileName", fileName);
 
 			TextField f1("title", xmlDoc.getTitle(), analyzer);
 //			cout << title << endl;
@@ -80,7 +66,7 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 //			cout << count << endl;
 
 		} else if ( util::isDir(fullPath) ) {
-			index(iw, analyzer, fullPath, indexPath);
+			twIndex(iw, analyzer, fullPath, indexPath);
 		}
 	}
 
@@ -88,31 +74,13 @@ void index(IndexWriter &iw, const Analyzer &analyzer,
 //	cout << iw.toString() << "================" << endl;
 }
 
-void index(const string &docDirPath, const string &indexPath) {
+void twIndex(const string &docDirPath, const string &indexPath) {
 	IndexWriter iw(indexPath);
 	Analyzer analyzer;
-	index(iw, analyzer, docDirPath, indexPath);
+	twIndex(iw, analyzer, docDirPath, indexPath);
 	cerr << endl << "merging ..." << endl;
 	iw.close();
 	cerr << "Finish." << endl;
-}
-
-void littleIndex() {
-	IndexWriter iw("/home/dhuang/index");
-	Analyzer analyzer;
-	for (size_t i = 0; i < tests.size(); i ++) {
-		StringField field0 = StringField("title", tests[i][0]);
-		Document doc = Document();
-		doc.addField(field0);
-		for (size_t j = 1; j < tests[i].size(); j ++) {
-			doc.addField(
-					*new TextField(string(1, 'a' + j - 1), 
-						tests[i][j], analyzer));
-		}
-		iw.write(doc);
-	}
-//	cout << iw.toString() << endl << endl;
-	iw.close();
 }
 
 

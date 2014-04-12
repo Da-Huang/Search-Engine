@@ -5,7 +5,7 @@
 
 
 pair<size_t, size_t> Snippet::snippet(
-		const vector<Token> &tokens, size_t WIDTH) {
+		const vector<Token> &tokens, size_t WIDTH) const {
 
 	map<string, size_t> termsCount;
 
@@ -68,7 +68,7 @@ pair<size_t, size_t> Snippet::snippet(
 }
 
 string Snippet::snippet(istream &in, size_t WIDTH, 
-		const Analyzer &analyzer) {
+		const Analyzer &analyzer) const {
 
 	vector<Token> tokens;
 	TokenStream &ts = analyzer.tokenStream(in);

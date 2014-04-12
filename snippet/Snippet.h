@@ -16,11 +16,11 @@ private:
 
 	static string fetch(istream &in, size_t begin, size_t end);
 	pair<size_t, size_t> snippet(
-			const vector<Token> &tokens, size_t WIDTH);
+			const vector<Token> &tokens, size_t WIDTH) const;
 public:
-	Snippet(const map<string, double> &terms) : terms(terms) {}
+	Snippet(map<string, double> &terms) : terms(terms) {}
 	virtual string snippet(istream &in, size_t WIDTH=100, 
-			const Analyzer &analyzer=Analyzer());
+			const Analyzer &analyzer=Analyzer()) const;
 	virtual ~Snippet() {}
 };
 
