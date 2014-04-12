@@ -1,26 +1,20 @@
 #include <iostream>
-
+#include <sys/time.h>
 using namespace std;
 
 
 int run(int argc, char* argv[]);
 
-#include <sstream>
-#include <Snippet.h>
 int main(int argc, char* argv[]) {
-	return run(argc, argv);
-	map<string, double> terms;
-	terms["big"] = 0.8;
-	terms["plai"] = 1;
-	terms["hello"] = 1.3;
-
-	string str = "This is a good day, and my \nmind is clear today. The most happiest thing is that I'm   hello begining to \t test hello a great snippet algorithm.  That is  \n it. Thank you for attention. Ladies and gentlemen,\n I'm so graful today. Let's have big some fun today play.";
-	istringstream is(str);
-	Snippet snippet(terms);
-	string s = snippet.snippet(is);
-	cout << s << endl;
-
-	return 0;
+	struct timeval t_start, t_finish;
+	gettimeofday(&t_start, NULL);
+	int res = run(argc, argv);
+	gettimeofday(&t_finish, NULL);
+	cout << "===========================" << endl;
+	double interval = t_finish.tv_sec - t_start.tv_sec +
+		double(t_finish.tv_usec - t_start.tv_usec) / 1000000;
+	cout << "Time Consumed: " << interval << "s" << endl;
+	return res;
 }
 
 
