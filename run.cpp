@@ -24,6 +24,7 @@ static const vector<string> usages = {
 	"usage: -search-f-batch \"index directory\" \"query file\"",
 	"usage: -search-tw \"index directory\" \"query string\"",
 	"usage: -search-tw-batch \"index directory\" \"query file\"",
+	"usage: -search-trec \"index directory\" \"topic file\"",
 };
 
 int run(int argc, char* argv[]) {
@@ -124,6 +125,13 @@ int run(int argc, char* argv[]) {
 			assert (i + 2 < argc);
 			ifstream in(argv[i + 2]);
 			test::twSearch(string(argv[i + 1]), in);
+			in.close();
+			return 0;
+
+		} else if ( string(argv[i]) == "-search-trec" ) {
+			assert (i + 2 < argc);
+			ifstream in(argv[i + 2]);
+			test::twTrec(string(argv[i + 1]), in);
 			in.close();
 			return 0;
 		}

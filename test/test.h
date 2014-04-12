@@ -17,6 +17,7 @@ void twSearch(const string &indexPath, const string &qStr,
 void twSearch(const string &indexPath, istream &in, 
 		bool fuzzy=false);
 
+void twTrec(const string &indexPath, istream &in);
 map<string, string> twConvert(istream &in);
 
 void search(const string &indexPath, const string &qStr, bool fuzzy=false);
