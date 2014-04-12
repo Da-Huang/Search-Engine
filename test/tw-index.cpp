@@ -52,9 +52,24 @@ void twIndex(IndexWriter &iw, const Analyzer &analyzer,
 	ifstream in(path.c_str());
 	static size_t count = 0;
 	while ( !in.eof() ) {
+		size_t offset = in.tellg();
 		cerr << ++ count << ". ";
 		map<string, string> record = twConvert(in);
-		cerr << record["title"] << endl;
+		cerr << record["trecid"] << endl;
+
+		Document doc;
+
+		TextField f1("title", record["title"], analyzer);
+		TextField f2("body", record["body"], analyzer);
+		StringField f3("path", path);
+		StringField f4("offset", to_string(offset));
+
+		doc.addField(f1);
+		doc.addField(f2);
+		doc.addField(f3);
+		doc.addField(f4);
+
+		iw.write(doc);
 	}
 	in.close();
 }
