@@ -1,11 +1,5 @@
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <cstdio>
-#include <cstdlib>
-#include <cerrno>
-
 #include <util.h>
+#include <dirent.h>
 #include <XMLDoc.h>
 #include <tinyxml2.h>
 #include <IndexWriter.h>
@@ -27,18 +21,13 @@ static vector<vector<string>> tests = {
 void index(IndexWriter &iw, const Analyzer &analyzer,
 		const string &docDirPath, const string &indexPath) {
 	static size_t count = 0;
-	DIR *dir;
-	struct dirent *ent;
-	if ( (dir = opendir(docDirPath.c_str())) == NULL ) {
-		cerr << "Can't open " << docDirPath << endl;
-		return;
-	}
+	DIR *dir = opendir(docDirPath.c_str());
+	assert (dir);
 
-	while ( (ent = readdir(dir)) != NULL ) {
-		string fullPath = docDirPath;
-		fullPath += "/";
-		fullPath += ent->d_name;
+	struct dirent *ent;
+	while ( (ent = readdir(dir)) ) {
 		string fileName = ent->d_name;
+		string fullPath = util::join("", {docDirPath, "/", fileName});
 		if ( fileName.length() == 0 || fileName[0] == '.' ) continue;
 
 		if ( util::isFile(fullPath) ) {
@@ -98,7 +87,7 @@ void index(const string &docDirPath, const string &indexPath) {
 }
 
 void littleIndex() {
-	IndexWriter iw("/home/dhuang/index");
+	IndexWriter iw("../index");
 	Analyzer analyzer;
 	for (size_t i = 0; i < tests.size(); i ++) {
 		StringField field0 = StringField("title", tests[i][0]);
