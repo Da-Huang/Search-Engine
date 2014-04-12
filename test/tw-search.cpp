@@ -12,6 +12,7 @@
 #include <BoolAnalyzer.h>
 #include <Snippet.h>
 #include <util.h>
+#include <test.h>
 namespace test {
 
 
@@ -48,7 +49,7 @@ void twSearch(IndexSearcher &is, const string &qStr, bool fuzzy) {
 	Analyzer analyzer;
 	const Query *pQuery1 = QueryParser::parse(
 			queryString,
-			"text", 
+			"body", 
 			analyzer, fuzzy);
 	Query *pQuery2 = QueryParser::parse(
 			queryString,
@@ -67,16 +68,21 @@ void twSearch(IndexSearcher &is, const string &qStr, bool fuzzy) {
 	cout << "Hit Documents:" << endl;
 	const size_t SHOW_NUM = 15;
 	for (size_t i = 0; i < scoreDocs.size() && i < SHOW_NUM; i ++) {
-		fprintf(stdout, "%4ld. #%-4ld ", i + 1, scoreDocs[i].id());
 //		cout << is.doc(scoreDocs[i].id()).toString() << endl;
-		string path = is.doc(scoreDocs[i].id()).get("filePath");
-		cout << path << endl;
+		Document doc = is.doc(scoreDocs[i].id());
+		string path = doc.get("path");
+		size_t offset = stol(doc.get("offset"));
 
-		XMLDoc xmlDoc(path);
-		cout << "\t" << xmlDoc.getTitle() << endl;
+		ifstream in(path);
+		in.seekg(offset);
+		map<string, string> record = twConvert(in);
+		in.close();
+
+		fprintf(stdout, "%4ld. %s ", i + 1, record["trecid"].c_str());
+		cout << record["title"] << endl;
 		cout << "\t" << scoreDocs[i].score() << endl;
 
-		istringstream istr(xmlDoc.getText());
+		istringstream istr(record["body"]);
 		cout << "\t" << snippet.snippet(istr) << endl;
 	}
 	if ( scoreDocs.size() > SHOW_NUM )

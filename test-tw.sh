@@ -1,1 +1,1 @@
-./main -search-tw ../index-tw "shit"
+./main -search-tw ../tw-index "the"

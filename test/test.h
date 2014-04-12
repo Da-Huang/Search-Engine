@@ -2,6 +2,8 @@
 #define _TEST_H_
 
 #include <string>
+#include <map>
+#include <istream>
 using namespace std;
 namespace test {
 
@@ -14,6 +16,8 @@ void twSearch(const string &indexPath, const string &qStr,
 		bool fuzzy=false);
 void twSearch(const string &indexPath, istream &in, 
 		bool fuzzy=false);
+
+map<string, string> twConvert(istream &in);
 
 void search(const string &indexPath, const string &qStr, bool fuzzy=false);
 void search(const string &indexPath, istream &in, bool fuzzy=false);
