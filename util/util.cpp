@@ -1,5 +1,6 @@
 #include <initializer_list>
 #include <algorithm>
+#include <cassert>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -79,6 +80,30 @@ string join(const string &split, const initializer_list<string> &strs) {
 		it ++;
 	}
 	return res;
+}
+
+istream& getline(istream &in, string &line, const string &split) {
+	assert (split.length() == 2);
+	line = "";
+
+	const size_t BEGIN = in.tellg();
+	in.seekg(0, ios::end);
+	const size_t END = in.tellg();
+	in.seekg(BEGIN);
+
+	while ( size_t(in.tellg()) < END ) {
+		char c = in.get();
+		if ( c == split[0] && size_t(in.tellg()) < END && 
+				in.peek() == split[1] ) {
+			in.ignore();
+			if ( size_t(in.tellg()) >= END ) in.ignore();
+			return in;
+
+		} else if ( isprint(c) || c == '\n' ) line.push_back(c);
+		else line.push_back(' ');
+	}
+	in.ignore();
+	return in;
 }
 
 

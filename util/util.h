@@ -23,6 +23,7 @@ bool isDir(const string &path);
 bool isFile(const string &path);
 
 string join(const string &split, const initializer_list<string> &strs);
+istream& getline(istream &in, string &line, const string &split);
 
 
 }
