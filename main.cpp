@@ -10,10 +10,10 @@ int main(int argc, char* argv[]) {
 	gettimeofday(&t_start, NULL);
 	int res = run(argc, argv);
 	gettimeofday(&t_finish, NULL);
-	cout << "===========================" << endl;
+	cerr << "===========================" << endl;
 	double interval = t_finish.tv_sec - t_start.tv_sec +
 		double(t_finish.tv_usec - t_start.tv_usec) / 1000000;
-	cout << "Time Consumed: " << interval << "s" << endl;
+	cerr << "Time Consumed: " << interval << "s" << endl;
 	return res;
 }
 
