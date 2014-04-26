@@ -1,10 +1,12 @@
 Search-Engine
 =============
-This is a course project for Web-Based Information Architecture @pku.
+This is a course project for Web-Based Information Architecture @pku.<br/>
+Boolean Retrieval, Proximity Retrieval, Fuzzy Retrieval, Multi-Field Retrieval, SPIMI, Variable Byte Coding, BM25 Scorer, Snippet and other features were implemented.
+
 
 Best Running Environment
 =============
-Ubuntu 12.04 64bit
+Ubuntu 12.04 64bit<br/>
 g++ 4.6
 
 
