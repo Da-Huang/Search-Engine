@@ -12,7 +12,7 @@ g++ 4.6
 
 How to Run
 =============
-make
-./main
+1) Compile: make (run "make -j 10" if you want to do it quickly)<br/>
+2) Run: ./main<br/>
 
 
