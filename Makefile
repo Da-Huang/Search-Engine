@@ -1,4 +1,4 @@
-GXX = $(shell dpkg -l | grep g++- | awk '{print $$2}' | sort -r | head -1)
+GXX = $(shell compgen -c g++ | sort -r | head -1)
 INCLUDES = -I. $(foreach dir,$(SOURCE_DIR),-I$(dir))
 #DEBUG = -g
 CXXFLAGS = -std=c++0x $(DEBUG) -Wall -O2 $(INCLUDES)
